@@ -5,6 +5,7 @@
     i18n.extraLocaleSettings = { LC_TIME = "C"; };
 
     boot = {
+        loader.systemd-boot.enable = true;
         initrd.network = {
             enable= true;
             ssh = {

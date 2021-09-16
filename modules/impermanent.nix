@@ -25,8 +25,6 @@
     # Otherwise we're lectured again every boot
     security.sudo.extraConfig = "Defaults lecture=never";
 
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
     boot.initrd.luks.devices.cryptroot = { device = "/dev/disk/by-partlabel/_luks"; };
 
     environment.persistence."/persist" = {
