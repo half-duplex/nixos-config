@@ -16,17 +16,20 @@ with lib;
 
         environment.systemPackages = with pkgs; [
             carla
-            discord
             ffmpeg
             gimp
             pavucontrol
             powertop
-            qemu_kvm
             redshift
-            tdesktop
-            teamspeak_client
+            virt-manager
             wine
             youtube-dl
+
+            discord
+            signal-desktop
+            tdesktop
+            teamspeak_client
+            thunderbird
 
             (mpv-with-scripts.override { scripts = [ mpvScripts.mpris ]; })
 
