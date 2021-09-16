@@ -4,25 +4,14 @@
     inputs.impermanence.url = "github:nix-community/impermanence";
 
     outputs = { self, nixpkgs, unstable, impermanence, ... }: {
-        nixosModules = {
-            inherit (impermanence.nixosModules) impermanence;
-
-            alacritty = import ./modules/alacritty.nix;
-            baseline = import ./modules/baseline.nix;
-            cli = import ./modules/cli.nix;
-            desktop = import ./modules/desktop.nix;
-            dvorak = import ./modules/dvorak.nix;
-            #i3 = import ./modules/i3;
-            impermanent = import ./modules/impermanent.nix;
-            #mouse-dpi = import ./modules/mouse-dpi.nix;
-            #pipewire = import ./modules/pipewire.nix;
-            plasma = import ./modules/plasma.nix;
-            profiles = import ./modules/profiles.nix;
-            #scroll-boost = import ./modules/scroll-boost;
-            #security-tools = import ./modules/security-tools.nix;
-            #server = import ./modules/server.nix;
-            #sway = import ./modules/sway.nix;
-        };
+        nixosModules =
+            { inherit (impermanence.nixosModules) impermanence; } //
+            nixpkgs.lib.mapAttrs'
+            (name: type: {
+                name = if (type == "regular") then (nixpkgs.lib.removeSuffix ".nix" name) else name;
+                value = import (./modules + "/${name}");
+            })
+            (builtins.readDir ./modules);
 
         nixosModule = { pkgs, ... }: {
             imports = builtins.attrValues self.nixosModules;
