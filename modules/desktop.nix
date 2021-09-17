@@ -15,21 +15,26 @@ with lib;
         };
 
         environment.systemPackages = with pkgs; [
+            redshift
+            powertop
+            pavucontrol
+
             carla
             ffmpeg
             gimp
-            pavucontrol
-            powertop
-            redshift
-            virt-manager
-            wine
             youtube-dl
+
+            wine
 
             discord
             signal-desktop
             tdesktop
             teamspeak_client
             thunderbird
+
+            chirp
+            #pgadmin # ancient
+            virt-manager
 
             (mpv-with-scripts.override { scripts = [ mpvScripts.mpris ]; })
 
