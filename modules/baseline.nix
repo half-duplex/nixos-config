@@ -41,9 +41,11 @@
         intel.updateMicrocode = true;
     };
 
+    users.groups.ssh-users = {};
+    users.users.root.extraGroups = [ "ssh-users" ];
     users.users.mal = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "audio" "video" "networkmanager" "dialout" "input" "wireshark" ];
+        extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" ];
     };
 
     virtualisation.docker = { enable = true; enableOnBoot = false; };
@@ -51,6 +53,10 @@
     services.openssh = {
         enable = true;
         passwordAuthentication = false;
+        extraConfig = ''
+            AllowGroups ssh-users
+            GSSAPIAuthentication yes
+        '';
     };
 
     krb5 = {
