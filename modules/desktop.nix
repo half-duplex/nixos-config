@@ -24,6 +24,7 @@ with lib;
             gimp
             youtube-dl
 
+            _1password-gui
             wine
 
             discord
