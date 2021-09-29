@@ -79,11 +79,4 @@
             };
         };
     };
-
-    # TODO: Only for physical machines
-    services.fwupd.enable = true;
-    environment.systemPackages = with pkgs; [
-        qemu_kvm
-        libvirt
-    ];
 }

@@ -4,6 +4,7 @@
         dvorak = true;
         plasma = true;
         profile = "desktop";
+        hardware = "physical";
         #security-tools = true;
     };
 
