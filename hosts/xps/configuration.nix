@@ -14,5 +14,6 @@
     ];
 
     hardware.video.hidpi.enable = true;
+    services.xserver.dpi = 192; # needed until >21.05
     system.stateVersion = "21.05";
 }
