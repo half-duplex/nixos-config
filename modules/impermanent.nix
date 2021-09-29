@@ -36,6 +36,7 @@
             "/etc/ssh/ssh_host_ed25519_key_initrd"
         ];
         directories = [
+            "/etc/NetworkManager/system-connections"
             "/home"
             "/var/log"
         ];
