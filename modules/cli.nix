@@ -12,6 +12,7 @@ in
 {
     #console.font = "Lat2-Terminus16"; # todo pick
     environment.systemPackages = with pkgs; [
+        binutils
         darkhttpd
         dnsutils
         file
