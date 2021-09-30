@@ -11,10 +11,7 @@ let
         {
           inherit (callPackage "${modulesPath}/installer/scan/not-detected.nix" { }) hardware;
           services.fwupd.enable = true;
-          environment.systemPackages = with pkgs; [
-            qemu_kvm
-            libvirt
-          ];
+          virtualisation.libvirtd.enable = true;
         })
 
       (hardwareFor "qemu"

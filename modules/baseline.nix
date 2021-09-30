@@ -45,10 +45,11 @@
     users.users.root.extraGroups = [ "ssh-users" ];
     users.users.mal = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" ];
+        extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd" ];
     };
 
     virtualisation.docker = { enable = true; enableOnBoot = false; };
+    virtualisation.libvirtd.qemuRunAsRoot = false;
 
     services.openssh = {
         enable = true;
