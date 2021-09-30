@@ -15,9 +15,10 @@ with lib;
         };
 
         environment.systemPackages = with pkgs; [
-            redshift
-            powertop
+            ntfs3g
             pavucontrol
+            powertop
+            redshift
 
             carla
             ffmpeg
