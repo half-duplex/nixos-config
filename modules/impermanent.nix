@@ -31,12 +31,12 @@
         files = [
             "/etc/krb5.keytab"
             "/etc/machine-id"
+            "/etc/NetworkManager/system-connections"
             "/etc/ssh/ssh_host_rsa_key"
             "/etc/ssh/ssh_host_ed25519_key"
             "/etc/ssh/ssh_host_ed25519_key_initrd"
         ];
         directories = [
-            "/etc/NetworkManager/system-connections"
             "/home"
             "/var/log"
         ];
