@@ -10,14 +10,16 @@
             enable= true;
             ssh = {
                 enable = true;
-                authorizedKeys = [
-                    "fake"
-                ];
+                authorizedKeys = config.users.users.mal.openssh.authorizedKeys.keys;
                 hostKeys = [
                     "/etc/ssh/ssh_host_ed25519_key_initrd"
                 ];
                 port = 23;
             };
+        };
+        initrd.secrets = {
+            "/etc/ssh/ssh_host_ed25519_key_initrd" =
+                "/etc/ssh/ssh_host_ed25519_key_initrd";
         };
         zfs.forceImportAll = false;
         zfs.forceImportRoot = false;
