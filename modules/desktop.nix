@@ -4,6 +4,7 @@ with lib;
     config = mkIf (config.sconfig.profile == "desktop") {
         sconfig.alacritty.enable = true;
 
+        hardware.bluetooth.enable = true;
         networking.networkmanager.enable = true;
 
         services.xserver.xkbOptions = "compose:ralt";
