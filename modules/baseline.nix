@@ -38,11 +38,6 @@
 
     nix.package = pkgs.nixFlakes;
 
-    hardware.cpu = {
-        amd.updateMicrocode = true;
-        intel.updateMicrocode = true;
-    };
-
     users.groups.ssh-users = {};
     users.users.root.extraGroups = [ "ssh-users" ];
     users.users.mal = {
