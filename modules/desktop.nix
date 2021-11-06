@@ -39,6 +39,10 @@ with lib;
             #pgadmin # ancient
             virt-manager
 
+            google-chrome
+
+            unstable.android-tools
+
             (mpv-with-scripts.override { scripts = [ mpvScripts.mpris ]; })
 
             (vscode-with-extensions.override {
@@ -91,6 +95,9 @@ with lib;
             })
         ];
 
+        #programs.adb.enable = true;
+        services.udev.packages = [ pkgs.android-udev-rules ];
+        users.users.mal.extraGroups = ["adbusers"];
         programs.steam.enable = true;
     };
 }
