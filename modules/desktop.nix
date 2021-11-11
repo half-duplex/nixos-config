@@ -71,7 +71,6 @@ with lib;
                         "media.autoplay.default" = { Status = "locked"; Value = 5; };
                         "media.autoplay.blocking_policy" = { Status = "locked"; Value = 2; };
                         "network.IDN_show_punycode" = { Status = "locked"; Value = true; };
-                        "network.cookie.cookieBehavior" = { Status = "locked"; Value = 5; };
                         # network.dns.disablePrefetch
                         # network.http.speculative-parallel-limit
                         # network.predictor.enabled
@@ -85,7 +84,7 @@ with lib;
                         "security.ssl3.rsa_aes_128_sha" = { Status = "locked"; Value = false; };
                         "security.ssl3.rsa_aes_256_sha" = { Status = "locked"; Value = false; };
                         "security.ssl3.rsa_des_ede3_sha" = { Status = "locked"; Value = false; };
-                        "security.webauth.u2f" = { Status = "locked"; Value = false; }; # I want fido
+                        "security.webauth.u2f" = { Status = "locked"; Value = false; }; # I want webauthn
                         "ui.prefersReducedMotion" = { Status = "locked"; Value = 1; };
                     };
                 };
