@@ -1,4 +1,4 @@
-{ path, nixosModule, ... }@inputs:
+{ path, nixosModule, unstable, ... }@inputs:
 let
     hostMetadata = builtins.mapAttrs
         (name: _: import (path + "/${name}"))
@@ -11,6 +11,16 @@ let
                 (nixosModule)
                 (hostMeta.module)
                 (_: { networking.hostName = hostName; })
+                (_: {
+                    nixpkgs.overlays = [
+                        (_: _: {
+                            unstable = import unstable {
+                                inherit (hostMeta) system;
+                                config.allowUnfree = true;
+                            };
+                        })
+                    ];
+                })
             ];
         };
 in
