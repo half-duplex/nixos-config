@@ -1,11 +1,11 @@
-{ path, nixosModule, unstable, ... }@inputs:
+{ path, nixosModule, nixpkgs, unstable }:
 let
     hostMetadata = builtins.mapAttrs
         (name: _: import (path + "/${name}"))
         (builtins.readDir path);
 
     getHostConfig = hostName: hostMeta:
-        inputs.${hostMeta.pkgs}.lib.nixosSystem {
+        nixpkgs.lib.nixosSystem {
             inherit (hostMeta) system;
             modules = [
                 (nixosModule)
