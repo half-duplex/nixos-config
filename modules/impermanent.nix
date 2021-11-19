@@ -31,7 +31,6 @@
         files = [
             "/etc/krb5.keytab"
             "/etc/machine-id"
-            "/etc/NetworkManager/system-connections"
             "/etc/ssh/ssh_host_rsa_key"
             "/etc/ssh/ssh_host_ed25519_key"
             "/etc/ssh/ssh_host_ed25519_key_initrd"
@@ -41,6 +40,8 @@
             "/var/log"
         ];
     };
+    environment.etc."NetworkManager/system-connections".source =
+        "/persist/etc/NetworkManager/system-connections";
 
     fileSystems = {
         "/" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "mode=755" ]; };
