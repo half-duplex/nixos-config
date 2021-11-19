@@ -37,6 +37,7 @@ with lib;
 
             chirp
             #pgadmin # ancient
+            remmina
             virt-manager
 
             google-chrome
