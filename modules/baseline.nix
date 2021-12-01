@@ -36,7 +36,13 @@
     networking.hostId = builtins.substring 0 8 (builtins.hashString "md5" config.networking.hostName);
     networking.wireguard.enable = true;
 
-    nix.package = pkgs.nixFlakes;
+    nix = {
+      package = pkgs.nixFlakes;
+      daemonCPUSchedPolicy = "idle";
+      extraOptions = ''
+        experimental-features = nix-command flakes
+      '';
+    };
 
     users.groups.ssh-users = {};
     users.users.root.extraGroups = [ "ssh-users" ];
