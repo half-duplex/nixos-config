@@ -46,7 +46,7 @@
     };
 
     virtualisation.docker = { enable = true; enableOnBoot = false; };
-    virtualisation.libvirtd.qemuRunAsRoot = false;
+    virtualisation.libvirtd.qemu.runAsRoot = false;
 
     services.openssh = {
         enable = true;

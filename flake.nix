@@ -1,5 +1,5 @@
 {
-    inputs.nixpkgs.url = "nixpkgs/nixos-21.05";
+    inputs.nixpkgs.url = "nixpkgs/nixos-21.11";
     inputs.unstable.url = "nixpkgs/nixos-unstable";
     inputs.impermanence.url = "github:nix-community/impermanence";
 
