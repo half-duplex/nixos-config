@@ -23,6 +23,7 @@ in
         lm_sensors
         mosh
         ncdu
+        nfs-utils
         nixpkgs-fmt
         openssl
         pv
