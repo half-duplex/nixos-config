@@ -59,6 +59,11 @@
         '';
     };
 
+    services.tailscale = {
+        enable = true;
+        interfaceName = "ts0";
+    };
+
     krb5 = {
         enable = true;
         domain_realm = {
