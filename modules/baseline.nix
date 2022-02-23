@@ -86,6 +86,8 @@
     };
     libdefaults = {
       default_realm = "SEC.GD";
+      permitted_enctypes =
+        "aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96";
       rdns = false;
       spake_preauth_groups = "edwards25519";
     };
