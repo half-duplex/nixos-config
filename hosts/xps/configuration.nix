@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
     sconfig = {
         dvorak = true;
@@ -18,7 +18,7 @@
 
     hardware.video.hidpi.enable = true;
 
-    fileSystems = {
+    fileSystems = lib.foldl (a: b: a // b) {
         "/mnt/awdbox/data" = {
             device = "awdbox:/data";
             fsType = "nfs";
@@ -29,5 +29,10 @@
             fsType = "nfs";
             options = [ "noauto" ];
         };
-    };
+    } (lib.forEach (lib.range 1 5) (n: {
+        "/mnt/crypt${toString n}" = {
+            device = "/dev/mapper/crypt${toString n}";
+            options = [ "noauto" "noatime" ];
+        };
+    }));
 }
