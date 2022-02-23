@@ -17,7 +17,7 @@
 # nixos-install --flake git+http://10.0.0.22:8080/?ref=main#xps --no-root-passwd
 # zpool export tank
 
-{ pkgs, ... }:
+{ ... }:
 {
     users.mutableUsers = false;
     users.users.mal.passwordFile = "/persist/shadow/mal";

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}:
+{ pkgs, ...}:
 let
     powerlineOpts = [
         "-mode=flat"
@@ -7,7 +7,6 @@ let
         "-modules=user,host,cwd,nix-shell,git,jobs"
         "-git-assume-unchanged-size 0"
     ];
-    system-rev = toString config.system.nixos.revision;
 in
 {
     #console.font = "Lat2-Terminus16"; # todo pick

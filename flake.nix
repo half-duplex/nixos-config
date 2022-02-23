@@ -13,7 +13,7 @@
             })
             (builtins.readDir ./modules);
 
-        nixosModule = { pkgs, ... }: {
+        nixosModule = { ... }: {
             imports = builtins.attrValues self.nixosModules;
         };
 

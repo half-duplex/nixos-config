@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
     sconfig = {
         profile = "server";
