@@ -1,4 +1,4 @@
-{ config, pkgs, ...}:
+{ config, pkgs, lib, ...}:
 {
     time.timeZone = "US/Eastern";
     i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
@@ -29,8 +29,20 @@
 
     zramSwap.enable = true;
 
-    networking.hostId = builtins.substring 0 8 (builtins.hashString "md5" config.networking.hostName);
-    networking.wireguard.enable = true;
+    networking = {
+        domain = lib.mkDefault "sec.gd";
+        hostId = builtins.substring 0 8 (builtins.hashString "md5" config.networking.hostName);
+        hosts = lib.mkIf (
+            config.networking.domain == "sec.gd" &&
+            config.services.tailscale.enable == true
+        ) {
+            "100.64.0.1" = [ "nova.sec.gd" "nova" ];
+            "100.64.0.2" = [ "xps.sec.gd" "xps" ];
+            "100.64.0.3" = [ "awdbox.sec.gd" "awdbox" ];
+            "100.64.0.4" = [ "mars.sec.gd" "mars" ];
+        };
+        wireguard.enable = true;
+    };
 
     nix = {
       package = pkgs.nixFlakes;
