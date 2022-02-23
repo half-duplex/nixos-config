@@ -38,6 +38,8 @@
         directories = [
             "/home"
             "/var/log"
+            "/var/lib/libvirt"
+            "/var/lib/tailscale"
         ];
     };
     environment.etc."NetworkManager/system-connections".source =
