@@ -19,36 +19,36 @@
 
 { ... }:
 {
-    users.mutableUsers = false;
-    users.users.mal.passwordFile = "/persist/shadow/mal";
+  users.mutableUsers = false;
+  users.users.mal.passwordFile = "/persist/shadow/mal";
 
-    # Otherwise we're lectured again every boot
-    security.sudo.extraConfig = "Defaults lecture=never";
+  # Otherwise we're lectured again every boot
+  security.sudo.extraConfig = "Defaults lecture=never";
 
-    boot.initrd.luks.devices.cryptroot = { device = "/dev/disk/by-partlabel/_luks"; };
+  boot.initrd.luks.devices.cryptroot = { device = "/dev/disk/by-partlabel/_luks"; };
 
-    environment.persistence."/persist" = {
-        files = [
-            "/etc/krb5.keytab"
-            "/etc/machine-id"
-            "/etc/ssh/ssh_host_rsa_key"
-            "/etc/ssh/ssh_host_ed25519_key"
-            "/etc/ssh/ssh_host_ed25519_key_initrd"
-        ];
-        directories = [
-            "/home"
-            "/var/log"
-            "/var/lib/libvirt"
-            "/var/lib/tailscale"
-        ];
-    };
-    environment.etc."NetworkManager/system-connections".source =
-        "/persist/etc/NetworkManager/system-connections";
+  environment.persistence."/persist" = {
+    files = [
+      "/etc/krb5.keytab"
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key_initrd"
+    ];
+    directories = [
+      "/home"
+      "/var/log"
+      "/var/lib/libvirt"
+      "/var/lib/tailscale"
+    ];
+  };
+  environment.etc."NetworkManager/system-connections".source =
+    "/persist/etc/NetworkManager/system-connections";
 
-    fileSystems = {
-        "/" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "mode=755" ]; };
-        "/boot" = { device = "/dev/disk/by-partlabel/_esp"; };
-        "/nix" = { device = "tank/nix"; fsType = "zfs"; };
-        "/persist" = { device = "tank/persist"; fsType = "zfs"; neededForBoot = true; };
-    };
+  fileSystems = {
+    "/" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "mode=755" ]; };
+    "/boot" = { device = "/dev/disk/by-partlabel/_esp"; };
+    "/nix" = { device = "tank/nix"; fsType = "zfs"; };
+    "/persist" = { device = "tank/persist"; fsType = "zfs"; neededForBoot = true; };
+  };
 }

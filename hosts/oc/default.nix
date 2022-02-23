@@ -1,4 +1,4 @@
 {
-    system = "aarch64-linux";
-    module = ./configuration.nix;
+  system = "aarch64-linux";
+  module = ./configuration.nix;
 }

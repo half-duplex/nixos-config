@@ -1,17 +1,17 @@
 { config, lib, ... }:
 let
-    cfg = config.sconfig.dvorak;
+  cfg = config.sconfig.dvorak;
 in
 {
-    options.sconfig.dvorak = lib.mkEnableOption "Use dvorak keyboard system-wide";
+  options.sconfig.dvorak = lib.mkEnableOption "Use dvorak keyboard system-wide";
 
-    config = lib.mkIf cfg {
-        console = {
-            keyMap = "dvorak";
-        };
-        services.xserver = {
-            layout = "us";
-            xkbVariant = "dvorak";
-        };
+  config = lib.mkIf cfg {
+    console = {
+      keyMap = "dvorak";
     };
+    services.xserver = {
+      layout = "us";
+      xkbVariant = "dvorak";
+    };
+  };
 }
