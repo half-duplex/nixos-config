@@ -24,6 +24,7 @@ in
         ncdu
         nfs-utils
         nixpkgs-fmt
+        nmap
         openssl
         pv
         python3
