@@ -17,4 +17,17 @@
     ];
 
     hardware.video.hidpi.enable = true;
+
+    fileSystems = {
+        "/mnt/awdbox/data" = {
+            device = "awdbox:/data";
+            fsType = "nfs";
+            options = [ "noauto" ];
+        };
+        "/mnt/mars/data" = {
+            device = "mars:/data";
+            fsType = "nfs";
+            options = [ "noauto" ];
+        };
+    };
 }
