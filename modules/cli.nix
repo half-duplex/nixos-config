@@ -26,6 +26,7 @@ in
     nixpkgs-fmt
     nmap
     openssl
+    psmisc
     pv
     python3
     rsync
