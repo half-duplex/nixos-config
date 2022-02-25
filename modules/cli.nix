@@ -26,6 +26,7 @@ in
     nixpkgs-fmt
     nmap
     openssl
+    parted
     psmisc
     pv
     python3
