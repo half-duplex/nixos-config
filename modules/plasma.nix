@@ -13,6 +13,7 @@ in
       displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5.enable = true;
       desktopManager.plasma5.runUsingSystemd = true;
+      desktopManager.plasma5.useQtScaling = true;
     };
 
     environment.systemPackages = with pkgs; [
