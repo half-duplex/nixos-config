@@ -10,7 +10,9 @@ in
       enable = true;
       libinput.enable = true;
       displayManager.sddm.enable = true;
+      displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5.enable = true;
+      desktopManager.plasma5.runUsingSystemd = true;
     };
 
     environment.systemPackages = with pkgs; [
