@@ -37,4 +37,6 @@
         options = [ "noauto" "noatime" ];
       };
     }));
+
+  system.stateVersion = "22.05";
 }
