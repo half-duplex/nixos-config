@@ -17,6 +17,7 @@
   ];
 
   hardware.video.hidpi.enable = true;
+  services.xserver.dpi = 192;
 
   fileSystems = lib.foldl (a: b: a // b)
     {
