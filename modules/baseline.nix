@@ -150,6 +150,7 @@
   security.apparmor.enable = true;
   security.apparmor.killUnconfinedConfinables = true;
 
+  nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
 
   systemd.tmpfiles.rules = [
