@@ -3,7 +3,11 @@
   sconfig = {
     profile = "server";
     hardware = "qemu";
+    remoteUnlock = true;
   };
+
+  # Delay for network device - work around https://github.com/NixOS/nixpkgs/issues/98741
+  #boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 2";
 
   boot = {
     #initrd.kernelModules = [ "virtio_gpu" "drm" ];

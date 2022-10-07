@@ -7,17 +7,7 @@
   boot = {
     loader.systemd-boot.enable = true;
     loader.systemd-boot.editor = false;
-    initrd.network = {
-      enable = true;
-      ssh = {
-        enable = true;
-        authorizedKeys = config.users.users.mal.openssh.authorizedKeys.keys;
-        hostKeys = [
-          "/persist/etc/ssh/ssh_host_ed25519_key_initrd"
-        ];
-        port = 23;
-      };
-    };
+
     zfs.forceImportAll = false;
     zfs.forceImportRoot = false;
 

@@ -6,10 +6,10 @@
     profile = "desktop";
     hardware = "physical";
     #security-tools = true;
+    remoteUnlock = true;
   };
 
   boot.initrd.availableKernelModules = [ "nvme" ];
-  #hardware.cpu.amd.updateMicrocode = true;
   hardware.cpu.intel.updateMicrocode = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
