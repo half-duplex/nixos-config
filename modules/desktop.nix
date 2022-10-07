@@ -29,6 +29,7 @@ with lib;
 
       _1password-gui
       wine
+      dxvk
 
       discord
       signal-desktop
