@@ -40,6 +40,7 @@
       "/var/log"
       "/var/lib/libvirt"
       "/var/lib/tailscale"
+      "/var/lib/flatpak"
     ];
   };
   environment.etc."NetworkManager/system-connections".source =

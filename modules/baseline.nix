@@ -37,7 +37,7 @@
       "vm.unprivileged_userfaultfd" = 0;
       "kernel.kexec_load_disabled" = 1;
       "kernel.sysrq" = 20; # SAK+sync
-      "kernel.unprivileged_userns_clone" = 0;
+      #"kernel.unprivileged_userns_clone" = 0;  # Required by flatpak
       "kernel.perf_event_paranoid" = 3;
       "net.ipv4.tcp_rfc1337" = 1;
       "net.ipv4.conf.all.log_martians" = 1;
