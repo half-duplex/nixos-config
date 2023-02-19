@@ -6,7 +6,6 @@
     profile = "desktop";
     hardware = "physical";
     #security-tools = true;
-    remoteUnlock = true;
   };
 
   boot.initrd.availableKernelModules = [ "nvme" ];
