@@ -46,7 +46,7 @@ with lib;
 
       unstable.android-tools
 
-      (mpv-with-scripts.override { scripts = [ mpvScripts.mpris ]; })
+      (mpv.override { scripts = [ mpvScripts.mpris ]; })
 
       (vscode-with-extensions.override {
         vscodeExtensions = with pkgs.vscode-extensions; [

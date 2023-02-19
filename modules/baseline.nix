@@ -129,7 +129,7 @@
     ];
   };
 
-  nix.allowedUsers = [ "@wheel" ];
+  nix.settings.allowed-users = [ "@wheel" ];
   #environment.memoryAllocator.provider = "graphene-hardened"; # Breaks everything... ??
   #environment.memoryAllocator.provider = "scudo"; # Breaks firefox...
   #environment.variables.SCUDO_OPTIONS = "ZeroContents=1";
