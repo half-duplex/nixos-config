@@ -159,8 +159,8 @@
         config.services.tailscale.enable == true
       )
       {
-        "100.64.0.1" = [ "nova.sec.gd" "nova" ];
-        "100.64.0.2" = [ "xps.sec.gd" "xps" ];
+        "100.64.0.1" = [ "xps.sec.gd" "xps" ];
+        "100.64.0.2" = [ "nova.sec.gd" "nova" ];
         "100.64.0.3" = [ "awdbox.sec.gd" "awdbox" ];
         "100.64.0.4" = [ "mars.sec.gd" "mars" ];
       };
