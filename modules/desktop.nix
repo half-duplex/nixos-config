@@ -16,6 +16,9 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
+      (tor-browser-bundle-bin.override {
+        useHardenedMalloc = false;
+      })
       gparted
       ntfs3g
       pavucontrol
