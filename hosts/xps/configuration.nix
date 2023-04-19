@@ -18,6 +18,9 @@
   hardware.video.hidpi.enable = true;
   services.xserver.dpi = 192;
 
+  # Battery
+  services.zfs.autoScrub.enable = false;
+
   fileSystems = lib.foldl (a: b: a // b)
     {
       "/mnt/awdbox/data" = {

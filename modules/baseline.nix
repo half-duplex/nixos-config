@@ -13,6 +13,8 @@
     zfs.forceImportRoot = false;
 
     kernelPackages = pkgs.linuxPackages_hardened;
+    # If hardened is ever newer than ZFS supports:
+    #kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
     # Hardening based on a website by someone I do not wish to promote. 2022-03-21
     # and https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/profiles/hardened.nix 2022-03-21
@@ -149,6 +151,11 @@
   ];
 
   zramSwap.enable = true;
+
+  # ZFS
+  systemd.services.zfs-mount.enable = false;
+  services.zfs.autoScrub.enable = lib.mkDefault true;
+  services.zfs.trim.enable = true;
 
   networking = {
     domain = lib.mkDefault "sec.gd";
