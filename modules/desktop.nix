@@ -46,6 +46,8 @@ with lib;
       virt-manager
 
       google-chrome
+      yubikey-manager-qt
+      zoom
 
       unstable.android-tools
 
