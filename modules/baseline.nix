@@ -194,7 +194,7 @@
 
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
+    settings.PasswordAuthentication = false;
     extraConfig = ''
       AllowGroups ssh-users
       GSSAPIAuthentication yes

@@ -15,7 +15,8 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYenMcXumgnwcAVa40KGhyXX3/VPqIZ9/YIej3g+RMC mal@luca.sec.gd"
   ];
 
-  hardware.video.hidpi.enable = true;
+  # deprecated, grab bits from https://github.com/NixOS/nixpkgs/blob/nixos-22.11/nixos/modules/hardware/video/hidpi.nix
+  #hardware.video.hidpi.enable = true;
   services.xserver.dpi = 192;
 
   # Battery
