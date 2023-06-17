@@ -2,7 +2,10 @@
 # mkfs.vfat -F32 /dev/nvme0n1p1
 # cryptsetup luksFormat --sector-size 4096 /dev/nvme0n1p2
 # cryptsetup --allow-discards --perf-no_read_workqueue --perf-no_write_workqueue --persistent open /dev/nvme0n1p2 cryptroot
-# zpool create -o ashift=12 -o autotrim=on -O compression=zstd-1 -O acltype=posixacl -O xattr=sa -O atime=off -O mountpoint=legacy tank /dev/mapper/cryptroot
+# zpool create -o ashift=12 -o autotrim=on -O compression=zstd-1 \
+#   -O acltype=posixacl -O xattr=sa -O dnodesize=auto -O normalization=formD \
+#   -O encryption=on -O keylocation=prompt -O keyformat=passphrase \
+#   -O atime=off -O mountpoint=legacy tank /dev/mapper/cryptroot
 # zfs create tank/persist
 # zfs create tank/nix
 # mount -t tmpfs tmpfs /mnt
