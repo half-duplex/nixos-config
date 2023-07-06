@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   sconfig = {
     dvorak = true;
@@ -15,8 +15,11 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYenMcXumgnwcAVa40KGhyXX3/VPqIZ9/YIej3g+RMC mal@luca.sec.gd"
   ];
 
-  # deprecated, grab bits from https://github.com/NixOS/nixpkgs/blob/nixos-22.11/nixos/modules/hardware/video/hidpi.nix
-  #hardware.video.hidpi.enable = true;
+  # HiDPI
+  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
+  console.earlySetup = true;
+  boot.loader.systemd-boot.consoleMode = "1";
+  fonts.fontconfig.subpixel.lcdfilter = "none";
   services.xserver.dpi = 192;
 
   # Battery
@@ -42,5 +45,5 @@
       };
     }));
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 }
