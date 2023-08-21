@@ -16,10 +16,9 @@
   ];
 
   # HiDPI
-  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
+  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v22n.psf.gz";
   console.earlySetup = true;
   boot.loader.systemd-boot.consoleMode = "1";
-  fonts.fontconfig.subpixel.lcdfilter = "none";
   services.xserver.dpi = 192;
 
   # Battery
