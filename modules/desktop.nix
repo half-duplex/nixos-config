@@ -46,6 +46,7 @@ with lib;
       virt-manager
 
       google-chrome
+      libreoffice-fresh
       yubikey-manager-qt
       zoom
 
