@@ -24,6 +24,12 @@
   # Battery
   services.zfs.autoScrub.enable = false;
 
+  environment.persistence."/persist" = {
+    directories = [
+      "/home"
+    ];
+  };
+
   fileSystems = lib.foldl (a: b: a // b)
     {
       "/mnt/awdbox/data" = {

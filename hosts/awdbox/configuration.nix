@@ -15,9 +15,15 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHIGpN/Enpx1FCRBqzDNYNN/QL94X4eAaPyvB+K9ekDg mal@xps"
   ];
 
+  environment.persistence."/persist" = {
+    directories = [
+      "/home"
+    ];
+  };
+
   fileSystems = lib.foldl (a: b: a // b)
     {
-      "/data" = {
+      "/data" = rec {
         device = "/dev/mapper/${encrypted.label}";
         encrypted = {
           enable = true;
@@ -27,7 +33,7 @@
         };
         options = [ "noatime" ];
       };
-      "/home2" = {
+      "/home2" = rec {
         device = "/dev/mapper/${encrypted.label}";
         encrypted = {
           enable = true;
@@ -49,4 +55,6 @@
         options = [ "noauto" "noatime" ];
       };
     }));
+
+    system.stateVersion = "23.05";
 }
