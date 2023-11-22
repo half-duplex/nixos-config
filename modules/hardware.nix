@@ -16,7 +16,7 @@ let
 
       (hardwareFor "qemu"
         {
-          inherit (callPackage "${modulesPath}/profiles/qemu-guest.nix" { }) boot;
+          inherit (callPackage "${modulesPath}/profiles/qemu-guest.nix" { config = config; }) boot;
           services.qemuGuest.enable = true;
         })
     ];
