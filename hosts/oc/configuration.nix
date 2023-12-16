@@ -22,5 +22,5 @@
     "/home" = { device = "tank/home"; fsType = "zfs"; };
   };
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 }

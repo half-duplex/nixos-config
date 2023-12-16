@@ -23,7 +23,7 @@
 { ... }:
 {
   users.mutableUsers = false;
-  users.users.mal.passwordFile = "/persist/shadow/mal";
+  users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
 
   # Otherwise we're lectured again every boot
   security.sudo.extraConfig = "Defaults lecture=never";

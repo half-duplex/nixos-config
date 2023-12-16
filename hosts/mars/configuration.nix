@@ -93,5 +93,5 @@
     add_bridge_mapping eth1 2
   '';
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.11";
 }
