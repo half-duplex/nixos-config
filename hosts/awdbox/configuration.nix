@@ -15,14 +15,9 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHIGpN/Enpx1FCRBqzDNYNN/QL94X4eAaPyvB+K9ekDg mal@xps"
   ];
 
-  environment.persistence."/persist" = {
-    directories = [
-      "/home"
-    ];
-  };
-
   fileSystems = lib.foldl (a: b: a // b)
     {
+      "/home" = { device = "tank/home"; fsType = "zfs"; };
       "/data" = rec {
         device = "/dev/mapper/${encrypted.label}";
         encrypted = {
