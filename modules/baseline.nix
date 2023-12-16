@@ -65,13 +65,14 @@
       "page_alloc.shuffle=1"
       "randomize_kstack_offset=on"
       "vsyscall=none"
-      "debugfs=off"
+      #"debugfs=off"
+      "debugfs=on"
       "oops=panic" # Too strong?
       #"module.sig_enforce=1"
       #"lockdown=confidentiality"
-      "mce=0"
+      #"mce=0"
       "quiet"
-      "loglevel=0"
+      #"loglevel=0"
       "intel_iommu=on" # Having both OK
       "amd_iommu=on"
       "efi=disable_early_pci_dma"
