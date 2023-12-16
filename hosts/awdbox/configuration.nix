@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   sconfig = {
     dvorak = true;
@@ -7,8 +7,11 @@
     hardware = "physical";
   };
 
-  boot.initrd.availableKernelModules = [ "nvme" ];
+  boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
+  boot.kernelParams = [ "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none" "processor.max_cstate=5" ];
+  console.earlySetup = true;
   hardware.cpu.amd.updateMicrocode = true;
+  hardware.rasdaemon.enable = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKu0BzxhF9J7L/0CLDuheOZurqEjPo4uSAFHNHmBXa0 mal@nova.sec.gd"
@@ -18,23 +21,23 @@
   fileSystems = lib.foldl (a: b: a // b)
     {
       "/home" = { device = "tank/home"; fsType = "zfs"; };
-      "/data" = rec {
-        device = "/dev/mapper/${encrypted.label}";
-        encrypted = {
-          enable = true;
-          blkDev = "UUID=bc600d0b-0248-4003-bcf9-0e16b989fee5";
-          label = "data";
-          keyFile = "/persist/etc/cryptsetup-keys.d/data.key";
-        };
-        options = [ "noatime" ];
-      };
+      #"/data" = rec {
+      #  device = "/dev/mapper/${encrypted.label}";
+      #  encrypted = {
+      #    enable = true;
+      #    blkDev = "/dev/disk/by-uuid/bc600d0b-0248-4003-bcf9-0e16b989fee5";
+      #    label = "data";
+      #    keyFile = "/mnt-root/persist/etc/cryptsetup-keys.d/data.key";
+      #  };
+      #  options = [ "noatime" ];
+      #};
       "/home2" = rec {
         device = "/dev/mapper/${encrypted.label}";
         encrypted = {
           enable = true;
-          blkDev = "UUID=53ac285c-cfba-4698-b0eb-988cb8cbdeea";
+          blkDev = "/dev/disk/by-uuid/53ac285c-cfba-4698-b0eb-988cb8cbdeea";
           label = "crypthome";
-          keyFile = "/persist/etc/cryptsetup-keys.d/crypthome.key";
+          keyFile = "/mnt-root/persist/etc/cryptsetup-keys.d/crypthome.key";
         };
         options = [ "noatime" ];
       };

@@ -40,9 +40,10 @@
     ];
     directories = [
       "/var/log"
-      "/var/lib/libvirt"
-      "/var/lib/tailscale"
       "/var/lib/flatpak"
+      "/var/lib/libvirt"
+      "/var/lib/rasdaemon"
+      "/var/lib/tailscale"
     ];
   };
   environment.etc."NetworkManager/system-connections".source =

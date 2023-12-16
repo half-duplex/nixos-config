@@ -200,6 +200,9 @@
       GSSAPIAuthentication yes
     '';
   };
+  programs.ssh.extraConfig = ''
+    GSSAPIAuthentication yes
+  '';
 
   services.tailscale = {
     enable = true;
