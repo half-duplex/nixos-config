@@ -108,6 +108,7 @@ with lib;
     services.flatpak.enable = true;
     services.udev.packages = [ pkgs.android-udev-rules ];
     users.users.mal.extraGroups = [ "adbusers" ];
+    programs.dconf.enable = true;
     programs.steam.enable = true;
   };
 }

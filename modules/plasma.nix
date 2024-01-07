@@ -10,7 +10,8 @@ in
       enable = true;
       libinput.enable = true;
       displayManager.sddm.enable = true;
-      displayManager.defaultSession = "plasmawayland";
+      # Can't use wayland until it has global hotkeys
+      #displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5.enable = true;
       desktopManager.plasma5.runUsingSystemd = true;
       desktopManager.plasma5.useQtScaling = true;

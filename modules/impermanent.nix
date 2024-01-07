@@ -28,8 +28,6 @@
   # Otherwise we're lectured again every boot
   security.sudo.extraConfig = "Defaults lecture=never";
 
-  boot.initrd.luks.devices.cryptroot = { device = "/dev/disk/by-partlabel/_luks"; };
-
   environment.persistence."/persist" = {
     files = [
       "/etc/krb5.keytab"

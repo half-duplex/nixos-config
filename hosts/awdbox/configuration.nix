@@ -5,6 +5,7 @@
     plasma = true;
     profile = "desktop";
     hardware = "physical";
+    remoteUnlock = true;
   };
 
   boot.initrd.availableKernelModules = [ "nvme" "r8169" ];

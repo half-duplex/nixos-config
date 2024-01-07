@@ -11,7 +11,7 @@
 
   hardware.cpu.intel.updateMicrocode = true;
   boot = {
-    initrd.availableKernelModules = [ "nvme" ]; # aoeu testing FIXME TODO
+    initrd.availableKernelModules = [ "nvme" ];
     #kernelParams = [ "console=ttyS0" ];
   };
 

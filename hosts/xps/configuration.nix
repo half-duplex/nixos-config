@@ -10,6 +10,7 @@
 
   boot.initrd.availableKernelModules = [ "nvme" ];
   hardware.cpu.intel.updateMicrocode = true;
+  boot.initrd.luks.devices.cryptroot = { device = "/dev/disk/by-partlabel/_luks"; };
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKYenMcXumgnwcAVa40KGhyXX3/VPqIZ9/YIej3g+RMC mal@luca.sec.gd"
