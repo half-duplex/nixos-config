@@ -30,7 +30,6 @@ with lib;
       gimp
       youtube-dl
 
-      _1password-gui
       wine
       dxvk
 
@@ -108,7 +107,14 @@ with lib;
     services.flatpak.enable = true;
     services.udev.packages = [ pkgs.android-udev-rules ];
     users.users.mal.extraGroups = [ "adbusers" ];
-    programs.dconf.enable = true;
-    programs.steam.enable = true;
+    programs = {
+      _1password.enable = true;
+      _1password-gui = {
+        enable = true;
+        polkitPolicyOwners = [ "mal" ];
+      };
+      dconf.enable = true;
+      steam.enable = true;
+    };
   };
 }
