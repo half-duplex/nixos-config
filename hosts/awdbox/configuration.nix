@@ -22,16 +22,9 @@
   fileSystems = lib.foldl (a: b: a // b)
     {
       "/home" = { device = "tank/home"; fsType = "zfs"; };
-      #"/data" = rec {
-      #  device = "/dev/mapper/${encrypted.label}";
-      #  encrypted = {
-      #    enable = true;
-      #    blkDev = "/dev/disk/by-uuid/bc600d0b-0248-4003-bcf9-0e16b989fee5";
-      #    label = "data";
-      #    keyFile = "/mnt-root/persist/etc/cryptsetup-keys.d/data.key";
-      #  };
-      #  options = [ "noatime" ];
-      #};
+      "/data" = { device = "awdbox-data/data"; fsType = "zfs"; };
+      "/data/backups" = { device = "awdbox-data/backups"; fsType = "zfs"; };
+      "/data/steam" = { device = "awdbox-data/steam"; fsType = "zfs"; };
       "/home2" = rec {
         device = "/dev/mapper/${encrypted.label}";
         encrypted = {
