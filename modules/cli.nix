@@ -28,6 +28,7 @@ in
     nvme-cli
     openssl
     parted
+    pciutils
     psmisc
     pv
     rsync

@@ -19,6 +19,7 @@ in
 
     environment.systemPackages = with pkgs; [
       libsForQt5.gwenview
+      libsForQt5.bismuth
     ];
   };
 }

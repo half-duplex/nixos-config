@@ -16,9 +16,7 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      (tor-browser-bundle-bin.override {
-        useHardenedMalloc = false;
-      })
+      tor-browser-bundle-bin
       gparted
       ntfs3g
       pavucontrol
@@ -26,7 +24,7 @@ with lib;
       redshift
 
       carla
-      ffmpeg
+      ffmpeg-full
       gimp
       youtube-dl
 
@@ -34,16 +32,19 @@ with lib;
       dxvk
 
       discord
+      #unstable.obsidian  # Requires ancient electron
       signal-desktop
       tdesktop
       teamspeak_client
       thunderbird
 
       chirp
+      ghidra
       #pgadmin # ancient
       remmina
       virt-manager
 
+      chromium
       google-chrome
       libreoffice-fresh
       yubikey-manager-qt
@@ -107,6 +108,10 @@ with lib;
     services.flatpak.enable = true;
     services.udev.packages = [ pkgs.android-udev-rules ];
     users.users.mal.extraGroups = [ "adbusers" ];
+    security = {
+      polkit.enable = true;
+      pam.services.kwallet.enableKwallet = true;
+    };
     programs = {
       _1password.enable = true;
       _1password-gui = {
