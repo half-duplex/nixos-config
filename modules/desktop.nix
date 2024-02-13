@@ -39,6 +39,8 @@ with lib;
       thunderbird
 
       chirp
+      gedit
+      gnome-text-editor
       ghidra
       #pgadmin # ancient
       remmina
