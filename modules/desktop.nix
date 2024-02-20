@@ -45,12 +45,15 @@ with lib;
       #pgadmin # ancient
       remmina
       virt-manager
+      wireshark
 
       chromium
       google-chrome
       libreoffice-fresh
       yubikey-manager-qt
       zoom
+
+      unstable.r2modman
 
       unstable.android-tools
 

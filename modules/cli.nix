@@ -11,6 +11,7 @@ in
 {
   #console.font = "Lat2-Terminus16"; # todo pick
   environment.systemPackages = with pkgs; [
+    ansible
     binutils
     darkhttpd
     dnsutils
@@ -37,6 +38,7 @@ in
     tcpdump
     unzip
     usbutils
+    virtiofsd
     wget
     wireguard-tools
     whois
