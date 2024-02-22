@@ -172,6 +172,7 @@
         "100.64.0.3" = [ "awdbox.sec.gd" "awdbox" ];
         "100.64.0.4" = [ "mars.sec.gd" "mars" ];
       };
+    nftables.enable = true;
     wireguard.enable = true;
   };
 
