@@ -34,6 +34,7 @@ in
     pv
     rsync
     smartmontools
+    socat
     sqlite
     tcpdump
     unzip

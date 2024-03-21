@@ -94,6 +94,10 @@
           };
         };
       };
+      tor = {
+        enable = true;
+        client.enable = true;
+      };
     };
 
     programs.gnupg.agent.enable = true;
