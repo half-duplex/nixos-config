@@ -50,6 +50,7 @@ with lib;
       chromium
       google-chrome
       libreoffice-fresh
+      yubikey-manager
       yubikey-manager-qt
       zoom
 
@@ -112,6 +113,7 @@ with lib;
     #programs.adb.enable = true;
     services.flatpak.enable = true;
     services.udev.packages = [ pkgs.android-udev-rules ];
+    services.pcscd.enable = true;  # yubikey ccid/piv
     users.users.mal.extraGroups = [ "adbusers" ];
     security = {
       polkit.enable = true;
