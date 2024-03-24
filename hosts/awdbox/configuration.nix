@@ -50,6 +50,7 @@
 
     networking.firewall.allowedTCPPorts = [ 445 ];
     services = {
+      avahi.enable = true;
       samba = {
         enable = true;
         enableWinbindd = false;
