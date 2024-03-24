@@ -25,8 +25,9 @@ with lib;
 
       carla
       ffmpeg-full
+      mediainfo
       gimp
-      youtube-dl
+      yt-dlp
 
       wine
       dxvk
