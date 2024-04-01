@@ -22,6 +22,7 @@ in
     htop
     jq
     lm_sensors
+    lsof
     mosh
     ncdu
     nfs-utils
