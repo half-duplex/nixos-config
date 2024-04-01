@@ -13,6 +13,7 @@ in
   environment.systemPackages = with pkgs; [
     ansible
     binutils
+    cryptsetup
     darkhttpd
     dnsutils
     file
