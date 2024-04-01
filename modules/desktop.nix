@@ -33,7 +33,7 @@ with lib;
       dxvk
 
       discord
-      #unstable.obsidian  # Requires ancient electron
+      #nixpkgsUnstable.obsidian  # Requires ancient electron
       signal-desktop
       tdesktop
       teamspeak_client
@@ -55,9 +55,9 @@ with lib;
       yubikey-manager-qt
       zoom
 
-      unstable.r2modman
+      nixpkgsUnstable.r2modman
 
-      unstable.android-tools
+      nixpkgsUnstable.android-tools
 
       (mpv.override { scripts = [ mpvScripts.mpris ]; })
 

@@ -1,4 +1,4 @@
-{ path, nixosModule, nixpkgs, unstable }:
+{ path, nixosModule, nixpkgs, nixpkgsStaging, nixpkgsUnstable }:
 let
   hostMetadata = builtins.mapAttrs
     (name: _: import (path + "/${name}"))
@@ -14,7 +14,11 @@ let
         (_: {
           nixpkgs.overlays = [
             (_: _: {
-              unstable = import unstable {
+              nixpkgsStaging = import nixpkgsUnstable {
+                inherit (hostMeta) system;
+                config.allowUnfree = true;
+              };
+              nixpkgsUnstable = import nixpkgsUnstable {
                 inherit (hostMeta) system;
                 config.allowUnfree = true;
               };

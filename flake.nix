@@ -1,9 +1,10 @@
 {
   inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
-  inputs.unstable.url = "nixpkgs/nixos-unstable";
+  inputs.nixpkgsStaging.url = "nixpkgs/release-23.11";
+  inputs.nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
   inputs.impermanence.url = "github:nix-community/impermanence";
 
-  outputs = { self, nixpkgs, unstable, impermanence, ... }: {
+  outputs = { self, nixpkgs, nixpkgsStaging, nixpkgsUnstable, impermanence, ... }: {
     nixosModules =
       { inherit (impermanence.nixosModules) impermanence; } //
       nixpkgs.lib.mapAttrs'
@@ -19,7 +20,7 @@
 
     nixosConfigurations = self.lib.getHosts {
       path = ./hosts;
-      inherit nixpkgs unstable;
+      inherit nixpkgs nixpkgsStaging nixpkgsUnstable;
       inherit (self) nixosModule;
     };
 
