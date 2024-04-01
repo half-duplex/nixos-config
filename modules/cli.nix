@@ -71,8 +71,45 @@ in
   environment.etc.nixpkgs.source = pkgs.path;
   nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
 
-  environment.variables.PLGO_HOSTNAMEFG = "0";
-  environment.variables.PLGO_HOSTNAMEBG = "114";
+  environment = {
+    sessionVariables = {
+      XDG_CACHE_HOME = "$HOME/.cache";
+      XDG_CONFIG_HOME = "$HOME/.config";
+      XDG_DATA_HOME = "$HOME/.local/share";
+      XDG_STATE_HOME = "$HOME/.local/state";
+    };
+    variables = {
+      EDITOR = "vim";
+      HISTCONTROL = "ignoreboth";
+      HISTSIZE = "5000";
+      HISTTIMEFORMAT = "%Y.%m.%d %T ";
+      PATH = "$HOME/.local/bin:$PATH";
+
+      MOSH_TITLE_NOPREFIX = "1";
+      PLGO_HOSTNAMEFG = "0";
+      PLGO_HOSTNAMEBG = "114";
+      KRB5CCNAME="DIR:/tmp/krb5cc_\${UID}_d/";
+
+      # Hack around lack of XDG base dir spec support
+      ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";
+      CARGO_HOME = "$XDG_DATA_HOME/cargo";
+      DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
+      GNUPGHOME = "$XDG_CONFIG_HOME/gnupg";
+      GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
+      HISTFILE = "$XDG_STATE_HOME/bash/history";
+      NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
+      NODE_REPL_HISTORY = "$XDG_DATA_HOME/node_repl_history";
+      NUGET_PACKAGES = "$XDG_CACHE_HOME/nuget-packages";
+      PYTHON_HISTORY = "$XDG_STATE_HOME/python/history";
+      PYTHONUSERBASE = "$XDG_DATA_HOME/python";
+      RANDFILE = "$XDG_DATA_HOME/openssl/rnd";
+      TERMINFO = "$XDG_DATA_HOME/terminfo";
+      TERMINFO_DIRS = "$XDG_DATA_HOME/terminfo:$TERMINFO_DIRS";
+      VIMINIT = ":source $XDG_CONFIG_HOME/vim/vimrc";
+      WGETRC = "$XDG_CONFIG_HOME/wget/wgetrc";
+      WINEPREFIX = "$XDG_DATA_HOME/wineprefixes/default";
+    };
+  };
 
   programs.mtr.enable = true;
 
