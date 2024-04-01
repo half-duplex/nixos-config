@@ -25,16 +25,6 @@
       "/data" = { device = "awdbox-data/data"; fsType = "zfs"; };
       "/data/backups" = { device = "awdbox-data/backups"; fsType = "zfs"; };
       "/data/steam" = { device = "awdbox-data/steam"; fsType = "zfs"; };
-      "/home2" = rec {
-        device = "/dev/mapper/${encrypted.label}";
-        encrypted = {
-          enable = true;
-          blkDev = "/dev/disk/by-uuid/53ac285c-cfba-4698-b0eb-988cb8cbdeea";
-          label = "crypthome";
-          keyFile = "/mnt-root/persist/etc/cryptsetup-keys.d/crypthome.key";
-        };
-        options = [ "noatime" ];
-      };
       "/mnt/mars/data" = {
         device = "mars:/data";
         fsType = "nfs";
