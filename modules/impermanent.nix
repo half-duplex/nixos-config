@@ -1,20 +1,20 @@
 # Setup:
 # mkfs.vfat -F32 /dev/nvme0n1p1
-# cryptsetup luksFormat --sector-size 4096 /dev/nvme0n1p2
-# cryptsetup --allow-discards --perf-no_read_workqueue --perf-no_write_workqueue --persistent open /dev/nvme0n1p2 cryptroot
 # zpool create -o ashift=12 -o autotrim=on -O compression=zstd-1 \
 #   -O acltype=posixacl -O xattr=sa -O dnodesize=auto -O normalization=formD \
 #   -O encryption=on -O keylocation=prompt -O keyformat=passphrase \
-#   -O atime=off -O mountpoint=legacy tank /dev/mapper/cryptroot
+#   -O atime=off -O mountpoint=legacy tank /dev/nvme0n1p2
 # zfs create tank/persist
+# zfs create tank/home
 # zfs create tank/nix
 # mount -t tmpfs tmpfs /mnt
-# mkdir -p /mnt/{boot,nix,persist}
+# mkdir -p /mnt/{boot,persist,home,nix}
 # mount /dev/nvme0n1p1 /mnt/boot
 # mount -t zfs tank/persist /mnt/persist/
+# mount -t zfs tank/home /mnt/home/
 # mount -t zfs tank/nix /mnt/nix/
-# nix-shell -p nixFlakes
-# mkdir -p /mnt/persist/shadow
+# mkdir -p /mnt/persist/shadow /persist/etc/NetworkManager/system-connections
+# nix-shell -p openssl git
 # openssl passwd -6 > /mnt/persist/shadow/mal
 # chmod go= /mnt/persist/shadow -R
 # nixos-install --flake git+http://10.0.0.22:8080/?ref=main#xps --no-root-passwd
