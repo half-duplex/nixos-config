@@ -68,7 +68,7 @@ with lib;
         ];
       })
 
-      (wrapFirefox firefox-unwrapped {
+      (wrapFirefox nixpkgsStaging.firefox-unwrapped {
         extraPolicies = {
           DisablePocket = true;
           OfferToSaveLogins = false;
