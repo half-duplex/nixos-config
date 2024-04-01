@@ -74,7 +74,7 @@
     };
   };
 
-  virtualisation.vmware.host.enable = true;
+  #virtualisation.vmware.host.enable = true;
   environment.etc."vmware/networking".text = ''
     VERSION=1,0
     answer VNET_1_DHCP yes
