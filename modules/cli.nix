@@ -128,12 +128,54 @@ in
     vimAlias = true;
     configure = {
       packages.sconfig.start = with pkgs.vimPlugins; [
+        vim-bracketed-paste
         vim-gitgutter
         vim-nix
       ];
       customRC = ''
-        set encoding=utf-8
         scriptencoding utf-8
+        set background=dark
+        set colorcolumn=120
+        set encoding=utf-8
+        set expandtab
+        set ignorecase
+        set incsearch
+        set list
+        set mouse=
+        set nowrap
+        set number
+        set pastetoggle=<F2>
+        set list listchars=precedes:<,extends:>
+        set scrolloff=8
+        set sidescroll=1
+        set sidescrolloff=15
+        set smartcase
+        set tabstop=4
+        set textwidth=99
+        set shiftwidth=4
+        highlight ColorColumn ctermbg=0
+        map <F8> <Esc>:w<CR>:!clear<CR>:! time ./%<CR>
+        noremap <F1> <Esc>
+        inoremap <F1> <Esc>
+        autocmd FileType make setlocal noexpandtab
+        let mapleader=","
+
+        " Append modeline after last line in buffer
+        " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
+        function! AppendModeline()
+            let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+                    \ &tabstop, &shiftwidth, &textwidth, &expandtab ? "" : "no")
+            let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+            call append(line("$"), l:modeline)
+        endfunction
+        nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
+        highlight ExtraWhitespace ctermbg=red guibg=red
+        match ExtraWhitespace /\s\+$/
+        autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+        autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+        autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+        autocmd BufWinLeave * call clearmatches()
       '';
     };
   };
