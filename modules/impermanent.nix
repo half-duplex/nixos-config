@@ -13,7 +13,7 @@
 # mount -t zfs tank/persist /mnt/persist/
 # mount -t zfs tank/home /mnt/home/
 # mount -t zfs tank/nix /mnt/nix/
-# mkdir -p /mnt/persist/shadow /persist/etc/NetworkManager/system-connections
+# mkdir -p /mnt/persist/shadow /persist/etc/secureboot /persist/etc/NetworkManager/system-connections
 # nix-shell -p openssl git
 # openssl passwd -6 > /mnt/persist/shadow/mal
 # chmod go= /mnt/persist/shadow -R
@@ -44,6 +44,7 @@
       "/var/lib/tailscale"
     ];
   };
+  environment.etc.secureboot.source = "/persist/etc/secureboot";
   environment.etc."NetworkManager/system-connections".source =
     "/persist/etc/NetworkManager/system-connections";
 

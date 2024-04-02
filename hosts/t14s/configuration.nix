@@ -5,6 +5,7 @@
     plasma = true;
     profile = "desktop";
     hardware = "physical";
+    secureboot = true;
   };
 
   boot.initrd.availableKernelModules = [ "nvme" ];

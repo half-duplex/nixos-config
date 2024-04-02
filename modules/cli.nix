@@ -35,6 +35,7 @@ in
     psmisc
     pv
     rsync
+    sbctl
     smartmontools
     socat
     sqlite
