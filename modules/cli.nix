@@ -28,6 +28,7 @@ in
     nfs-utils
     nixpkgs-fmt
     nmap
+    nvd
     nvme-cli
     openssl
     parted
