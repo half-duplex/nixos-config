@@ -42,6 +42,7 @@
       "/var/lib/libvirt"
       "/var/lib/rasdaemon"
       "/var/lib/tailscale"
+      "/var/lib/swtpm-localca"
     ];
   };
   environment.etc.secureboot.source = "/persist/etc/secureboot";
