@@ -48,8 +48,8 @@
   fileSystems = lib.foldl (a: b: a // b)
     {
       "/home" = { device = "tank/home"; fsType = "zfs"; };
-      "/data" = { device = "awen-data/data"; fsType = "zfs"; };
-      "/data/backups" = { device = "awen-data/backups"; fsType = "zfs"; };
+      #"/data" = { device = "awen-data/data"; fsType = "zfs"; };
+      #"/data/backups" = { device = "awen-data/backups"; fsType = "zfs"; };
     }
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {
