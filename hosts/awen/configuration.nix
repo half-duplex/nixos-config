@@ -7,7 +7,7 @@
   };
 
   hardware.cpu.amd.updateMicrocode = true;
-  boot.initrd.availableKernelModules = [ "nvme" ];
+  boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
   boot.kernelParams = [ "ip=10.0.0.5::10.0.0.1:255.255.255.0::eth0:none" ];
   console.earlySetup = true;
 
