@@ -9,6 +9,7 @@
   hardware.cpu.amd.updateMicrocode = true;
   boot.initrd.availableKernelModules = [ "nvme" ];
   boot.kernelParams = [ "ip=10.0.0.5::10.0.0.1:255.255.255.0::eth0:none" ];
+  console.earlySetup = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM9oQ5Cdab1hZF5LhQ8FTWdAV8QQ/S1/0krreiRzT62n mal@awdbox.sec.gd"
