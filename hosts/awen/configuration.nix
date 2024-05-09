@@ -5,6 +5,7 @@
     profile = "server";
     hardware = "physical";
     remoteUnlock = true;
+    secureboot = true;
   };
 
   hardware.cpu.amd.updateMicrocode = true;
