@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 {
   sconfig = {
+    dvorak = true;
     profile = "server";
     hardware = "physical";
     remoteUnlock = true;
