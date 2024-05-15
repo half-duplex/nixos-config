@@ -153,10 +153,17 @@
 
   zramSwap.enable = true;
 
-  # ZFS
+  # Filesystems
   systemd.services.zfs-mount.enable = false;
-  services.zfs.autoScrub.enable = lib.mkDefault true;
-  services.zfs.trim.enable = true;
+  services = {
+    udev.extraRules = ''
+      SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
+    '';
+    zfs = {
+      autoScrub.enable = lib.mkDefault true;
+      trim.enable = true;
+    };
+  };
 
   networking = {
     domain = lib.mkDefault "sec.gd";
