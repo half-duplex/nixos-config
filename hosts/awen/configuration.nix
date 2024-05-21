@@ -37,6 +37,7 @@
         ];
         ipv6.addresses = [];
       };
+      eth0.wakeOnLan.enable = true;
     };
     nameservers = [
       "10.0.0.1"
