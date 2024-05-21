@@ -31,6 +31,7 @@ in
     nvd
     nvme-cli
     openssl
+    openvpn
     parted
     pciutils
     psmisc
