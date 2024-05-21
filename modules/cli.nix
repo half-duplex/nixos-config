@@ -46,8 +46,9 @@ in
     usbutils
     virtiofsd
     wget
-    wireguard-tools
     whois
+    wireguard-tools
+    wol
     zip
 
     python3
