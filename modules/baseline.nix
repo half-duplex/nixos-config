@@ -208,9 +208,12 @@
 
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
+    settings = {
+      AllowGroups = [ "ssh-users" ];
+      KbdInteractiveAuthentication = false;
+      PasswordAuthentication = false;
+    };
     extraConfig = ''
-      AllowGroups ssh-users
       GSSAPIAuthentication yes
     '';
   };
