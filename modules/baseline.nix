@@ -217,9 +217,24 @@
     GSSAPIAuthentication yes
   '';
 
-  services.tailscale = {
-    enable = true;
-    interfaceName = "ts0";
+  services = {
+    sanoid = {
+      enable = true;
+      datasets = {
+        "tank/home".use_template = [ "default" ];
+        "tank/persist".use_template = [ "default" ];
+      };
+      templates.default = {
+        hourly = 48;
+        daily = 90;
+        monthly = 12;
+        yearly = 0;
+      };
+    };
+    tailscale = {
+      enable = true;
+      interfaceName = "ts0";
+    };
   };
 
   krb5 = {
