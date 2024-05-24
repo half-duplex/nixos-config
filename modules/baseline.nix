@@ -222,8 +222,14 @@
     sanoid = {
       enable = true;
       datasets = {
-        "tank/home".use_template = [ "default" ];
-        "tank/persist".use_template = [ "default" ];
+        "tank/home" = {
+          use_template = [ "default" ];
+          recursive = true;
+        };
+        "tank/persist" = {
+          use_template = [ "default" ];
+          recursive = true;
+        };
       };
       templates.default = {
         hourly = 48;
