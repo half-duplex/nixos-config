@@ -1,4 +1,9 @@
 # Setup:
+# nix-shell -p openssl git
+# parted /dev/nvme0n1 mklabel gpt
+# parted /dev/nvme0n1 mkpart _esp fat32 0% 1G
+# parted /dev/nvme0n1 set 1 esp on
+# parted /dev/nvme0n1 mkpart _tank 1G 100%
 # mkfs.vfat -F32 /dev/nvme0n1p1
 # zpool create -o ashift=12 -o autotrim=on -O compression=zstd-1 \
 #   -O acltype=posixacl -O xattr=sa -O dnodesize=auto -O normalization=formD \
@@ -8,17 +13,22 @@
 # zfs create tank/home
 # zfs create tank/nix
 # mount -t tmpfs tmpfs /mnt
-# mkdir -p /mnt/{boot,persist,home,nix}
-# mount /dev/nvme0n1p1 /mnt/boot
-# mount -t zfs tank/persist /mnt/persist/
-# mount -t zfs tank/home /mnt/home/
-# mount -t zfs tank/nix /mnt/nix/
-# mkdir -p /mnt/persist/shadow /persist/etc/secureboot /persist/etc/NetworkManager/system-connections
-# nix-shell -p openssl git
+# cd /mnt
+# mkdir -p {boot,persist,home,nix}
+# mount /dev/nvme0n1p1 boot
+# for ds in persist home nix ; do mount -t zfs tank/$ds $ds ; done
+# mkdir -p persist/{shadow,etc/{secureboot,ssh,NetworkManager/system-connections}}
+# ssh-keygen -t ed25519 -N '' -C '' -f etc/ssh/ssh_host_ed25519_key_initrd
 # openssl passwd -6 > /mnt/persist/shadow/mal
 # chmod go= /mnt/persist/shadow -R
-# nixos-install --flake git+http://10.0.0.22:8080/?ref=main#xps --no-root-passwd
+# nixos-install --no-root-password \
+#   --flake git+https://github.com/half-duplex/nixos-config.git?ref=main#hostname
 # zpool export tank
+# Once booted: https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md
+# sbctl create-keys
+# Enable SB in host config.nix, rebuild, setup mode in fw
+# sudo sbctl enroll-keys --microsoft
+
 
 { ... }:
 {
