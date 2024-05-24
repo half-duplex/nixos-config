@@ -50,7 +50,6 @@
 
   fileSystems = lib.foldl (a: b: a // b)
     {
-      "/home" = { device = "tank/home"; fsType = "zfs"; };
       "/mnt/data" = { device = "pool"; fsType = "zfs"; };
       "/mnt/data/backups" = { device = "pool/backups"; fsType = "zfs"; };
       "/mnt/data/downloads" = { device = "pool/downloads"; fsType = "zfs"; };

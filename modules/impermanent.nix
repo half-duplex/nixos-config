@@ -62,6 +62,7 @@
   fileSystems = {
     "/" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "mode=755" ]; };
     "/boot" = { device = "/dev/disk/by-partlabel/_esp"; };
+    "/home" = { device = "tank/home"; fsType = "zfs"; };
     "/nix" = { device = "tank/nix"; fsType = "zfs"; };
     "/persist" = { device = "tank/persist"; fsType = "zfs"; neededForBoot = true; };
   };

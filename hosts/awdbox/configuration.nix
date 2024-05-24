@@ -22,7 +22,6 @@
 
   fileSystems = lib.foldl (a: b: a // b)
     {
-      "/home" = { device = "tank/home"; fsType = "zfs"; };
       "/data" = { device = "awdbox-data/data"; fsType = "zfs"; };
       "/data/backups" = { device = "awdbox-data/backups"; fsType = "zfs"; };
       "/data/steam" = { device = "awdbox-data/steam"; fsType = "zfs"; };
