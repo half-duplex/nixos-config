@@ -2,6 +2,8 @@
 with lib;
 {
   config = mkIf (config.sconfig.profile == "desktop") {
+    time.timeZone = "US/Eastern";
+
     sconfig.alacritty.enable = true;
 
     hardware.bluetooth.enable = true;
