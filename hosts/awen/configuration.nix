@@ -115,6 +115,14 @@
         };
       };
     };
+    sanoid = {
+      datasets = {
+        "pool" = {
+          use_template = [ "default" ];
+          recursive = true;
+        };
+      };
+    };
     smartd.enable = true;
     tor = {
       enable = true;
