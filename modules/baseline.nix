@@ -143,6 +143,7 @@
   security.virtualisation.flushL1DataCache = "always";
   security.apparmor.enable = true;
   security.apparmor.killUnconfinedConfinables = true;
+  security.sudo.execWheelOnly = lib.mkDefault true;
 
   nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
