@@ -8,9 +8,10 @@
     secureboot = true;
   };
 
-  hardware.cpu.amd.updateMicrocode = true;
-  boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages;  # hardened currently causes boot loops
   boot.kernelParams = [ "ip=10.0.0.6::10.0.0.1:255.255.255.0::eth0:none" ];
+  boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
+  hardware.cpu.amd.updateMicrocode = true;
   console.earlySetup = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
