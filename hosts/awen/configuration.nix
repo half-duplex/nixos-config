@@ -10,7 +10,7 @@
 
   hardware.cpu.amd.updateMicrocode = true;
   boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
-  boot.kernelParams = [ "ip=10.0.0.5::10.0.0.1:255.255.255.0::eth0:none" ];
+  boot.kernelParams = [ "ip=10.0.0.6::10.0.0.1:255.255.255.0::eth0:none" ];
   console.earlySetup = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
@@ -31,7 +31,7 @@
       br0 = {
         ipv4.addresses = [
           {
-            address = "10.0.0.5";
+            address = "10.0.0.6";
             prefixLength = 24;
           }
         ];
