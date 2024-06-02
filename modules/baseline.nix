@@ -144,6 +144,30 @@
   security.apparmor.enable = true;
   security.apparmor.killUnconfinedConfinables = true;
   security.sudo.execWheelOnly = lib.mkDefault true;
+  security.krb5 = {
+    enable = true;
+    settings = {
+      domain_realm = {
+        "sec.gd" = "SEC.GD";
+        ".sec.gd" = "SEC.GD";
+      };
+      libdefaults = {
+        default_realm = "SEC.GD";
+        permitted_enctypes =
+          "aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96";
+        rdns = false;
+        spake_preauth_groups = "edwards25519";
+      };
+      realms = {
+        "SEC.GD" = {
+          kdc = "kerberos.sec.gd";
+          admin_server = "kerberos.sec.gd";
+          default_principal_flags = "+preauth";
+          disable_encrypted_timestamp = true;
+        };
+      };
+    };
+  };
 
   nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
@@ -244,29 +268,6 @@
     tailscale = {
       enable = true;
       interfaceName = "ts0";
-    };
-  };
-
-  krb5 = {
-    enable = true;
-    domain_realm = {
-      "sec.gd" = "SEC.GD";
-      ".sec.gd" = "SEC.GD";
-    };
-    libdefaults = {
-      default_realm = "SEC.GD";
-      permitted_enctypes =
-        "aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96";
-      rdns = false;
-      spake_preauth_groups = "edwards25519";
-    };
-    realms = {
-      "SEC.GD" = {
-        kdc = "kerberos.sec.gd";
-        admin_server = "kerberos.sec.gd";
-        default_principal_flags = "+preauth";
-        disable_encrypted_timestamp = true;
-      };
     };
   };
 }

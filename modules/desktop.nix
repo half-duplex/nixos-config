@@ -9,7 +9,7 @@ with lib;
     hardware.bluetooth.enable = true;
     networking.networkmanager.enable = true;
 
-    services.xserver.xkbOptions = "compose:ralt";
+    services.xserver.xkb.options = "compose:ralt";
 
     security.rtkit.enable = true;
     services.pipewire = {

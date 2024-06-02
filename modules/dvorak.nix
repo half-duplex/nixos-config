@@ -10,8 +10,10 @@ in
       keyMap = "dvorak";
     };
     services.xserver = {
-      layout = "us";
-      xkbVariant = "dvorak";
+      xkb = {
+        layout = "us";
+        variant = "dvorak";
+      };
     };
   };
 }

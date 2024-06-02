@@ -6,15 +6,17 @@ in
   options.sconfig.plasma = lib.mkEnableOption "Enable Plasma Desktop";
 
   config = lib.mkIf cfg {
-    services.xserver = {
-      enable = true;
-      libinput.enable = true;
+    services = {
       displayManager.sddm.enable = true;
-      # Can't use wayland until it has global hotkeys
-      #displayManager.defaultSession = "plasmawayland";
-      desktopManager.plasma5.enable = true;
-      desktopManager.plasma5.runUsingSystemd = true;
-      desktopManager.plasma5.useQtScaling = true;
+      libinput.enable = true;
+      xserver = {
+        enable = true;
+        # Can't use wayland until it has global hotkeys
+        #displayManager.defaultSession = "plasmawayland";
+        desktopManager.plasma5.enable = true;
+        desktopManager.plasma5.runUsingSystemd = true;
+        desktopManager.plasma5.useQtScaling = true;
+      };
     };
 
     environment.systemPackages = with pkgs; [

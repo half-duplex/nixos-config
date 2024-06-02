@@ -1,6 +1,6 @@
 {
-  inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
-  inputs.nixpkgsStaging.url = "nixpkgs/release-23.11";
+  inputs.nixpkgs.url = "nixpkgs/nixos-24.05";
+  inputs.nixpkgsStaging.url = "nixpkgs/release-24.05";
   inputs.nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
   inputs.impermanence.url = "github:nix-community/impermanence";
   inputs.lanzaboote = {

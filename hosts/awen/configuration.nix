@@ -65,7 +65,7 @@
   services = {
     avahi = {
       enable = true;
-      nssmdns = true;
+      nssmdns4 = true;
     };
     mosquitto = {
       enable = true;
@@ -153,5 +153,5 @@
     add_bridge_mapping eth1 2
   '';
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }
