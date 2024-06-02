@@ -28,7 +28,7 @@
     {
       "/data" = { device = "awdbox-data/data"; fsType = "zfs"; };
       "/data/backups" = { device = "awdbox-data/backups"; fsType = "zfs"; };
-      "/data/steam" = { device = "awdbox-data/steam"; fsType = "zfs"; };
+      "/data/nobackup" = { device = "awdbox-data/nobackup"; fsType = "zfs"; };
       "/mnt/mars/data" = {
         device = "mars:/data";
         fsType = "nfs";
