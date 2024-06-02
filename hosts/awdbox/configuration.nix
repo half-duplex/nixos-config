@@ -89,6 +89,11 @@
           };
         };
       };
+      sanoid = {
+        datasets = {
+          "awdbox-data/data" = { use_template = [ "default" ]; recursive = true; };
+        };
+      };
       tor = {
         enable = true;
         client.enable = true;
