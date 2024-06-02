@@ -20,6 +20,10 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHIGpN/Enpx1FCRBqzDNYNN/QL94X4eAaPyvB+K9ekDg mal@xps"
   ];
 
+  environment.systemPackages = with pkgs; [
+     virtio-win
+  ];
+
   fileSystems = lib.foldl (a: b: a // b)
     {
       "/data" = { device = "awdbox-data/data"; fsType = "zfs"; };
