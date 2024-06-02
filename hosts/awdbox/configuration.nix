@@ -42,65 +42,65 @@
       };
     }));
 
-    networking.firewall.allowedTCPPorts = [ 445 ];
-    services = {
-      avahi.enable = true;
-      samba = {
-        enable = true;
-        enableWinbindd = false;
-        enableNmbd = false;
-        extraConfig = ''
-          server string = %h
-          passdb backend = tdbsam:/persist/etc/samba/private/passdb.tdb
-          hosts deny = ALL
-          hosts allow = ::1 127.0.0.1 10.0.0.0/16
-          logging = syslog
-          printing = bsd
-          printcap name = /dev/null
-          load printers = no
-          disable spoolss = yes
-          disable netbios = yes
-          dns proxy = no
-          inherit permissions = yes
-          map to guest = Bad User
-          client min protocol = SMB3
-          server min protocol = SMB3
-          ;restrict anonymous = 2  ; even =1 breaks anon from windows
-          smb ports = 445
-          client signing = desired
-          client smb encrypt = desired
-          server signing = desired
-          ;server smb encrypt = desired  ; breaks anon from windows
-        '';
-        shares = {
-          homes = {
-            browseable = "no";
-            writeable = "yes";
-            "valid users" = "%S";
-          };
-          public = {
-            path = "/data/public";
-            #writeable = "yes";
-            public = "yes";
-          };
-          media = {
-            path = "/data/library";
-            writeable = "yes";
-          };
+  networking.firewall.allowedTCPPorts = [ 445 ];
+  services = {
+    avahi.enable = true;
+    samba = {
+      enable = true;
+      enableWinbindd = false;
+      enableNmbd = false;
+      extraConfig = ''
+        server string = %h
+        passdb backend = tdbsam:/persist/etc/samba/private/passdb.tdb
+        hosts deny = ALL
+        hosts allow = ::1 127.0.0.1 10.0.0.0/16
+        logging = syslog
+        printing = bsd
+        printcap name = /dev/null
+        load printers = no
+        disable spoolss = yes
+        disable netbios = yes
+        dns proxy = no
+        inherit permissions = yes
+        map to guest = Bad User
+        client min protocol = SMB3
+        server min protocol = SMB3
+        ;restrict anonymous = 2  ; even =1 breaks anon from windows
+        smb ports = 445
+        client signing = desired
+        client smb encrypt = desired
+        server signing = desired
+        ;server smb encrypt = desired  ; breaks anon from windows
+      '';
+      shares = {
+        homes = {
+          browseable = "no";
+          writeable = "yes";
+          "valid users" = "%S";
         };
-      };
-      sanoid = {
-        datasets = {
-          "awdbox-data/data" = { use_template = [ "default" ]; recursive = true; };
+        public = {
+          path = "/data/public";
+          #writeable = "yes";
+          public = "yes";
         };
-      };
-      tor = {
-        enable = true;
-        client.enable = true;
+        media = {
+          path = "/data/library";
+          writeable = "yes";
+        };
       };
     };
+    sanoid = {
+      datasets = {
+        "awdbox-data/data" = { use_template = [ "default" ]; recursive = true; };
+      };
+    };
+    tor = {
+      enable = true;
+      client.enable = true;
+    };
+  };
 
-    programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.enable = true;
 
-    system.stateVersion = "23.11";
+  system.stateVersion = "23.11";
 }
