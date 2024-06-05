@@ -14,6 +14,9 @@
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIt2xxDXFBkIOODdasb1v0253kZqUa8UydrLCOtffQot mal@awdbox"
   ];
+  users.users.syncoid.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKWcoVFWglasqishwofWMGVk8yJPek2ueI0FxphV9csm syncoid@awdbox"
+  ];
 
   fileSystems = lib.foldl (a: b: a // b)
     {

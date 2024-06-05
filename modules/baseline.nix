@@ -181,6 +181,16 @@
   # Filesystems
   systemd.services.zfs-mount.enable = false;
   services = {
+    syncoid = {
+      commonArgs = lib.mkDefault [
+        "--no-privilege-elevation"
+        "--no-sync-snap"
+        "--recursive"
+        "--exclude=tank/nix"  # once >2.2.0, use --exclude-datasets instead
+      ];
+      localTargetAllow = lib.mkDefault [];
+      localSourceAllow = lib.mkDefault [];
+    };
     udev.extraRules = ''
       SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
     '';
@@ -216,11 +226,23 @@
     '';
   };
 
-  users.groups.ssh-users = { };
-  users.users.root.extraGroups = [ "ssh-users" ];
-  users.users.mal = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd" ];
+  users = {
+    groups = {
+      ssh-users = { };
+      syncoid = { };
+    };
+    users = {
+      root.extraGroups = [ "ssh-users" ];
+      mal = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd" ];
+      };
+      syncoid = {
+        group = "syncoid";
+        isSystemUser = true;
+        extraGroups = [ "ssh-users" ];
+      };
+    };
   };
 
   virtualisation.docker = { enable = true; enableOnBoot = false; };

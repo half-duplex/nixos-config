@@ -94,6 +94,33 @@
         "awdbox-data/data" = { use_template = [ "default" ]; recursive = true; };
       };
     };
+    syncoid = {
+      enable = true;
+      # install -o syncoid -g syncoid -m 0750 -d /persist/syncoid
+      # ssh-keygen -t ed25519 -N '' -C "syncoid@$(hostname)" -f /persist/syncoid/...
+      # chown -R syncoid:syncoid /persist/syncoid/
+      commands = {
+        "awdbox" = {
+          source = "tank";
+          target = "awdbox-data/backups/awdbox/tank";
+        };
+        "awen" = {
+          source = "awen:tank";
+          target = "awdbox-data/backups/awen/tank";
+          sshKey = "/persist/syncoid/awen.key";
+        };
+        "t14s" = {
+          source = "t14s:tank";
+          target = "awdbox-data/backups/t14s/tank";
+          sshKey = "/persist/syncoid/t14s.key";
+        };
+        "all-awen" = {
+          source = "awdbox-data/backups";
+          target = "awen:pool/backups";
+          sshKey = "/persist/syncoid/awen.key";
+        };
+      };
+    };
     tor = {
       enable = true;
       client.enable = true;

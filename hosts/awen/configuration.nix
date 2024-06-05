@@ -18,6 +18,9 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM9oQ5Cdab1hZF5LhQ8FTWdAV8QQ/S1/0krreiRzT62n mal@awdbox.sec.gd"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE+ejh/zHzsMdmTNeNUkKgpYHBQguKi5lg1bvrpA2O+e mal@nova.sec.gd"
   ];
+  users.users.syncoid.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4xsLvnw2YX7qNdnJkWmEzsx5wIaFiXR0spwj1/5ga0 syncoid@awdbox"
+  ];
 
   networking = {
     bridges = {
@@ -121,6 +124,15 @@
         "pool" = {
           use_template = [ "default" ];
           recursive = true;
+        };
+      };
+    };
+    syncoid = {
+      enable = true;
+      commands = {
+        "awen" = {
+          source = "tank";
+          target = "pool/backups/awen/tank";
         };
       };
     };
