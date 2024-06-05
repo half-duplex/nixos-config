@@ -209,10 +209,10 @@
         config.services.tailscale.enable == true
       )
       {
-        "100.64.0.1" = [ "xps.sec.gd" "xps" ];
         "100.64.0.2" = [ "nova.sec.gd" "nova" ];
         "100.64.0.3" = [ "awdbox.sec.gd" "awdbox" ];
-        "100.64.0.4" = [ "mars.sec.gd" "mars" ];
+        "100.64.0.5" = [ "t14s.sec.gd" "t14s" ];
+        "100.64.0.7" = [ "awen.sec.gd" "awen" ];
       };
     nftables.enable = true;
     wireguard.enable = true;
