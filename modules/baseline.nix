@@ -267,6 +267,24 @@
   programs.ssh.extraConfig = ''
     GSSAPIAuthentication yes
   '';
+  programs.ssh.knownHosts = {
+    "nova" = {
+      extraHostNames = [ "nova.sec.gd" ];
+      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFdMktqbADswjjuvchDjw7yPzxEKPjVvmlDQ9KSmXETm";
+    };
+    "awdbox" = {
+      extraHostNames = [ "awdbox.sec.gd" ];
+      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaHPoXU8rSgo1xnGzdycTE4V12s7r9UCorttLN3uijo";
+    };
+    "awen" = {
+      extraHostNames = [ "awen.sec.gd" ];
+      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGX39naSG1lKKC/Ap/flCR20JTV2i3FiSgQTtJ8pL6lR";
+    };
+    "t14s" = {
+      extraHostNames = [ "t14s.sec.gd" ];
+      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID7TXKM5OichO/g4S51tAc5taggPefpazAxJV8l7kfbv";
+    };
+  };
 
   services = {
     sanoid = {
