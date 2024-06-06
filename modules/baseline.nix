@@ -241,6 +241,7 @@
         group = "syncoid";
         isSystemUser = true;
         extraGroups = [ "ssh-users" ];
+        useDefaultShell = true;
       };
     };
   };
