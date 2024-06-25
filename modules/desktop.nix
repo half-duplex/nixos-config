@@ -39,6 +39,7 @@ with lib;
       dxvk
 
       discord
+      element-desktop
       #nixpkgsUnstable.obsidian  # Requires ancient electron
       signal-desktop
       tdesktop
