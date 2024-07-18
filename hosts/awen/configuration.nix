@@ -145,6 +145,7 @@
 
   environment.systemPackages = with pkgs; [
     rtorrent
+    virtio-win
   ];
 
   #virtualisation.vmware.host.enable = true;
