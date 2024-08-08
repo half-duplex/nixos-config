@@ -311,4 +311,9 @@
       interfaceName = "ts0";
     };
   };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "nixacme@" + "sec.gd";
+  };
 }

@@ -58,6 +58,7 @@
     ];
     directories = [
       "/var/log"
+      "/var/lib/acme"
       "/var/lib/flatpak"
       "/var/lib/libvirt"
       "/var/lib/rasdaemon"
