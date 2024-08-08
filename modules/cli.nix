@@ -17,7 +17,6 @@ in
     darkhttpd
     dnsutils
     file
-    gcc
     git
     htop
     jq
@@ -50,6 +49,11 @@ in
     wireguard-tools
     wol
     zip
+
+    cargo
+    gcc
+    pkg-config
+    rustc
 
     python3
     black  # python-black
@@ -132,6 +136,7 @@ in
     vimAlias = true;
     configure = {
       packages.sconfig.start = with pkgs.vimPlugins; [
+        ale
         vim-bracketed-paste
         vim-gitgutter
         vim-nix
