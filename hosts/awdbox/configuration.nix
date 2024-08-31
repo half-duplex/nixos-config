@@ -10,7 +10,7 @@
   };
 
   boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
-  boot.kernelParams = [ "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none" "processor.max_cstate=5" ];
+  boot.kernelParams = [ "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth1:none" "processor.max_cstate=5" ];
   console.earlySetup = true;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.rasdaemon.enable = true;
@@ -45,6 +45,15 @@
   networking.firewall.allowedTCPPorts = [ 445 ];
   services = {
     avahi.enable = true;
+    postgresql = {
+      enable = true;
+      ensureDatabases = [ "fuzzysearch" ];
+      authentication = ''
+        local all all trust
+        host all all 127.0.0.1/32 trust
+        host all all ::1/128 trust
+      '';
+    };
     samba = {
       enable = true;
       enableWinbindd = false;
@@ -99,6 +108,11 @@
       # install -o syncoid -g syncoid -m 0750 -d /persist/syncoid
       # ssh-keygen -t ed25519 -N '' -C "syncoid@$(hostname)" -f /persist/syncoid/...
       # chown -R syncoid:syncoid /persist/syncoid/
+      # zfs allow -u syncoid send src_dataset
+      # zfs allow -u syncoid receive dst_dataset
+      # current problems:
+      # - syncoid can't see lzop/mbuffer on target
+      # - dataset layout for replication...
       commands = {
         "awdbox" = {
           source = "tank";
