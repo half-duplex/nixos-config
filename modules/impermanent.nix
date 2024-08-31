@@ -61,6 +61,7 @@
       "/var/lib/acme"
       "/var/lib/flatpak"
       "/var/lib/libvirt"
+      "/var/lib/nixos"
       "/var/lib/rasdaemon"
       "/var/lib/tailscale"
       "/var/lib/swtpm-localca"
