@@ -228,6 +228,7 @@
 
   users = {
     groups = {
+      adbusers = { };
       ssh-users = { };
       syncoid = { };
     };
