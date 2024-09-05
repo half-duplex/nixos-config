@@ -42,8 +42,35 @@ with lib;
       element-desktop
       #nixpkgsUnstable.obsidian  # Requires ancient electron
       signal-desktop
-      tdesktop
       teamspeak_client
+      (telegram-desktop.overrideAttrs (previousAttrs: {
+          patches = previousAttrs.patches ++ [
+            ../patches/telegram-desktop_more-recent-stickers.patch
+            # https://github.com/Layerex/telegram-desktop-patches/tree/master
+            (fetchpatch {
+              url = "https://github.com/Layerex/telegram-desktop-patches/raw/b7a73c0b8a8b3527f69959ce3ceb35f8dbde8a8e/0001-Disable-sponsored-messages.patch";
+              hash = "sha256-HeDH6tkkGx2XYTtzfo+gRee4BYxRiPKXQuftycl8Kvo=";
+            })
+            # v5.3.2+
+            #(fetchpatch {
+            #  url = "https://github.com/Layerex/telegram-desktop-patches/raw/b7a73c0b8a8b3527f69959ce3ceb35f8dbde8a8e/0002-Disable-saving-restrictions.patch";
+            #  hash = "sha256-1YqbRNHgwwkPpmHE/KxoksTXoiD7dTGRiYrOWEW08jY=";
+            #})
+            (fetchpatch {
+              url = "https://github.com/Layerex/telegram-desktop-patches/raw/2457ef3a2d3ff94dfa4b0a73ea4c51bad4b3f14b/0002-Disable-saving-restrictions.patch";
+              hash = "sha256-sQsyXlvhXSvouPgzYSiRB8ieICo3GDXWH5MaZtBjtqw=";
+            })
+            (fetchpatch {
+              url = "https://github.com/Layerex/telegram-desktop-patches/raw/b7a73c0b8a8b3527f69959ce3ceb35f8dbde8a8e/0003-Disable-invite-peeking-restrictions.patch";
+              hash = "sha256-8mJD6LOjz11yfAdY4QPK/AUz9o5W3XdupXxy7kRrbC8=";
+            })
+            (fetchpatch {
+              url = "https://github.com/Layerex/telegram-desktop-patches/raw/b7a73c0b8a8b3527f69959ce3ceb35f8dbde8a8e/0004-Disable-accounts-limit.patch";
+              hash = "sha256-PZWCFdGE/TTJ1auG1JXNpnTUko2rCWla6dYKaQNzreg=";
+            })
+          ];
+        })
+      )
       thunderbird
 
       chirp

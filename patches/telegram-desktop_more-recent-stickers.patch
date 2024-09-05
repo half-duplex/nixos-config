@@ -1,0 +1,13 @@
+diff --git a/Telegram/SourceFiles/chat_helpers/stickers_list_widget.cpp b/Telegram/SourceFiles/chat_helpers/stickers_list_widget.cpp
+index c3af5e262..7c085c6c9 100644
+--- a/Telegram/SourceFiles/chat_helpers/stickers_list_widget.cpp
++++ b/Telegram/SourceFiles/chat_helpers/stickers_list_widget.cpp
+@@ -60,7 +60,7 @@ namespace ChatHelpers {
+ namespace {
+ 
+ constexpr auto kSearchRequestDelay = 400;
+-constexpr auto kRecentDisplayLimit = 20;
++constexpr auto kRecentDisplayLimit = 40;
+ constexpr auto kPreloadOfficialPages = 4;
+ constexpr auto kOfficialLoadLimit = 40;
+ constexpr auto kMinRepaintDelay = crl::time(33);
