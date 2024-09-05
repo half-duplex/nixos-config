@@ -141,6 +141,30 @@ in
             proxyWebsockets = true;
           };
         };
+        "notes.sec.gd" = {  # proxy configured by services.trilium-server
+          onlySSL = true;
+          enableACME = true;
+          extraConfig = concatStringsSep "\n" (
+            mapAttrsToList (
+              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+            ) {
+              Content-Security-Policy = mapAttrsToList (
+                k: v: "${k} ${concatStringsSep " " (toList v)};"
+              ) {
+                default-src = "'self'";
+                connect-src = "'self' https://api.github.com/repos/zadam/trilium/releases/latest";
+                img-src = "'self' data:";
+                script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
+                style-src = "'self' 'unsafe-inline'";
+                frame-ancestors = "'none'";
+              };
+              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+              X-Content-Type-Options = "nosniff";
+              Referrer-Policy = "same-origin";
+              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+            }
+          );
+        };
       };
     };
     samba = {
@@ -204,6 +228,13 @@ in
     tor = {
       enable = true;
       client.enable = true;
+    };
+    trilium-server = {
+      enable = true;
+      port = 37962;
+      dataDir = "/persist/var/lib/trilium";
+      nginx.enable = true;
+      nginx.hostName = "notes.sec.gd";
     };
   };
 
