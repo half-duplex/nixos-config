@@ -113,6 +113,34 @@ in
           ];
           rejectSSL = true;
         };
+        "hass.sec.gd" = {
+          onlySSL = true;
+          enableACME = true;
+          extraConfig = concatStringsSep "\n" (
+            mapAttrsToList (
+              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+            ) {
+              Content-Security-Policy = mapAttrsToList (
+                k: v: "${k} ${concatStringsSep " " (toList v)};"
+              ) {
+                default-src = "'self'";
+                font-src = "'self' data: https://cdnjs.cloudflare.com";
+                frame-ancestors = "'self'";
+                img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
+                script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+                style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+              };
+              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+              X-Content-Type-Options = "nosniff";
+              Referrer-Policy = "same-origin";
+              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+            }
+          );
+          locations."/" = {
+            proxyPass = "http://10.0.0.7:8123";
+            proxyWebsockets = true;
+          };
+        };
       };
     };
     samba = {
