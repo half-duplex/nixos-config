@@ -59,6 +59,7 @@ in
 
   fileSystems = lib.foldl (a: b: a // b)
     {
+      "/data" = { device = "/mnt/data"; options = [ "bind" ]; };
       "/mnt/data" = { device = "pool"; fsType = "zfs"; };
       "/mnt/data/backups" = { device = "pool/backups"; fsType = "zfs"; };
       "/mnt/data/downloads" = { device = "pool/downloads"; fsType = "zfs"; };
@@ -75,6 +76,10 @@ in
     avahi = {
       enable = true;
       nssmdns4 = true;
+    };
+    jellyfin = {
+      enable = true;
+      dataDir = "/persist/jellyfin";
     };
     mosquitto = {
       enable = true;
@@ -139,6 +144,39 @@ in
           locations."/" = {
             proxyPass = "http://10.0.0.7:8123";
             proxyWebsockets = true;
+          };
+        };
+        "media.sec.gd" = {
+          onlySSL = true;
+          enableACME = true;
+          extraConfig = concatStringsSep "\n" (
+            mapAttrsToList (
+              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+            ) {
+              Content-Security-Policy = mapAttrsToList (
+                k: v: "${k} ${concatStringsSep " " (toList v)};"
+              ) {
+                default-src = "'self'";
+                img-src = "'self' https://repo.jellyfin.org/releases/plugin/images/";
+                script-src = "'self' 'unsafe-inline'";
+                style-src = "'self' 'unsafe-inline'";
+                frame-ancestors = "'none'";
+              };
+              Cross-Origin-Opener-Policy = "same-origin";
+              Cross-Origin-Embedder-Policy = "require-corp";
+              Cross-Origin-Resource-Policy = "same-origin";
+              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+              X-Content-Type-Options = "nosniff";
+              Referrer-Policy = "same-origin";
+              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+            }
+          );
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:8096";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_buffering off;
+            '';
           };
         };
         "notes.sec.gd" = {  # proxy configured by services.trilium-server
