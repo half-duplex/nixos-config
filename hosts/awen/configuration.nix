@@ -1,4 +1,9 @@
 { lib, pkgs, ... }:
+let
+  inherit (lib.attrsets) mapAttrsToList;
+  inherit (lib.lists) toList;
+  inherit (lib.strings) concatStringsSep toJSON;
+in
 {
   sconfig = {
     dvorak = true;
@@ -65,7 +70,7 @@
       };
     }));
 
-  networking.firewall.allowedTCPPorts = [ 445 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 445 ];
   services = {
     avahi = {
       enable = true;
@@ -78,6 +83,37 @@
           port = 1883;
         }
       ];
+    };
+    nginx = {
+      enable = true;
+      # default headers, if none are overridden in a location block
+      appendHttpConfig = ''
+        add_header Content-Security-Policy "default-src 'self'; frame-ancestors 'none';" always;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "same-origin" always;
+        add_header Permissions-Policy "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()" always;
+      '';
+      recommendedBrotliSettings = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      recommendedZstdSettings = true;
+      virtualHosts = {
+        "default" = {
+          default = true;
+          # Can't use globalRedirect because it adds a bonus http://
+          extraConfig = ''
+            return 301 https://$host$request_uri;
+          '';
+          listen = [
+            { addr = "0.0.0.0"; extraParameters = [ "deferred" ]; }
+            { addr = "[::]"; extraParameters = [ "deferred" ]; }
+          ];
+          rejectSSL = true;
+        };
+      };
     };
     samba = {
       enable = true;
