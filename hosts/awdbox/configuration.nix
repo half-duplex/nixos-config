@@ -9,7 +9,7 @@
     secureboot = true;
   };
 
-  boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
+  boot.initrd.availableKernelModules = [ "nvme" "e1000e" ];
   boot.kernelParams = [ "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth1:none" "processor.max_cstate=5" ];
   console.earlySetup = true;
   hardware.cpu.amd.updateMicrocode = true;
