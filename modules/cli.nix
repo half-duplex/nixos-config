@@ -54,6 +54,7 @@ in
     gcc
     pkg-config
     rustc
+    rustup
 
     python3
     black  # python-black
