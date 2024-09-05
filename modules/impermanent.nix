@@ -30,7 +30,7 @@
 # sudo sbctl enroll-keys --microsoft
 
 
-{ ... }:
+{ config, ... }:
 {
   users.mutableUsers = false;
   users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
@@ -38,17 +38,20 @@
   # Otherwise we're lectured again every boot
   security.sudo.extraConfig = "Defaults lecture=never";
 
-  services.openssh.hostKeys = [
-    {
-      path = "/persist/etc/ssh/ssh_host_ed25519_key";
-      type = "ed25519";
-    }
-    {
-      path = "/persist/etc/ssh/ssh_host_rsa_key";
-      type = "rsa";
-      bits = 4096;
-    }
-  ];
+  services = {
+    openssh.hostKeys = [
+      {
+        path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+      {
+        path = "/persist/etc/ssh/ssh_host_rsa_key";
+        type = "rsa";
+        bits = 4096;
+      }
+    ];
+    postgresql.dataDir = "/persist/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}";
+  };
 
   environment.persistence."/persist" = {
     files = [
