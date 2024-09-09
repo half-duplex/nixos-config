@@ -87,7 +87,7 @@ with lib;
       libreoffice-fresh
       yubikey-manager
       yubikey-manager-qt
-      zoom
+      zoom-us
 
       nixpkgsUnstable.r2modman
 
