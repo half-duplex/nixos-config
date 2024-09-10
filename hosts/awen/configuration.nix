@@ -158,13 +158,18 @@ in
                 k: v: "${k} ${concatStringsSep " " (toList v)};"
               ) {
                 default-src = "'self'";
-                img-src = "'self' https://repo.jellyfin.org/releases/plugin/images/";
+                font-src = "'self' data:";
+                img-src = [
+                  "'self'"
+                  "https://repo.jellyfin.org/releases/plugin/images/"
+                  "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
+                ];
                 script-src = "'self' 'unsafe-inline'";
                 style-src = "'self' 'unsafe-inline'";
                 frame-ancestors = "'none'";
               };
               Cross-Origin-Opener-Policy = "same-origin";
-              Cross-Origin-Embedder-Policy = "require-corp";
+              Cross-Origin-Embedder-Policy = "credentialless";
               Cross-Origin-Resource-Policy = "same-origin";
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
               X-Content-Type-Options = "nosniff";
