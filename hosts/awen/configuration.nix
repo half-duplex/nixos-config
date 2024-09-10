@@ -115,7 +115,9 @@ in
           '';
           listen = [
             { addr = "0.0.0.0"; extraParameters = [ "deferred" ]; }
+            { addr = "0.0.0.0"; extraParameters = [ "deferred" ]; port = 443; ssl = true; }
             { addr = "[::]"; extraParameters = [ "deferred" ]; }
+            { addr = "[::]"; extraParameters = [ "deferred" ]; port = 443; ssl = true; }
           ];
           rejectSSL = true;
         };
@@ -200,6 +202,26 @@ in
                 img-src = "'self' data:";
                 script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
                 style-src = "'self' 'unsafe-inline'";
+                frame-ancestors = "'none'";
+              };
+              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+              X-Content-Type-Options = "nosniff";
+              Referrer-Policy = "same-origin";
+              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+            }
+          );
+        };
+        "rt.awen.sec.gd" = {  # proxy configured by services.rutorrent
+          onlySSL = true;
+          enableACME = true;
+          extraConfig = concatStringsSep "\n" (
+            mapAttrsToList (
+              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+            ) {
+              Content-Security-Policy = mapAttrsToList (
+                k: v: "${k} ${concatStringsSep " " (toList v)};"
+              ) {
+                default-src = "'self'";
                 frame-ancestors = "'none'";
               };
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
