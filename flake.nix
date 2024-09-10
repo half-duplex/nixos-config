@@ -10,10 +10,10 @@
 
   outputs = { self, nixpkgs, nixpkgsStaging, nixpkgsUnstable, impermanence, lanzaboote, ... }:
     let
-      myModules =
-        {
+      myModules = {
           inherit (impermanence.nixosModules) impermanence;
           inherit (lanzaboote.nixosModules) lanzaboote;
+          rutorrent = "${nixpkgsUnstable}/nixos/modules/services/web-apps/rutorrent.nix";
         } // nixpkgs.lib.mapAttrs'
           (name: type: {
             name = if (type == "regular") then (nixpkgs.lib.removeSuffix ".nix" name) else name;
