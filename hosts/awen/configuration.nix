@@ -104,7 +104,7 @@ in
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      recommendedZstdSettings = true;
+      #recommendedZstdSettings = true;  # causes response truncation
       virtualHosts = {
         "default" = {
           default = true;
@@ -202,6 +202,36 @@ in
                 img-src = "'self' data:";
                 script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
                 style-src = "'self' 'unsafe-inline'";
+                frame-ancestors = "'none'";
+              };
+              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+              X-Content-Type-Options = "nosniff";
+              Referrer-Policy = "same-origin";
+              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+            }
+          );
+        };
+        "content.awen.sec.gd" = {
+          basicAuthFile = "/persist/nginx/htpasswd-content";
+          enableACME = true;
+          onlySSL = true;
+          root = "/mnt/data/downloads";
+          extraConfig = ''
+            access_log /var/log/nginx/content.log;
+            aio threads;
+            autoindex on;
+            charset utf8;
+            autoindex_exact_size off;
+            set_real_ip_from 100.64.0.6;
+          '' + concatStringsSep "\n" (
+            mapAttrsToList (
+              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+            ) {
+              Content-Disposition = "inline";
+              Content-Security-Policy = mapAttrsToList (
+                k: v: "${k} ${concatStringsSep " " (toList v)};"
+              ) {
+                default-src = "'self'";
                 frame-ancestors = "'none'";
               };
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
