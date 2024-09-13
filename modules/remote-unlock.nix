@@ -15,7 +15,7 @@ in
         enable = true;
         authorizedKeys = config.users.users.mal.openssh.authorizedKeys.keys;
         hostKeys = [
-          "/persist/etc/ssh/ssh_host_ed25519_key_initrd"
+          "/persist/ssh/ssh_host_ed25519_key_initrd"
         ];
       };
     };

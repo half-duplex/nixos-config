@@ -17,8 +17,8 @@
 # mkdir -p {boot,persist,home,nix}
 # mount /dev/nvme0n1p1 boot
 # for ds in persist home nix ; do mount -t zfs tank/$ds $ds ; done
-# mkdir -p persist/{shadow,etc/{secureboot,ssh,NetworkManager/system-connections}}
-# ssh-keygen -t ed25519 -N '' -C '' -f etc/ssh/ssh_host_ed25519_key_initrd
+# mkdir -p persist/{shadow,secureboot,ssh,NetworkManager/system-connections}
+# ssh-keygen -t ed25519 -N '' -C '' -f ssh/ssh_host_ed25519_key_initrd
 # openssl passwd -6 > /mnt/persist/shadow/mal
 # chmod go= /mnt/persist/shadow -R
 # nixos-install --no-root-password \
@@ -45,23 +45,22 @@
     };
     openssh.hostKeys = [
       {
-        path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        path = "/persist/ssh/ssh_host_ed25519_key";
         type = "ed25519";
       }
       {
-        path = "/persist/etc/ssh/ssh_host_rsa_key";
+        path = "/persist/ssh/ssh_host_rsa_key";
         type = "rsa";
         bits = 4096;
       }
     ];
-    postgresql.dataDir = "/persist/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}";
+    postgresql.dataDir = "/persist/postgresql/${config.services.postgresql.package.psqlSchema}";
   };
 
   environment.persistence."/persist" = {
     files = [
       "/etc/krb5.keytab"
       "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key_initrd"
     ];
     directories = [
       "/var/log"
@@ -74,9 +73,9 @@
       "/var/lib/swtpm-localca"
     ];
   };
-  environment.etc.secureboot.source = "/persist/etc/secureboot";
+  environment.etc.secureboot.source = "/persist/secureboot";
   environment.etc."NetworkManager/system-connections".source =
-    "/persist/etc/NetworkManager/system-connections";
+    "/persist/NetworkManager/system-connections";
 
   fileSystems = {
     "/" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "mode=755" ]; };
