@@ -40,6 +40,7 @@ with lib;
 
       discord
       element-desktop
+      evolution
       #nixpkgsUnstable.obsidian  # Requires ancient electron
       signal-desktop
       teamspeak_client
