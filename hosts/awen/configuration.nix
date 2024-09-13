@@ -242,6 +242,7 @@ in
           );
         };
         "rt.awen.sec.gd" = {  # proxy configured by services.rutorrent
+          basicAuthFile = "/persist/rutorrent/htpasswd";
           onlySSL = true;
           enableACME = true;
           extraConfig = concatStringsSep "\n" (
@@ -252,7 +253,9 @@ in
                 k: v: "${k} ${concatStringsSep " " (toList v)};"
               ) {
                 default-src = "'self'";
-                frame-ancestors = "'none'";
+                script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
+                style-src = "'self' 'unsafe-inline'";
+                frame-ancestors = "'self'";
               };
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
               X-Content-Type-Options = "nosniff";
@@ -278,7 +281,7 @@ in
       openFirewall = true;
       port = 41519;
       configText = lib.mkOverride 10 ''
-        directory.default.set = "/mnt/data/downloads2"
+        directory.default.set = "/mnt/data/downloads"
         network.port_range.set = 41519-41519
         method.insert = cfg.basedir, private|const|string, (cat,"/persist/rtorrent/")
 
