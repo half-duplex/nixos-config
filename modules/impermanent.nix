@@ -39,6 +39,10 @@
   security.sudo.extraConfig = "Defaults lecture=never";
 
   services = {
+    jellyfin = {
+      cacheDir = "/persist/nobackup/jellyfin/cache";
+      dataDir = "/persist/jellyfin";
+    };
     openssh.hostKeys = [
       {
         path = "/persist/etc/ssh/ssh_host_ed25519_key";
@@ -80,5 +84,6 @@
     "/home" = { device = "tank/home"; fsType = "zfs"; };
     "/nix" = { device = "tank/nix"; fsType = "zfs"; };
     "/persist" = { device = "tank/persist"; fsType = "zfs"; neededForBoot = true; };
+    "/persist/nobackup" = { device = "tank/persist/nobackup"; fsType = "zfs"; };
   };
 }

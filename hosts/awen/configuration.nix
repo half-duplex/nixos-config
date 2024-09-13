@@ -80,7 +80,6 @@ in
     };
     jellyfin = {
       enable = true;
-      dataDir = "/persist/jellyfin";
     };
     mosquitto = {
       enable = true;
@@ -163,11 +162,12 @@ in
                 font-src = "'self' data:";
                 img-src = [
                   "'self'"
+                  "blob:"
                   "https://repo.jellyfin.org/releases/plugin/images/"
                   "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
                 ];
                 script-src = "'self' 'unsafe-inline'";
-                style-src = "'self' 'unsafe-inline'";
+                style-src = "'self' 'unsafe-inline' blob:";
                 frame-ancestors = "'none'";
               };
               Cross-Origin-Opener-Policy = "same-origin";
