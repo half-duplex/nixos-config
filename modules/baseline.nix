@@ -56,6 +56,12 @@
       # TODO add other archs
       "vm.mmap_rnd_bits" = 32;
       "vm.mmap_rnd_compat_bits" = 16;
+
+      # https://cmm.github.io/soapbox/the-year-of-linux-on-the-desktop.html
+      "vm.swappiness" = 180;
+      "vm.page-cluster" = 0;
+      "vm.watermark_scale_factor" = 125;
+      "vm.watermark_boost_factor" = 0;
     };
 
     kernelParams = [
