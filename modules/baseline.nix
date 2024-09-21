@@ -221,6 +221,7 @@
   nix = {
     package = pkgs.nixFlakes;
     daemonCPUSchedPolicy = "idle";
+    daemonIOSchedClass = "idle";
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
