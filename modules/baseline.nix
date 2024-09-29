@@ -80,7 +80,6 @@
       "quiet"
       #"loglevel=0"
       "intel_iommu=on" # Having both OK
-      "amd_iommu=on"
       "efi=disable_early_pci_dma"
 
       # TODO apply per-machine based on cpu
