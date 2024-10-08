@@ -20,6 +20,20 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHIGpN/Enpx1FCRBqzDNYNN/QL94X4eAaPyvB+K9ekDg mal@xps"
   ];
 
+  hardware.printers = {
+    ensurePrinters = [
+      {
+        name = "Canon-Pixma-TR4520-WiFi";
+        deviceUri = "ipp://956151000000.local:631/ipp/print";
+        model = "everywhere";
+        ppdOptions = {
+          Duplex = "DuplexNoTumble";
+          PageSize = "US Letter";
+        };
+      }
+    ];
+  };
+
   environment.systemPackages = with pkgs; [
      virtio-win
   ];
@@ -44,7 +58,10 @@
 
   networking.firewall.allowedTCPPorts = [ 445 ];
   services = {
-    avahi.enable = true;
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+    };
     postgresql = {
       enable = true;
       ensureDatabases = [ "fuzzysearch" ];
@@ -54,6 +71,7 @@
         host all all ::1/128 trust
       '';
     };
+    printing.enable = true;
     samba = {
       enable = true;
       enableWinbindd = false;
