@@ -21,7 +21,6 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      tor-browser-bundle-bin
       gparted
       ntfs3g
       pavucontrol
@@ -87,6 +86,7 @@ with lib;
       evince  # may be implicit with gnome
       google-chrome
       libreoffice-fresh
+      nixpkgsStaging.tor-browser
       yubikey-manager
       yubikey-manager-qt
       zoom-us
