@@ -98,6 +98,13 @@ in
         add_header X-Content-Type-Options "nosniff" always;
         add_header Referrer-Policy "same-origin" always;
         add_header Permissions-Policy "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()" always;
+
+        # content vhost
+        limit_conn_zone $binary_remote_addr zone=content_addr:5m;
+        geo $content_rate_limit {
+          10.0.0.0/16 0;  # lan, unlimited
+          default     2m;  # 2m=16mbps
+        }
       '';
       recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
@@ -223,6 +230,8 @@ in
             charset utf8;
             autoindex_exact_size off;
             set_real_ip_from 100.64.0.6;
+            limit_rate $content_rate_limit;
+            limit_conn content_addr 2;
           '' + concatStringsSep "\n" (
             mapAttrsToList (
               k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
@@ -240,6 +249,14 @@ in
               Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
             }
           );
+          locations."/library/".alias = "/mnt/data/library/";
+          locations."/now/" = {
+            alias = "/mnt/data/downloads/";
+            extraConfig = ''
+              limit_rate 4608k;  # 4m=32mbps, 4608k=4.5m=36mbps
+              limit_conn content_addr 2;
+            '';
+          };
         };
         "rt.awen.sec.gd" = {  # proxy configured by services.rutorrent
           basicAuthFile = "/persist/rutorrent/htpasswd";
@@ -326,8 +343,8 @@ in
         system.cwd.set = (cfg.basedir)
         network.http.dns_cache_timeout.set = 25
 
-        #schedule2 = watch_start, 10, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
-        #schedule2 = watch_load, 11, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))
+        schedule2 = watch_start, 120, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
+        schedule2 = watch_load, 130, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))
 
         # Logging:
         #   Levels = critical error warn notice info debug
