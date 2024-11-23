@@ -1,6 +1,6 @@
 {
-  inputs.nixpkgs.url = "nixpkgs/nixos-24.05";
-  inputs.nixpkgsStaging.url = "nixpkgs/release-24.05";
+  inputs.nixpkgs.url = "nixpkgs/nixos-24.11";
+  inputs.nixpkgsStaging.url = "nixpkgs/release-24.11";
   inputs.nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
   inputs.impermanence.url = "github:nix-community/impermanence";
   inputs.lanzaboote = {
@@ -13,7 +13,6 @@
       myModules = {
           inherit (impermanence.nixosModules) impermanence;
           inherit (lanzaboote.nixosModules) lanzaboote;
-          rutorrent = "${nixpkgsUnstable}/nixos/modules/services/web-apps/rutorrent.nix";
         } // nixpkgs.lib.mapAttrs'
           (name: type: {
             name = if (type == "regular") then (nixpkgs.lib.removeSuffix ".nix" name) else name;

@@ -1,10 +1,7 @@
 { config, pkgs, nixpkgs, ... }: {
-  nixpkgs.overlays = [
-    (_: _: { rutorrent = pkgs.nixpkgsUnstable.rutorrent; })
-  ];
   environment.systemPackages = with pkgs; [
     pyrosimple
-    transmission  # useful for transmission-show etc
+    transmission_4  # useful for transmission-show etc
   ];
   services.rutorrent = {
     dataDir = "/persist/rutorrent";

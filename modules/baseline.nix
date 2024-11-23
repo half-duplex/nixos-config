@@ -224,7 +224,7 @@
   };
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
@@ -268,11 +268,11 @@
       PasswordAuthentication = false;
     };
     extraConfig = ''
-      GSSAPIAuthentication yes
+      #GSSAPIAuthentication yes
     '';
   };
   programs.ssh.extraConfig = ''
-    GSSAPIAuthentication yes
+    #GSSAPIAuthentication yes
   '';
   programs.ssh.knownHosts = {
     "nova" = {
