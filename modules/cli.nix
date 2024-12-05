@@ -20,6 +20,7 @@ in
     git
     htop
     jq
+    libva-utils  # for vainfo
     lm_sensors
     lsof
     mosh
