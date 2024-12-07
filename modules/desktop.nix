@@ -82,6 +82,7 @@ with lib;
       yubikey-manager-qt
       zoom-us
 
+      protontools
       nixpkgsUnstable.r2modman
 
       nixpkgsUnstable.android-tools
