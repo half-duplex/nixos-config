@@ -20,6 +20,8 @@ with lib;
       jack.enable = true;
     };
 
+    environment.variables.MOZ_USE_XINPUT2 = "1";
+
     environment.systemPackages = with pkgs; [
       gparted
       ntfs3g
