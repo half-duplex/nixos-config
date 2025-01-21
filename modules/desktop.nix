@@ -68,7 +68,7 @@ with lib;
       gnome-text-editor
       ghidra
       #pgadmin # ancient
-      (proxmark3.override { hardwarePlatform = "PM3GENERIC"; })
+      (nixpkgsUnstable.proxmark3.override { hardwarePlatform = "PM3GENERIC"; })
       remmina
       virt-manager
       wireshark
