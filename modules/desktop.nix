@@ -83,9 +83,9 @@ with lib;
       zoom-us
 
       protontricks
-      nixpkgsUnstable.r2modman
+      r2modman
 
-      nixpkgsUnstable.android-tools
+      android-tools
 
       (mpv.override { scripts = [ mpvScripts.mpris ]; })
 
