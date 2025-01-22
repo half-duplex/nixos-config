@@ -186,22 +186,102 @@
   # Filesystems
   systemd.services.zfs-mount.enable = false;
   services = {
-    syncoid = {
-      commonArgs = lib.mkDefault [
-        "--no-privilege-elevation"
-        "--no-sync-snap"
-        "--recursive"
-        "--exclude=tank/nix"  # once >2.2.0, use --exclude-datasets instead
-      ];
-      localTargetAllow = lib.mkDefault [];
-      localSourceAllow = lib.mkDefault [];
-    };
     udev.extraRules = ''
       SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
     '';
     zfs = {
       autoScrub.enable = lib.mkDefault true;
       trim.enable = true;
+    };
+    zrepl = {
+      enable = true;
+      settings = {
+        jobs = [
+          {
+            name = "tank_snap_nobackup";
+            type = "snap";
+            filesystems = {
+              #"tank/nix<" = true;
+              "tank/home/nobackup" = true;
+              "tank/persist/nobackup<" = true;
+            };
+            snapshotting = {
+              type = "periodic";
+              interval = "5m";
+              prefix = "zrepl_";
+            };
+            pruning = {
+              keep = [
+                {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 32x15m | 24x1h";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+            };
+          }
+          {
+            name = "tank_snap";
+            type = "push";
+            connect = {
+              type = "ssh+stdinserver";
+              host = "awen.sec.gd";
+              #user = "zrepl";
+              user = "root";
+              port = 22;
+              identity_file = "/persist/zrepl/ssh_awen";
+            };
+            send.encrypted = true;
+            replication.protection = {
+              initial = "guarantee_resumability";
+              incremental = "guarantee_incremental";
+            };
+            filesystems = {
+              "tank<" = true;
+              "tank/nix<" = false;
+              "tank/home/nobackup" = false;
+              "tank/persist/nobackup<" = false;
+            };
+            snapshotting = {
+              type = "periodic";
+              interval = "5m";
+              prefix = "zrepl_";
+            };
+            pruning = {
+              keep_sender = [
+                { type = "not_replicated"; }
+                {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 32x15m | 24x1h | 7x1d";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+              keep_receiver = [
+                {
+                  type = "grid";
+                  grid = "3x1d(keep=all) | 72x1h | 30x1d | 52x1w";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+            };
+          }
+        ];
+      };
     };
   };
 
@@ -236,19 +316,12 @@
     groups = {
       adbusers = { };
       ssh-users = { };
-      syncoid = { };
     };
     users = {
       root.extraGroups = [ "ssh-users" ];
       mal = {
         isNormalUser = true;
         extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd" ];
-      };
-      syncoid = {
-        group = "syncoid";
-        isSystemUser = true;
-        extraGroups = [ "ssh-users" ];
-        useDefaultShell = true;
       };
     };
   };
@@ -294,25 +367,6 @@
   };
 
   services = {
-    sanoid = {
-      enable = true;
-      datasets = {
-        "tank/home" = {
-          use_template = [ "default" ];
-          recursive = true;
-        };
-        "tank/persist" = {
-          use_template = [ "default" ];
-          recursive = true;
-        };
-      };
-      templates.default = {
-        hourly = 48;
-        daily = 90;
-        monthly = 12;
-        yearly = 0;
-      };
-    };
     tailscale = {
       enable = true;
       interfaceName = "ts0";

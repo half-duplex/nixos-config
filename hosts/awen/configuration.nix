@@ -24,8 +24,10 @@ in
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE+ejh/zHzsMdmTNeNUkKgpYHBQguKi5lg1bvrpA2O+e mal@nova.sec.gd"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSqbI35Krvjngna/q9iuB/i9fd/u8l0q3qG3rLMEKl8 mal@t14s.sec.gd"
   ];
-  users.users.syncoid.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4xsLvnw2YX7qNdnJkWmEzsx5wIaFiXR0spwj1/5ga0 syncoid@awdbox"
+  users.users.root.openssh.authorizedKeys.keys = [
+    "command=\"zrepl stdinserver awdbox\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCo6e8qf5a3NPz55vmLKxBr0J8fiIR4AiXEZRw/lmSD root@awdbox"
+    "command=\"zrepl stdinserver awen\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEtpIj6zB4jeoYCWUH9jAxvTaNKfWQ7OMqTVD3lXw3Xh root@awen"
+    "command=\"zrepl stdinserver t14s\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBlIAZVeRbfsFpbsoywqneHtIDvXTWv7myK5YOvnSsx7 root@t14s"
   ];
 
   networking = {
@@ -406,23 +408,6 @@ in
         };
       };
     };
-    sanoid = {
-      datasets = {
-        "pool" = {
-          use_template = [ "default" ];
-          recursive = true;
-        };
-      };
-    };
-    syncoid = {
-      enable = true;
-      commands = {
-        "awen" = {
-          source = "tank";
-          target = "pool/backups/awen/tank";
-        };
-      };
-    };
     smartd.enable = true;
     tor = {
       enable = true;
@@ -457,6 +442,21 @@ in
         ];
       };
     };
+    zrepl.settings.jobs = [
+      {
+        name = "tank_sink";
+        type = "sink";
+        serve = {
+          type = "stdinserver";
+          client_identities = [
+            "awdbox"
+            "awen"  # TODO: use local instead
+            "t14s"
+          ];
+        };
+        root_fs = "pool/backups";
+      }
+    ];
   };
 
   environment.systemPackages = with pkgs; [
