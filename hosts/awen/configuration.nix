@@ -249,13 +249,16 @@ in
               Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
             }
           );
-          locations."/library/".alias = "/mnt/data/library/";
-          locations."/now/" = {
-            alias = "/mnt/data/downloads/";
-            extraConfig = ''
-              limit_rate 4608k;  # 4m=32mbps, 4608k=4.5m=36mbps
-              limit_conn content_addr 2;
-            '';
+          locations = {
+            "/dav/".proxyPass = "http://127.0.0.1:45496";
+            "/library/".alias = "/mnt/data/library/";
+            "/now/" = {
+              alias = "/mnt/data/downloads/";
+              extraConfig = ''
+                limit_rate 4608k;  # 4m=32mbps, 4608k=4.5m=36mbps
+                limit_conn content_addr 2;
+              '';
+            };
           };
         };
         "rt.awen.sec.gd" = {  # proxy configured by services.rutorrent
@@ -431,6 +434,28 @@ in
       dataDir = "/persist/var/lib/trilium";
       nginx.enable = true;
       nginx.hostName = "notes.sec.gd";
+    };
+    webdav = {
+      enable = true;
+      settings = {
+        address = "127.0.0.1";
+        port = 45496;
+        debug = true;
+        noSniff = true;
+        behindProxy = true;
+        permissions = "R";
+        prefix = "/dav/";
+        directory = "/data/downloads";
+        noPassword = true;
+        users = [
+          # https://github.com/hacdias/webdav/issues/216
+          #{
+          #  username = "mal-seedvault";
+          #  directory = "/data/backups/phone/";
+          #  permissions = "CRUD";
+          #}
+        ];
+      };
     };
   };
 
