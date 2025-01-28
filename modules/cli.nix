@@ -11,56 +11,58 @@ in
 {
   #console.font = "Lat2-Terminus16"; # todo pick
   environment.systemPackages = with pkgs; [
-    ansible
     binutils
     cryptsetup
-    darkhttpd
     dnsutils
     file
-    git
     htop
     jq
     libva-utils  # for vainfo
     lm_sensors
     lsof
-    mosh
     ncdu
     nfs-utils
-    nixpkgs-fmt
-    nmap
     nvd
     nvme-cli
     openssl
-    openvpn
     parted
     pciutils
     psmisc
     pv
-    rsync
     sbctl
     smartmontools
-    socat
-    sqlite
     tcpdump
     unzip
     usbutils
     virtiofsd
     wget
-    whois
     wireguard-tools
+
+    ansible
+    darkhttpd
+    mosh
+    nmap
+    openvpn
+    rsync
+    socat
+    sqlite
+    vbindiff
+    whois
     wol
+    xclip
     zip
 
+    black  # python-black
     cargo
+    cloc
     gcc
+    git
+    nixpkgs-fmt
+    nodejs
     pkg-config
+    python3
     rustc
     rustup
-
-    python3
-    black  # python-black
-
-    nodejs
 
     # https://github.com/buckley310/nixos-config/blob/a05bdb3ee24674bd1df706f881296458f3339c6f/modules/cli.nix#L52
     (writeShellScriptBin "needs-restart" ''

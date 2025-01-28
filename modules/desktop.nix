@@ -23,6 +23,7 @@ with lib;
     environment.variables.MOZ_USE_XINPUT2 = "1";
 
     environment.systemPackages = with pkgs; [
+      ddcui
       gparted
       ntfs3g
       pavucontrol
@@ -69,6 +70,7 @@ with lib;
       gedit
       gnome-text-editor
       ghidra
+      imhex
       #pgadmin # ancient
       (nixpkgsUnstable.proxmark3.override { hardwarePlatform = "PM3GENERIC"; })
       remmina
