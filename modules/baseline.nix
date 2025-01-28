@@ -11,6 +11,8 @@
 
     zfs.forceImportAll = false;
     zfs.forceImportRoot = false;
+    # Others should be auto-loaded once tank is mounted
+    zfs.requestEncryptionCredentials = [ "tank" "pool" ];
 
     kernelPackages = pkgs.linuxPackages_hardened;
     # If hardened is ever newer than ZFS supports:
