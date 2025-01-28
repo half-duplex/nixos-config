@@ -6,10 +6,13 @@
   i18n.extraLocaleSettings = { LC_TIME = "C"; };
 
   boot = {
-    loader.systemd-boot = {
-      enable = true;
-      editor = false;
-      rebootForBitlocker = true;
+    loader = {
+      systemd-boot = {
+        enable = true;
+        editor = false;
+        rebootForBitlocker = true;
+      };
+      timeout = 1;
     };
 
     zfs.forceImportAll = false;
