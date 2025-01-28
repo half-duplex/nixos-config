@@ -40,9 +40,9 @@
 
   fileSystems = lib.foldl (a: b: a // b)
     {
-      "/data" = { device = "awdbox-data/data"; fsType = "zfs"; };
-      "/data/backups" = { device = "awdbox-data/backups"; fsType = "zfs"; };
-      "/data/nobackup" = { device = "awdbox-data/nobackup"; fsType = "zfs"; };
+      "/data" = { device = "pool/data"; fsType = "zfs"; };
+      "/data/backups" = { device = "pool/backups"; fsType = "zfs"; };
+      "/data/nobackup" = { device = "pool/nobackup"; fsType = "zfs"; };
       "/mnt/mars/data" = {
         device = "mars:/data";
         fsType = "nfs";
@@ -125,7 +125,7 @@
         name = "data_snap_nobackup";
         type = "snap";
         filesystems = {
-          "awdbox-data/nobackup" = true;
+          "pool/nobackup" = true;
         };
         snapshotting = {
           type = "periodic";
@@ -164,8 +164,8 @@
           incremental = "guarantee_incremental";
         };
         filesystems = {
-          "awdbox-data<" = true;
-          "awdbox-data/nobackup<" = false;
+          "pool<" = true;
+          "pool/nobackup<" = false;
         };
         snapshotting = {
           type = "periodic";
