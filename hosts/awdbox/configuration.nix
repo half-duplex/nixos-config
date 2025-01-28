@@ -120,6 +120,87 @@
       enable = true;
       client.enable = true;
     };
+    zrepl.settings.jobs = [
+      {
+        name = "data_snap_nobackup";
+        type = "snap";
+        filesystems = {
+          "awdbox-data/nobackup" = true;
+        };
+        snapshotting = {
+          type = "periodic";
+          interval = "5m";
+          prefix = "zrepl_";
+        };
+        pruning = {
+          keep = [
+            {
+              type = "grid";
+              grid = "1x1h(keep=all) | 32x15m | 24x1h";
+              regex = "^zrepl_.*";
+            }
+            {
+              type = "regex";
+              negate = true;
+              regex = "^zrepl_.*";
+            }
+          ];
+        };
+      }
+      {
+        name = "data_snap";
+        type = "push";
+        connect = {
+          type = "ssh+stdinserver";
+          host = "awen.sec.gd";
+          #user = "zrepl";
+          user = "root";
+          port = 22;
+          identity_file = "/persist/zrepl/ssh_awen";
+        };
+        send.encrypted = true;
+        replication.protection = {
+          initial = "guarantee_resumability";
+          incremental = "guarantee_incremental";
+        };
+        filesystems = {
+          "awdbox-data<" = true;
+          "awdbox-data/nobackup<" = false;
+        };
+        snapshotting = {
+          type = "periodic";
+          interval = "5m";
+          prefix = "zrepl_";
+        };
+        pruning = {
+          keep_sender = [
+            { type = "not_replicated"; }
+            {
+              type = "grid";
+              grid = "1x1h(keep=all) | 32x15m | 24x1h | 7x1d";
+              regex = "^zrepl_.*";
+            }
+            {
+              type = "regex";
+              negate = true;
+              regex = "^zrepl_.*";
+            }
+          ];
+          keep_receiver = [
+            {
+              type = "grid";
+              grid = "3x1d(keep=all) | 72x1h | 30x1d | 52x1w";
+              regex = "^zrepl_.*";
+            }
+            {
+              type = "regex";
+              negate = true;
+              regex = "^zrepl_.*";
+            }
+          ];
+        };
+      }
+    ];
   };
 
   programs.gnupg.agent.enable = true;
