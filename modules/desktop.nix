@@ -102,42 +102,94 @@ with lib;
 
       (wrapFirefox nixpkgsStaging.firefox-unwrapped {
         extraPolicies = {
-          DisablePocket = true;
-          OfferToSaveLogins = false;
+          AutofillAddressEnabled = false;
+          AutofillCreditCardEnabled = false;
+          Cookies.Behavior = "reject-foreign";
           DisableFormHistory = true;
+          DisablePocket = true;
+          DisabledCiphers = {
+            "TLS_RSA_WITH_AES_128_CBC_SHA" = true;
+            "TLS_RSA_WITH_AES_256_CBC_SHA" = true;
+            "TLS_RSA_WITH_3DES_EDE_CBC_SHA" = true;
+          };
+          DisplayBookmarksToolbar = "never";
+          EnableTrackingProtection = {
+            Value = true;
+            Cryptomining = true;
+            Fingerprinting = true;
+            EmailTracking = true;
+          };
+          FirefoxHome = {
+            Pocket = false;
+            Search = false;
+            SponsoredPocket = false;
+            SponsoredTopSites = false;
+          };
+          FirefoxSuggest = {
+            WebSuggest = false;
+            ImproveSuggest = false;
+            SponsoredSuggestions = false;
+          };
+          HttpsOnlyMode = "force_enabled";
+          NetworkPrediction = false;
+          OfferToSaveLogins = false;
+          PasswordManagerEnabled = false;
+          Permissions = {
+            Autoplay.Default = "block-audio-video";
+            Notifications.BlockNewRequests = true;
+          };
+          PopupBlocking.Default = false;
+          SanitizeOnShutdown.Cache = true;  # History=true clears session
           SearchSuggestEnabled = false;
+          SSLVersionMin = "tls1.2";
+          ExtensionSettings = {
+            "uBlock0@raymondhill.net" = {
+              "installation_mode" = "normal_installed";
+              "install_url" = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+            };
+          };
           Preferences = {
-            "accessibility.blockautorefresh" = { Status = "locked"; Value = false; };
+            "accessibility.blockautorefresh".Value = false;
             "browser.aboutConfig.showWarning" = { Status = "locked"; Value = false; };
-            "browser.contentblocking.category" = { Status = "locked"; Value = "strict"; };
-            "browser.discovery.enabled" = { Status = "locked"; Value = false; };
-            "browser.newtabpage.enabled" = { Status = "locked"; Value = false; };
-            "browser.search.suggest.enabled" = { Status = "locked"; Value = false; };
-            "browser.sessionstore.warnOnQuit" = { Status = "locked"; Value = true; };
-            "browser.startup.page" = { Status = "locked"; Value = 3; };
-            "browser.tabs.closeWindowWithLastTab" = { Status = "locked"; Value = false; };
-            "browser.tabs.tabMinWidth" = { Status = "locked"; Value = 66; };
-            "browser.toolbars.bookmarks.visibility" = { Status = "locked"; Value = "never"; };
-            "browser.uidensity" = { Status = "locked"; Value = 1; };
-            "dom.security.https_only_mode" = { Status = "locked"; Value = true; };
-            "media.autoplay.default" = { Status = "locked"; Value = 5; };
-            "media.autoplay.blocking_policy" = { Status = "locked"; Value = 2; };
-            "network.IDN_show_punycode" = { Status = "locked"; Value = true; };
-            # network.dns.disablePrefetch
-            # network.http.speculative-parallel-limit
-            # network.predictor.enabled
-            # network.prefetch-next
-            # places.history.enabled = false
-            "privacy.firstparty.isolate" = { Status = "locked"; Value = true; };
-            "privacy.resistFingerprinting" = { Status = "locked"; Value = true; };
-            "privacy.userContext.enabled" = { Status = "locked"; Value = true; };
-            #"privacy.userContext.longPressBehavior" = { Status = "locked"; Value = 2; }; # removed?
+            "browser.contentblocking.category".Value = "strict";
+            "browser.discovery.enabled".Value = false;
+            "browser.newtabpage.enabled".Value = false;
+            "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
+            "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
+            "browser.newtabpage.activity-stream.showSponsored" = { Status = "locked"; Value = false; };
+            "browser.newtabpage.activity-stream.showSponsoredTopSites" = { Status = "locked"; Value = false; };
+            "browser.newtabpage.activity-stream.system.showSponsored" = { Status = "locked"; Value = false; };
+            "browser.sessionstore.warnOnQuit".Value = true;
+            "browser.startup.page".Value = 3;  # Restore session
+            "browser.tabs.closeWindowWithLastTab".Value = false;
+            "browser.tabs.tabMinWidth".Value = 70;
+            "browser.urlbar.sponsoredTopSites" = { Status = "locked"; Value = false; };
+            "browser.urlbar.suggest.quicksuggest.sponsored" = { Status = "locked"; Value = false; };
+            "browser.uidensity".Value = 1;
+            "dom.disable_window_move_resize".Value = true;
+            "dom.disable_window_flip".Value = true;
+            "extensions.activeThemeID".Value = "firefox-compact-dark@mozilla.org";
+            "extensions.formautofill.addresses.enabled" = { Status = "locked"; Value = false; };
+            "extensions.formautofill.creditCards.enabled" = { Status = "locked"; Value = false; };
+            "media.autoplay.blocking_policy".Value = 2;  # 2=Click-to-play
+            "network.dns.disablePrefetch".Value = true;
+            "network.IDN_show_punycode".Value = true;
+            "network.predictor.enabled".Value = false;  # What *is* this??
+            # "network.prefetch-next".Value = false;  # Benefit? Based on html tag
+            "places.history.enabled".Value = false;
+            "privacy.userContext.enabled".Value = true;
             "privacy.userContext.ui.enabled" = { Status = "locked"; Value = true; };
-            "security.ssl3.rsa_aes_128_sha" = { Status = "locked"; Value = false; };
-            "security.ssl3.rsa_aes_256_sha" = { Status = "locked"; Value = false; };
-            "security.ssl3.rsa_des_ede3_sha" = { Status = "locked"; Value = false; };
-            "security.webauth.u2f" = { Status = "locked"; Value = false; }; # I want webauthn
-            "ui.prefersReducedMotion" = { Status = "locked"; Value = 1; };
+            "security.default_personal_cert".Value = "Ask Every Time";
+            "security.insecure_connection_text.enabled".Value = true;
+            "security.insecure_connection_text.pbmode.enabled".Value = true;
+            "ui.prefersReducedMotion".Value = true;
+            # Can't be set by policy for "security/stability reasons"
+            #"privacy.firstparty.isolate".Value = true;
+            #"privacy.resistFingerprinting".Value = true;
+            #"privacy.fingerprintingProtection".Value = true;
+            # Maybe -JSDateTimeUTC too
+            #"privacy.fingerprintingProtection.overrides".Value = "+AllTargets,-CSSPrefersColorScheme";
+            #"security.webauth.u2f".Value = false;  # I want webauthn
           };
         };
       })
