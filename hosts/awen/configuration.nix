@@ -469,6 +469,12 @@ in {
       };
     };
     smartd.enable = true;
+    teamspeak3 = {
+      enable = true;
+      dataDir = "/persist/teamspeak3-server";
+      defaultVoicePort = 36609;
+      openFirewall = true;
+    };
     tor = {
       enable = true;
       client.enable = true;
