@@ -1,6 +1,12 @@
-{ path, nixosModule, nixpkgs, nixpkgsStaging, nixpkgsUnstable }:
-let
-  hostMetadata = builtins.mapAttrs
+{
+  path,
+  nixosModule,
+  nixpkgs,
+  nixpkgsStaging,
+  nixpkgsUnstable,
+}: let
+  hostMetadata =
+    builtins.mapAttrs
     (name: _: import (path + "/${name}"))
     (builtins.readDir path);
 
@@ -8,9 +14,9 @@ let
     nixpkgs.lib.nixosSystem {
       inherit (hostMeta) system;
       modules = [
-        (nixosModule)
+        nixosModule
         (hostMeta.module)
-        (_: { networking.hostName = hostName; })
+        (_: {networking.hostName = hostName;})
         (_: {
           nixpkgs.overlays = [
             (_: _: {
@@ -28,4 +34,4 @@ let
       ];
     };
 in
-builtins.mapAttrs getHostConfig hostMetadata
+  builtins.mapAttrs getHostConfig hostMetadata

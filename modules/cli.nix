@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   powerlineOpts = [
     "-mode=flat"
     "-colorize-hostname"
@@ -7,8 +6,7 @@ let
     "-modules=user,host,cwd,nix-shell,git,jobs"
     "-git-assume-unchanged-size 0"
   ];
-in
-{
+in {
   #console.font = "Lat2-Terminus16"; # todo pick
   environment.systemPackages = with pkgs; [
     binutils
@@ -17,7 +15,7 @@ in
     file
     htop
     jq
-    libva-utils  # for vainfo
+    libva-utils # for vainfo
     lm_sensors
     lsof
     ncdu
@@ -52,7 +50,8 @@ in
     xclip
     zip
 
-    black  # python-black
+    alejandra
+    black # python-black
     cargo
     cloc
     gcc
@@ -81,7 +80,7 @@ in
   ];
 
   environment.etc.nixpkgs.source = pkgs.path;
-  nix.nixPath = [ "nixpkgs=/etc/nixpkgs" ];
+  nix.nixPath = ["nixpkgs=/etc/nixpkgs"];
 
   environment = {
     sessionVariables = {
@@ -105,7 +104,7 @@ in
       MOSH_TITLE_NOPREFIX = "1";
       PLGO_HOSTNAMEFG = "0";
       PLGO_HOSTNAMEBG = "114";
-      KRB5CCNAME="DIR:/tmp/krb5cc_\${UID}_d/";
+      KRB5CCNAME = "DIR:/tmp/krb5cc_\${UID}_d/";
 
       # Hack around lack of XDG base dir spec support
       ANDROID_SDK_HOME = "$XDG_CONFIG_HOME/android";

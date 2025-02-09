@@ -28,10 +28,7 @@
 # sbctl create-keys
 # Enable SB in host config.nix, rebuild, setup mode in fw
 # sudo sbctl enroll-keys --microsoft
-
-
-{ config, ... }:
-{
+{config, ...}: {
   users.mutableUsers = false;
   users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
 
@@ -74,16 +71,35 @@
     ];
   };
   environment.etc.secureboot.source = "/persist/secureboot";
-  environment.etc."NetworkManager/system-connections".source =
-    "/persist/NetworkManager/system-connections";
+  environment.etc."NetworkManager/system-connections".source = "/persist/NetworkManager/system-connections";
 
   fileSystems = {
-    "/" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "mode=755" ]; };
-    "/boot" = { device = "/dev/disk/by-partlabel/_esp"; };
-    "/home" = { device = "tank/home"; fsType = "zfs"; };
-    "/home/nobackup" = { device = "tank/home/nobackup"; fsType = "zfs"; };
-    "/nix" = { device = "tank/nix"; fsType = "zfs"; };
-    "/persist" = { device = "tank/persist"; fsType = "zfs"; neededForBoot = true; };
-    "/persist/nobackup" = { device = "tank/persist/nobackup"; fsType = "zfs"; };
+    "/" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = ["mode=755"];
+    };
+    "/boot" = {device = "/dev/disk/by-partlabel/_esp";};
+    "/home" = {
+      device = "tank/home";
+      fsType = "zfs";
+    };
+    "/home/nobackup" = {
+      device = "tank/home/nobackup";
+      fsType = "zfs";
+    };
+    "/nix" = {
+      device = "tank/nix";
+      fsType = "zfs";
+    };
+    "/persist" = {
+      device = "tank/persist";
+      fsType = "zfs";
+      neededForBoot = true;
+    };
+    "/persist/nobackup" = {
+      device = "tank/persist/nobackup";
+      fsType = "zfs";
+    };
   };
 }

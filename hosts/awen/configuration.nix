@@ -1,10 +1,12 @@
-{ lib, pkgs, ... }:
-let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists) toList;
   inherit (lib.strings) concatStringsSep toJSON;
-in
-{
+in {
   sconfig = {
     dvorak = true;
     profile = "server";
@@ -13,9 +15,9 @@ in
     secureboot = true;
   };
 
-  boot.kernelPackages = lib.mkForce pkgs.linuxPackages;  # hardened currently causes boot loops
-  boot.kernelParams = [ "ip=10.0.0.6::10.0.0.1:255.255.255.0::eth0:none" ];
-  boot.initrd.availableKernelModules = [ "nvme" "r8169" ];
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages; # hardened currently causes boot loops
+  boot.kernelParams = ["ip=10.0.0.6::10.0.0.1:255.255.255.0::eth0:none"];
+  boot.initrd.availableKernelModules = ["nvme" "r8169"];
   hardware.cpu.amd.updateMicrocode = true;
   console.earlySetup = true;
 
@@ -60,21 +62,34 @@ in
     ];
   };
 
-  fileSystems = lib.foldl (a: b: a // b)
+  fileSystems =
+    lib.foldl (a: b: a // b)
     {
-      "/data" = { device = "/mnt/data"; options = [ "bind" ]; };
-      "/mnt/data" = { device = "pool"; fsType = "zfs"; };
-      "/mnt/data/backups" = { device = "pool/backups"; fsType = "zfs"; };
-      "/mnt/data/downloads" = { device = "pool/downloads"; fsType = "zfs"; };
+      "/data" = {
+        device = "/mnt/data";
+        options = ["bind"];
+      };
+      "/mnt/data" = {
+        device = "pool";
+        fsType = "zfs";
+      };
+      "/mnt/data/backups" = {
+        device = "pool/backups";
+        fsType = "zfs";
+      };
+      "/mnt/data/downloads" = {
+        device = "pool/downloads";
+        fsType = "zfs";
+      };
     }
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {
         device = "/dev/mapper/crypt${toString n}";
-        options = [ "noauto" "noatime" ];
+        options = ["noauto" "noatime"];
       };
     }));
 
-  networking.firewall.allowedTCPPorts = [ 80 443 445 ];
+  networking.firewall.allowedTCPPorts = [80 443 445];
   services = {
     avahi = {
       enable = true;
@@ -122,10 +137,26 @@ in
             return 301 https://$host$request_uri;
           '';
           listen = [
-            { addr = "0.0.0.0"; extraParameters = [ "deferred" ]; }
-            { addr = "0.0.0.0"; extraParameters = [ "deferred" ]; port = 443; ssl = true; }
-            { addr = "[::]"; extraParameters = [ "deferred" ]; }
-            { addr = "[::]"; extraParameters = [ "deferred" ]; port = 443; ssl = true; }
+            {
+              addr = "0.0.0.0";
+              extraParameters = ["deferred"];
+            }
+            {
+              addr = "0.0.0.0";
+              extraParameters = ["deferred"];
+              port = 443;
+              ssl = true;
+            }
+            {
+              addr = "[::]";
+              extraParameters = ["deferred"];
+            }
+            {
+              addr = "[::]";
+              extraParameters = ["deferred"];
+              port = 443;
+              ssl = true;
+            }
           ];
           rejectSSL = true;
         };
@@ -133,19 +164,24 @@ in
           onlySSL = true;
           enableACME = true;
           extraConfig = concatStringsSep "\n" (
-            mapAttrsToList (
+            mapAttrsToList
+            (
               k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            ) {
-              Content-Security-Policy = mapAttrsToList (
-                k: v: "${k} ${concatStringsSep " " (toList v)};"
-              ) {
-                default-src = "'self'";
-                font-src = "'self' data: https://cdnjs.cloudflare.com";
-                frame-ancestors = "'self'";
-                img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
-                script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-                style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-              };
+            )
+            {
+              Content-Security-Policy =
+                mapAttrsToList
+                (
+                  k: v: "${k} ${concatStringsSep " " (toList v)};"
+                )
+                {
+                  default-src = "'self'";
+                  font-src = "'self' data: https://cdnjs.cloudflare.com";
+                  frame-ancestors = "'self'";
+                  img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
+                  script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+                  style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+                };
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
               X-Content-Type-Options = "nosniff";
               Referrer-Policy = "same-origin";
@@ -161,24 +197,29 @@ in
           onlySSL = true;
           enableACME = true;
           extraConfig = concatStringsSep "\n" (
-            mapAttrsToList (
+            mapAttrsToList
+            (
               k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            ) {
-              Content-Security-Policy = mapAttrsToList (
-                k: v: "${k} ${concatStringsSep " " (toList v)};"
-              ) {
-                default-src = "'self'";
-                font-src = "'self' data:";
-                img-src = [
-                  "'self'"
-                  "blob:"
-                  "https://repo.jellyfin.org/releases/plugin/images/"
-                  "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
-                ];
-                script-src = "'self' 'unsafe-inline'";
-                style-src = "'self' 'unsafe-inline' blob:";
-                frame-ancestors = "'none'";
-              };
+            )
+            {
+              Content-Security-Policy =
+                mapAttrsToList
+                (
+                  k: v: "${k} ${concatStringsSep " " (toList v)};"
+                )
+                {
+                  default-src = "'self'";
+                  font-src = "'self' data:";
+                  img-src = [
+                    "'self'"
+                    "blob:"
+                    "https://repo.jellyfin.org/releases/plugin/images/"
+                    "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
+                  ];
+                  script-src = "'self' 'unsafe-inline'";
+                  style-src = "'self' 'unsafe-inline' blob:";
+                  frame-ancestors = "'none'";
+                };
               Cross-Origin-Opener-Policy = "same-origin";
               Cross-Origin-Embedder-Policy = "credentialless";
               Cross-Origin-Resource-Policy = "same-origin";
@@ -196,23 +237,29 @@ in
             '';
           };
         };
-        "notes.sec.gd" = {  # proxy configured by services.trilium-server
+        "notes.sec.gd" = {
+          # proxy configured by services.trilium-server
           onlySSL = true;
           enableACME = true;
           extraConfig = concatStringsSep "\n" (
-            mapAttrsToList (
+            mapAttrsToList
+            (
               k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            ) {
-              Content-Security-Policy = mapAttrsToList (
-                k: v: "${k} ${concatStringsSep " " (toList v)};"
-              ) {
-                default-src = "'self'";
-                connect-src = "'self' https://api.github.com/repos/zadam/trilium/releases/latest";
-                img-src = "'self' data:";
-                script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
-                style-src = "'self' 'unsafe-inline'";
-                frame-ancestors = "'none'";
-              };
+            )
+            {
+              Content-Security-Policy =
+                mapAttrsToList
+                (
+                  k: v: "${k} ${concatStringsSep " " (toList v)};"
+                )
+                {
+                  default-src = "'self'";
+                  connect-src = "'self' https://api.github.com/repos/zadam/trilium/releases/latest";
+                  img-src = "'self' data:";
+                  script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
+                  style-src = "'self' 'unsafe-inline'";
+                  frame-ancestors = "'none'";
+                };
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
               X-Content-Type-Options = "nosniff";
               Referrer-Policy = "same-origin";
@@ -225,32 +272,39 @@ in
           enableACME = true;
           onlySSL = true;
           root = "/mnt/data/downloads";
-          extraConfig = ''
-            access_log /var/log/nginx/content.log;
-            aio threads;
-            autoindex on;
-            charset utf8;
-            autoindex_exact_size off;
-            set_real_ip_from 100.64.0.6;
-            limit_rate $content_rate_limit;
-            limit_conn content_addr 2;
-          '' + concatStringsSep "\n" (
-            mapAttrsToList (
-              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            ) {
-              Content-Disposition = "inline";
-              Content-Security-Policy = mapAttrsToList (
-                k: v: "${k} ${concatStringsSep " " (toList v)};"
-              ) {
-                default-src = "'self'";
-                frame-ancestors = "'none'";
-              };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-          );
+          extraConfig =
+            ''
+              access_log /var/log/nginx/content.log;
+              aio threads;
+              autoindex on;
+              charset utf8;
+              autoindex_exact_size off;
+              set_real_ip_from 100.64.0.6;
+              limit_rate $content_rate_limit;
+              limit_conn content_addr 2;
+            ''
+            + concatStringsSep "\n" (
+              mapAttrsToList
+              (
+                k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+              )
+              {
+                Content-Disposition = "inline";
+                Content-Security-Policy =
+                  mapAttrsToList
+                  (
+                    k: v: "${k} ${concatStringsSep " " (toList v)};"
+                  )
+                  {
+                    default-src = "'self'";
+                    frame-ancestors = "'none'";
+                  };
+                Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+                X-Content-Type-Options = "nosniff";
+                Referrer-Policy = "same-origin";
+                Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+              }
+            );
           locations = {
             "/dav/".proxyPass = "http://127.0.0.1:45496";
             "/library/".alias = "/mnt/data/library/";
@@ -263,22 +317,28 @@ in
             };
           };
         };
-        "rt.awen.sec.gd" = {  # proxy configured by services.rutorrent
+        "rt.awen.sec.gd" = {
+          # proxy configured by services.rutorrent
           basicAuthFile = "/persist/rutorrent/htpasswd";
           onlySSL = true;
           enableACME = true;
           extraConfig = concatStringsSep "\n" (
-            mapAttrsToList (
+            mapAttrsToList
+            (
               k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            ) {
-              Content-Security-Policy = mapAttrsToList (
-                k: v: "${k} ${concatStringsSep " " (toList v)};"
-              ) {
-                default-src = "'self'";
-                script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
-                style-src = "'self' 'unsafe-inline'";
-                frame-ancestors = "'self'";
-              };
+            )
+            {
+              Content-Security-Policy =
+                mapAttrsToList
+                (
+                  k: v: "${k} ${concatStringsSep " " (toList v)};"
+                )
+                {
+                  default-src = "'self'";
+                  script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
+                  style-src = "'self' 'unsafe-inline'";
+                  frame-ancestors = "'self'";
+                };
               Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
               X-Content-Type-Options = "nosniff";
               Referrer-Policy = "same-origin";
@@ -377,7 +437,7 @@ in
           "server string" = "%h";
           "passdb backend" = "tdbsam:/persist/etc/samba/private/passdb.tdb";
           "hosts deny" = "ALL";
-          "hosts allow" = [ "::1" "127.0.0.1" "10.0.0.0/16" ];
+          "hosts allow" = ["::1" "127.0.0.1" "10.0.0.0/16"];
           "logging" = "syslog";
           "printing" = "bsd";
           "printcap name" = "/dev/null";
@@ -450,7 +510,7 @@ in
           type = "stdinserver";
           client_identities = [
             "awdbox"
-            "awen"  # TODO: use local instead
+            "awen" # TODO: use local instead
             "t14s"
           ];
         };

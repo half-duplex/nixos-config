@@ -1,7 +1,11 @@
-{ config, pkgs, lib, ... }:
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   options.sconfig.boot = lib.mkOption {
-    type = lib.types.enum [ "efi" "bios" ];
+    type = lib.types.enum ["efi" "bios"];
     default = "efi";
   };
 

@@ -1,5 +1,8 @@
-{ lib, pkgs, ... }:
 {
+  lib,
+  pkgs,
+  ...
+}: {
   sconfig = {
     dvorak = true;
     plasma = true;
@@ -9,8 +12,8 @@
     secureboot = true;
   };
 
-  boot.initrd.availableKernelModules = [ "nvme" "e1000e" ];
-  boot.kernelParams = [ "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none" "processor.max_cstate=5" ];
+  boot.initrd.availableKernelModules = ["nvme" "e1000e"];
+  boot.kernelParams = ["ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none" "processor.max_cstate=5"];
   console.earlySetup = true;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.rasdaemon.enable = true;
@@ -35,28 +38,38 @@
   };
 
   environment.systemPackages = with pkgs; [
-     virtio-win
+    virtio-win
   ];
 
-  fileSystems = lib.foldl (a: b: a // b)
+  fileSystems =
+    lib.foldl (a: b: a // b)
     {
-      "/data" = { device = "pool/data"; fsType = "zfs"; };
-      "/data/backups" = { device = "pool/backups"; fsType = "zfs"; };
-      "/data/nobackup" = { device = "pool/nobackup"; fsType = "zfs"; };
+      "/data" = {
+        device = "pool/data";
+        fsType = "zfs";
+      };
+      "/data/backups" = {
+        device = "pool/backups";
+        fsType = "zfs";
+      };
+      "/data/nobackup" = {
+        device = "pool/nobackup";
+        fsType = "zfs";
+      };
       "/mnt/mars/data" = {
         device = "mars:/data";
         fsType = "nfs";
-        options = [ "noauto" "nfsvers=4" "sec=krb5p" ];
+        options = ["noauto" "nfsvers=4" "sec=krb5p"];
       };
     }
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {
         device = "/dev/mapper/crypt${toString n}";
-        options = [ "noauto" "noatime" ];
+        options = ["noauto" "noatime"];
       };
     }));
 
-  networking.firewall.allowedTCPPorts = [ 445 ];
+  networking.firewall.allowedTCPPorts = [445];
   services = {
     avahi = {
       enable = true;
@@ -64,7 +77,7 @@
     };
     postgresql = {
       enable = true;
-      ensureDatabases = [ "fuzzysearch" ];
+      ensureDatabases = ["fuzzysearch"];
       authentication = ''
         local all all trust
         host all all 127.0.0.1/32 trust
@@ -81,7 +94,7 @@
           "server string" = "%h";
           "passdb backend" = "tdbsam:/persist/etc/samba/private/passdb.tdb";
           "hosts deny" = "ALL";
-          "hosts allow" = [ "::1" "127.0.0.1" "10.0.0.0/16" ];
+          "hosts allow" = ["::1" "127.0.0.1" "10.0.0.0/16"];
           "logging" = "syslog";
           "printing" = "bsd";
           "printcap name" = "/dev/null";
@@ -174,7 +187,7 @@
         };
         pruning = {
           keep_sender = [
-            { type = "not_replicated"; }
+            {type = "not_replicated";}
             {
               type = "grid";
               grid = "1x1h(keep=all) | 32x15m | 24x1h | 7x1d";

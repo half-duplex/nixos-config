@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   sconfig = {
     profile = "server";
     hardware = "qemu";
@@ -11,7 +10,7 @@
 
   boot = {
     #initrd.kernelModules = [ "virtio_gpu" "drm" ];
-    kernelParams = [ "console=ttyAMA0" ];
+    kernelParams = ["console=ttyAMA0"];
   };
 
   users.users.mal.openssh.authorizedKeys.keys = [

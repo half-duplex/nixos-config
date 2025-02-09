@@ -1,7 +1,12 @@
-{ config, pkgs, nixpkgs, ... }: {
+{
+  config,
+  pkgs,
+  nixpkgs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     pyrosimple
-    transmission_4  # useful for transmission-show etc
+    transmission_4 # useful for transmission-show etc
   ];
   services.rutorrent = {
     dataDir = "/persist/rutorrent";

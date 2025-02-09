@@ -1,8 +1,12 @@
-{ config, pkgs, lib, lanzaboote, ... }:
-let
-  cfg = config.sconfig.secureboot;
-in
 {
+  config,
+  pkgs,
+  lib,
+  lanzaboote,
+  ...
+}: let
+  cfg = config.sconfig.secureboot;
+in {
   options.sconfig.secureboot = lib.mkEnableOption "Enable SecureBoot";
 
   config = lib.mkIf cfg {
@@ -13,6 +17,6 @@ in
         pkiBundle = "/etc/secureboot";
       };
     };
-    environment.systemPackages = [ pkgs.sbctl ];
+    environment.systemPackages = [pkgs.sbctl];
   };
 }

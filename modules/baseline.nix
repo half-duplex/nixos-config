@@ -1,9 +1,13 @@
-{ config, pkgs, lib, ... }:
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   time.timeZone = lib.mkDefault "UTC";
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "eo/UTF-8" ];
+  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "eo/UTF-8"];
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = { LC_TIME = "C"; };
+  i18n.extraLocaleSettings = {LC_TIME = "C";};
 
   boot = {
     loader = {
@@ -18,7 +22,7 @@
     zfs.forceImportAll = false;
     zfs.forceImportRoot = false;
     # Others should be auto-loaded once tank is mounted
-    zfs.requestEncryptionCredentials = [ "tank" "pool" ];
+    zfs.requestEncryptionCredentials = ["tank" "pool"];
 
     kernelPackages = pkgs.linuxPackages_hardened;
     # If hardened is ever newer than ZFS supports:
@@ -145,7 +149,7 @@
     ];
   };
 
-  nix.settings.allowed-users = [ "@wheel" ];
+  nix.settings.allowed-users = ["@wheel"];
   #environment.memoryAllocator.provider = "graphene-hardened"; # Breaks everything... ??
   #environment.memoryAllocator.provider = "scudo"; # Breaks firefox...
   #environment.variables.SCUDO_OPTIONS = "ZeroContents=1";
@@ -166,8 +170,7 @@
       };
       libdefaults = {
         default_realm = "SEC.GD";
-        permitted_enctypes =
-          "aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96";
+        permitted_enctypes = "aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96";
         rdns = false;
         spake_preauth_groups = "edwards25519";
       };
@@ -262,7 +265,7 @@
             };
             pruning = {
               keep_sender = [
-                { type = "not_replicated"; }
+                {type = "not_replicated";}
                 {
                   type = "grid";
                   grid = "1x1h(keep=all) | 32x15m | 24x1h | 7x1d";
@@ -296,16 +299,18 @@
   networking = {
     domain = lib.mkDefault "sec.gd";
     hostId = builtins.substring 0 8 (builtins.hashString "md5" config.networking.hostName);
-    hosts = lib.mkIf
+    hosts =
+      lib.mkIf
       (
-        config.networking.domain == "sec.gd" &&
-        config.services.tailscale.enable == true
+        config.networking.domain
+        == "sec.gd"
+        && config.services.tailscale.enable == true
       )
       {
-        "100.64.0.2" = [ "nova.sec.gd" "nova" ];
-        "100.64.0.3" = [ "awdbox.sec.gd" "awdbox" ];
-        "100.64.0.5" = [ "t14s.sec.gd" "t14s" ];
-        "100.64.0.7" = [ "awen.sec.gd" "awen" ];
+        "100.64.0.2" = ["nova.sec.gd" "nova"];
+        "100.64.0.3" = ["awdbox.sec.gd" "awdbox"];
+        "100.64.0.5" = ["t14s.sec.gd" "t14s"];
+        "100.64.0.7" = ["awen.sec.gd" "awen"];
       };
     nftables.enable = true;
     wireguard.enable = true;
@@ -322,29 +327,32 @@
 
   users = {
     groups = {
-      adbusers = { };
-      ssh-users = { };
+      adbusers = {};
+      ssh-users = {};
     };
     users = {
-      root.extraGroups = [ "ssh-users" ];
+      root.extraGroups = ["ssh-users"];
       mal = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd" ];
+        extraGroups = ["wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd"];
       };
     };
   };
 
-  virtualisation.docker = { enable = true; enableOnBoot = false; };
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+  };
   virtualisation.libvirtd.qemu = {
     runAsRoot = false;
     swtpm.enable = true;
-    ovmf.packages = [ pkgs.OVMFFull.fd ];
+    ovmf.packages = [pkgs.OVMFFull.fd];
   };
 
   services.openssh = {
     enable = true;
     settings = {
-      AllowGroups = [ "ssh-users" ];
+      AllowGroups = ["ssh-users"];
       KbdInteractiveAuthentication = false;
       PasswordAuthentication = false;
     };
@@ -357,19 +365,19 @@
   '';
   programs.ssh.knownHosts = {
     "nova" = {
-      extraHostNames = [ "nova.sec.gd" ];
+      extraHostNames = ["nova.sec.gd"];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFdMktqbADswjjuvchDjw7yPzxEKPjVvmlDQ9KSmXETm";
     };
     "awdbox" = {
-      extraHostNames = [ "awdbox.sec.gd" ];
+      extraHostNames = ["awdbox.sec.gd"];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaHPoXU8rSgo1xnGzdycTE4V12s7r9UCorttLN3uijo";
     };
     "awen" = {
-      extraHostNames = [ "awen.sec.gd" ];
+      extraHostNames = ["awen.sec.gd"];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGX39naSG1lKKC/Ap/flCR20JTV2i3FiSgQTtJ8pL6lR";
     };
     "t14s" = {
-      extraHostNames = [ "t14s.sec.gd" ];
+      extraHostNames = ["t14s.sec.gd"];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID7TXKM5OichO/g4S51tAc5taggPefpazAxJV8l7kfbv";
     };
   };

@@ -1,8 +1,10 @@
-{ config, lib, ... }:
-let
-  cfg = config.sconfig.remoteUnlock;
-in
 {
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.sconfig.remoteUnlock;
+in {
   options.sconfig.remoteUnlock = lib.mkEnableOption "Configure remote-unlock for FDE";
 
   config = lib.mkIf cfg {
