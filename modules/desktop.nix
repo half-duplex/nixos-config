@@ -131,6 +131,7 @@ in
               EmailTracking = true;
             };
             FirefoxHome = {
+              Locked = true; # only locks params we set here
               Pocket = false;
               Search = false;
               SponsoredPocket = false;
@@ -167,9 +168,8 @@ in
               "browser.newtabpage.enabled".Value = false;
               "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
               "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
-              "browser.newtabpage.activity-stream.showSponsored" = ffLocked false;
-              "browser.newtabpage.activity-stream.showSponsoredTopSites" = ffLocked false;
-              "browser.newtabpage.activity-stream.system.showSponsored" = ffLocked false;
+              "browser.newtabpage.activity-stream.showWeather" = ffLocked false; # not in FirefoxHome; fuck accuweather
+              "browser.newtabpage.activity-stream.system.showSponsored" = ffLocked false; # ?
               "browser.sessionstore.warnOnQuit".Value = true;
               "browser.startup.page".Value = 3; # Restore session
               "browser.tabs.closeWindowWithLastTab".Value = false;
@@ -186,7 +186,7 @@ in
               "network.dns.disablePrefetch".Value = true;
               "network.IDN_show_punycode".Value = true;
               "network.predictor.enabled".Value = false; # What *is* this??
-              # "network.prefetch-next".Value = false;  # Benefit? Based on html tag
+              #"network.prefetch-next".Value = false;  # Benefit? Based on html tag
               "places.history.enabled".Value = false;
               "privacy.userContext.enabled".Value = true;
               "privacy.userContext.ui.enabled" = ffLocked true;
