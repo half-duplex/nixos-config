@@ -71,6 +71,12 @@
 
   networking.firewall.allowedTCPPorts = [445];
   services = {
+    ollama = {
+      enable = true;
+      package = pkgs.ollama-rocm;
+      acceleration = "rocm";
+      rocmOverrideGfx = "10.1.0";
+    };
     avahi = {
       enable = true;
       nssmdns4 = true;
@@ -215,6 +221,8 @@
       }
     ];
   };
+  systemd.services.ollama.wantedBy = lib.mkForce [];
+  systemd.services.ensure-printers.wantedBy = lib.mkForce []; # fails if printer off
 
   programs.gnupg.agent.enable = true;
 

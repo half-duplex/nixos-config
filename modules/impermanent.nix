@@ -40,6 +40,7 @@
       cacheDir = "/persist/nobackup/jellyfin/cache";
       dataDir = "/persist/jellyfin";
     };
+    ollama.models = "/persist/nobackup/ollama-models";
     openssh.hostKeys = [
       {
         path = "/persist/ssh/ssh_host_ed25519_key";
