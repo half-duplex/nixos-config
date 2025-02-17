@@ -221,8 +221,9 @@
       }
     ];
   };
-  systemd.services.ollama.wantedBy = lib.mkForce [];
   systemd.services.ensure-printers.wantedBy = lib.mkForce []; # fails if printer off
+  systemd.services.ollama.wantedBy = lib.mkForce [];
+  systemd.services.postgresql.wantedBy = lib.mkForce [];
 
   programs.gnupg.agent.enable = true;
 
