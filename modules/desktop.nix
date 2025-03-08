@@ -33,6 +33,7 @@ in
 
       environment.systemPackages = with pkgs; [
         ddcui
+        ddcutil
         gparted
         ntfs3g
         pavucontrol
@@ -44,6 +45,7 @@ in
         ffmpeg-full
         mediainfo
         gimp
+        exiftool
         yt-dlp
 
         wine
