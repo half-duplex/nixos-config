@@ -4,6 +4,12 @@
   nixpkgsUnstable,
   ...
 }: final: prev: {
-  nixpkgsStaging = nixpkgsStaging.legacyPackages.${prev.system};
-  nixpkgsUnstable = nixpkgsUnstable.legacyPackages.${prev.system};
+  nixpkgsStaging = import nixpkgsStaging {
+    inherit (prev) system;
+    config.allowUnfree = prev.config.allowUnfree;
+  };
+  nixpkgsUnstable = import nixpkgsUnstable {
+    inherit (prev) system;
+    config.allowUnfree = prev.config.allowUnfree;
+  };
 }

@@ -63,6 +63,7 @@ in {
       #nixpkgsUnstable.obsidian  # Requires ancient electron
       signal-desktop
       teamspeak_client
+      nixpkgsUnstable.teamspeak6-client
       telegram-desktop
       thunderbird
 
