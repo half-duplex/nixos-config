@@ -5,6 +5,7 @@
         (prevAttrs.unwrapped.patches or [])
         ++ [
           patches/more-recent-stickers.patch
+          patches/disable-gift-buttons.patch
           # Based on https://github.com/Layerex/telegram-desktop-patches/tree/master
           patches/disable-sponsored-messages.patch
           patches/disable-save-restrictions.patch

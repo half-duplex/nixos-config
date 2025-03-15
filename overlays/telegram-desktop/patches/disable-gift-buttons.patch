@@ -1,0 +1,41 @@
+diff --git a/Telegram/SourceFiles/history/history_widget.cpp b/Telegram/SourceFiles/history/history_widget.cpp
+index 88060ecf4..8c67291ab 100644
+--- a/Telegram/SourceFiles/history/history_widget.cpp
++++ b/Telegram/SourceFiles/history/history_widget.cpp
+@@ -378,7 +378,6 @@ HistoryWidget::HistoryWidget(
+ 	_botStart->addClickHandler([=] { sendBotStartCommand(); });
+ 	_joinChannel->addClickHandler([=] { joinChannel(); });
+ 	_muteUnmute->addClickHandler([=] { toggleMuteUnmute(); });
+-	setupGiftToChannelButton();
+ 	_reportMessages->addClickHandler([=] { reportSelectedMessages(); });
+ 	_field->submits(
+ 	) | rpl::start_with_next([=](Qt::KeyboardModifiers modifiers) {
+@@ -1016,15 +1015,7 @@ void HistoryWidget::refreshJoinChannelText() {
+ }
+ 
+ void HistoryWidget::refreshGiftToChannelShown() {
+-	if (!_giftToChannelIn || !_giftToChannelOut) {
+-		return;
+-	}
+-	const auto channel = _peer->asChannel();
+-	const auto shown = channel
+-		&& channel->isBroadcast()
+-		&& channel->stargiftsAvailable();
+-	_giftToChannelIn->setVisible(shown);
+-	_giftToChannelOut->setVisible(shown);
++	return;
+ }
+ 
+ void HistoryWidget::refreshTopBarActiveChat() {
+diff --git a/Telegram/SourceFiles/window/window_peer_menu.cpp b/Telegram/SourceFiles/window/window_peer_menu.cpp
+index 036093e55..4a6303927 100644
+--- a/Telegram/SourceFiles/window/window_peer_menu.cpp
++++ b/Telegram/SourceFiles/window/window_peer_menu.cpp
+@@ -1459,7 +1459,6 @@ void Filler::fillProfileActions() {
+ 	addEditContact();
+ 	addBotToGroup();
+ 	addNewMembers();
+-	addSendGift();
+ 	addViewStatistics();
+ 	addStoryArchive();
+ 	addManageChat();
