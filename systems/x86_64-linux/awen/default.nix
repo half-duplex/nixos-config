@@ -89,7 +89,7 @@ in {
       };
     }));
 
-  networking.firewall.allowedTCPPorts = [80 443 445];
+  networking.firewall.allowedTCPPorts = [80 443 445 1883];
   services = {
     avahi = {
       enable = true;
