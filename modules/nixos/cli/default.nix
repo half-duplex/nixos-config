@@ -80,7 +80,8 @@ in {
   ];
 
   environment.etc.nixpkgs.source = pkgs.path;
-  nix.nixPath = ["nixpkgs=/etc/nixpkgs"];
+  environment.etc.nixpkgsUnstable.source = pkgs.nixpkgsUnstable.path;
+  nix.nixPath = ["nixpkgs=/etc/nixpkgs" "nixpkgsUnstable=/etc/nixpkgsUnstable"];
 
   environment = {
     sessionVariables = {
