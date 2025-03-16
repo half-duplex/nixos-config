@@ -254,7 +254,7 @@ in {
                 )
                 {
                   default-src = "'self'";
-                  connect-src = "'self' https://api.github.com/repos/zadam/trilium/releases/latest";
+                  connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
                   img-src = "'self' data:";
                   script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
                   style-src = "'self' 'unsafe-inline'";
@@ -481,6 +481,7 @@ in {
     };
     trilium-server = {
       enable = true;
+      package = pkgs.trilium-next-server;
       port = 37962;
       dataDir = "/persist/var/lib/trilium";
       nginx.enable = true;
