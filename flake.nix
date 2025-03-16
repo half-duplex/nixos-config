@@ -11,6 +11,10 @@
     url = "github:nix-community/lanzaboote/v0.3.0";
     inputs.nixpkgs.follows = "nixpkgs";
   };
+  inputs.lix-module = {
+    url = "git+https://git.lix.systems/lix-project/nixos-module?ref=stable";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   outputs = inputs: let
     lib = inputs.snowfall-lib.mkLib {
@@ -30,6 +34,7 @@
       systems.modules.nixos = with inputs; [
         impermanence.nixosModules.impermanence
         lanzaboote.nixosModules.lanzaboote
+        lix-module.nixosModules.default
       ];
     };
 }

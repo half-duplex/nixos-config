@@ -318,7 +318,7 @@
   };
 
   nix = {
-    package = pkgs.nixVersions.stable;
+    package = lib.mkOverride 900 pkgs.lix; # ~Default, but override nixpkgs
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
