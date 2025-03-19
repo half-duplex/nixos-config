@@ -159,12 +159,13 @@ in {
         set ignorecase
         set incsearch
         set list
+        set list listchars=tab:»\ ,extends:›,precedes:‹,nbsp:␣
         set mouse=
         set nowrap
         set number
         set pastetoggle=<F2>
-        set list listchars=precedes:<,extends:>
         set scrolloff=8
+        let &showbreak='↪ '
         set sidescroll=1
         set sidescrolloff=15
         set smartcase
