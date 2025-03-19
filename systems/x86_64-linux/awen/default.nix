@@ -6,7 +6,7 @@
 }: let
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists) toList;
-  inherit (lib.strings) concatStringsSep toJSON;
+  inherit (lib.strings) concatStrings concatStringsSep toJSON;
 in {
   ${namespace} = {
     dvorak = true;
@@ -18,8 +18,11 @@ in {
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages; # hardened currently causes boot loops
   boot.kernelParams = ["ip=10.0.0.6::10.0.0.1:255.255.255.0::eth0:none"];
   boot.initrd.availableKernelModules = ["nvme" "r8169"];
-  hardware.cpu.amd.updateMicrocode = true;
   console.earlySetup = true;
+  hardware = {
+    cpu.amd.updateMicrocode = true;
+    graphics.enable = true; # enable hw video acceleration
+  };
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM9oQ5Cdab1hZF5LhQ8FTWdAV8QQ/S1/0krreiRzT62n mal@awdbox.sec.gd"
@@ -95,6 +98,28 @@ in {
       enable = true;
       nssmdns4 = true;
     };
+    immich = {
+      enable = true;
+      package = pkgs.nixpkgsUnstable.immich;
+      host = "127.0.0.1"; # "localhost" causes v6-only listen
+      mediaLocation = "/mnt/data/immich/media";
+      settings = {
+        ffmpeg = {
+          accelDecode = true; # May not work without accel="enabled", but I don't want hw encode
+          acceptedAudioCodecs = ["aac" "mp3" "libopus"];
+          acceptedContainers = ["mp4" "ogg" "webm"];
+          acceptedVideoCodecs = ["h264" "hevc" "vp9" "av1"];
+          crf = "30";
+          maxBitrate = "10000";
+          preset = "medium";
+          targetResolution = "1080";
+          targetVideoCodec = "av1";
+          transcode = "bitrate";
+        };
+        trash.days = 90;
+        user.deleteDelay = 90;
+      };
+    };
     jellyfin = {
       enable = true;
     };
@@ -159,6 +184,56 @@ in {
             }
           ];
           rejectSSL = true;
+        };
+        "content.awen.sec.gd" = {
+          basicAuthFile = "/persist/nginx/htpasswd-content";
+          enableACME = true;
+          onlySSL = true;
+          root = "/mnt/data/downloads";
+          extraConfig =
+            ''
+              access_log /var/log/nginx/content.log;
+              aio threads;
+              autoindex on;
+              charset utf8;
+              autoindex_exact_size off;
+              set_real_ip_from 100.64.0.6;
+              limit_rate $content_rate_limit;
+              limit_conn content_addr 2;
+            ''
+            + concatStringsSep "\n" (
+              mapAttrsToList
+              (
+                k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
+              )
+              {
+                Content-Disposition = "inline";
+                Content-Security-Policy =
+                  mapAttrsToList
+                  (
+                    k: v: "${k} ${concatStringsSep " " (toList v)};"
+                  )
+                  {
+                    default-src = "'self'";
+                    frame-ancestors = "'none'";
+                  };
+                Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+                X-Content-Type-Options = "nosniff";
+                Referrer-Policy = "same-origin";
+                Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+              }
+            );
+          locations = {
+            "/dav/".proxyPass = "http://127.0.0.1:45496";
+            "/library/".alias = "/mnt/data/library/";
+            "/now/" = {
+              alias = "/mnt/data/downloads/";
+              extraConfig = ''
+                limit_rate 4608k;  # 4m=32mbps, 4608k=4.5m=36mbps
+                limit_conn content_addr 2;
+              '';
+            };
+          };
         };
         "hass.sec.gd" = {
           onlySSL = true;
@@ -267,54 +342,35 @@ in {
             }
           );
         };
-        "content.awen.sec.gd" = {
-          basicAuthFile = "/persist/nginx/htpasswd-content";
-          enableACME = true;
+        "photos.sec.gd" = {
           onlySSL = true;
-          root = "/mnt/data/downloads";
-          extraConfig =
-            ''
-              access_log /var/log/nginx/content.log;
-              aio threads;
-              autoindex on;
-              charset utf8;
-              autoindex_exact_size off;
-              set_real_ip_from 100.64.0.6;
-              limit_rate $content_rate_limit;
-              limit_conn content_addr 2;
-            ''
-            + concatStringsSep "\n" (
-              mapAttrsToList
-              (
-                k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-              )
-              {
-                Content-Disposition = "inline";
-                Content-Security-Policy =
-                  mapAttrsToList
-                  (
-                    k: v: "${k} ${concatStringsSep " " (toList v)};"
-                  )
-                  {
-                    default-src = "'self'";
-                    frame-ancestors = "'none'";
-                  };
-                Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-                X-Content-Type-Options = "nosniff";
-                Referrer-Policy = "same-origin";
-                Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-              }
-            );
-          locations = {
-            "/dav/".proxyPass = "http://127.0.0.1:45496";
-            "/library/".alias = "/mnt/data/library/";
-            "/now/" = {
-              alias = "/mnt/data/downloads/";
-              extraConfig = ''
-                limit_rate 4608k;  # 4m=32mbps, 4608k=4.5m=36mbps
-                limit_conn content_addr 2;
-              '';
-            };
+          enableACME = true;
+          extraConfig = concatStrings (
+            mapAttrsToList (k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;\n") {
+              Content-Security-Policy = mapAttrsToList (k: v: "${k} ${concatStringsSep " " (toList v)};") {
+                default-src = "'self'";
+                connect-src = "'self' https://tiles.immich.cloud/ https://static.immich.cloud/tiles/";
+                frame-ancestors = "'self'";
+                img-src = "'self' data:";
+                script-src = "'self' 'unsafe-inline'";
+                style-src = "'self' 'unsafe-inline'";
+                worker-src = "'self' blob:";
+              };
+              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
+              X-Content-Type-Options = "nosniff";
+              Referrer-Policy = "same-origin";
+              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
+            }
+            ++ mapAttrsToList (k: v: "${k} ${v};\n") {
+              client_max_body_size = "50000M";
+              proxy_read_timeout = "600s";
+              proxy_send_timeout = "600s";
+              send_timeout = "600s";
+            }
+          );
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:2283";
+            proxyWebsockets = true;
           };
         };
         "rt.awen.sec.gd" = {
@@ -527,6 +583,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    mal.immich-stacker
     virtio-win
   ];
 
