@@ -203,6 +203,7 @@
     zfs = {
       autoScrub.enable = lib.mkDefault true;
       trim.enable = true;
+      zed.settings.ZED_SYSLOG_SUBCLASS_EXCLUDE = "history_event";
     };
     zrepl = {
       enable = true;
