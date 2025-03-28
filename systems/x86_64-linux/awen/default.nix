@@ -273,9 +273,9 @@ in {
                     "https://repo.jellyfin.org/releases/plugin/images/"
                     "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
                   ];
-                  script-src = "'self' 'unsafe-inline'";
+                  script-src = "'self' 'unsafe-inline' blob:";
                   style-src = "'self' 'unsafe-inline' blob:";
-                  frame-ancestors = "'none'";
+                  frame-ancestors = "'self'";
                 };
               Cross-Origin-Opener-Policy = "same-origin";
               Cross-Origin-Embedder-Policy = "credentialless";
