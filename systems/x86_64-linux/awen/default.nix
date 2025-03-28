@@ -13,6 +13,9 @@ in {
     hardware = "physical";
     remoteUnlock.enable = true;
     boot.secureboot.enable = true;
+    services = {
+      authentik.enable = true;
+    };
   };
 
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages; # hardened currently causes boot loops

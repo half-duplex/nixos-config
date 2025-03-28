@@ -20,6 +20,11 @@
       url = "git+https://git.lix.systems/lix-project/nixos-module?ref=release-2.92";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    authentik-nix = {
+      url = "github:nix-community/authentik-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let
@@ -38,6 +43,7 @@
       overlays = with inputs; [
       ];
       systems.modules.nixos = with inputs; [
+        authentik-nix.nixosModules.default
         impermanence.nixosModules.impermanence
         lanzaboote.nixosModules.lanzaboote
         lix-module.nixosModules.default
