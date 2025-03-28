@@ -36,6 +36,7 @@ in {
     wget
     wireguard-tools
 
+    age
     ansible
     darkhttpd
     mosh

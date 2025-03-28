@@ -1,0 +1,25 @@
+keys:
+  - &mal_awdbox age1djlcdgz26exeq365xztx24hgjt3680jpjn0ht6hr5w2x995uc3kss4467c
+  - &mal_awen age1wv7uheuv9kd3wvdwylxyzg7adma4ym4ajr0g73t4xh0c8cmapgksxqkm26
+  - &awdbox age1nxrcgmvkrnq3cpvrqpm6ll49gu7cphhzm5m8f90gg7vrcxwg8ykq83c3rp
+  - &awen age10cq2vaw34z8870gf4p0pw9w5e58kesdhgnyh0k692eca4fgq29pswykl72
+  - &t14s age14nh6ula72rtlvda90lyjpply8uezul0lhgthtl58hu0gnmspxvmsnx2q4m
+creation_rules:
+  - path_regex: ((modules/nixos/[^/]+/)?secrets/awdbox(/[^/]+)?|systems/[^/]+/awdbox/secrets)\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *mal_awdbox
+      - *mal_awen
+      - *awdbox
+  - path_regex: ((modules/nixos/[^/]+/)?secrets/awen(/[^/]+)?|systems/[^/]+/awen/secrets)\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *mal_awdbox
+      - *mal_awen
+      - *awen
+  - path_regex: ((modules/nixos/[^/]+/)?secrets/t14s(/[^/]+)?|systems/[^/]+/t14s/secrets)\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *mal_awdbox
+      - *mal_awen
+      - *t14s

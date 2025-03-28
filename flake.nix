@@ -1,19 +1,25 @@
 {
-  inputs.nixpkgs.url = "nixpkgs/nixos-24.11";
-  inputs.nixpkgsStaging.url = "nixpkgs/release-24.11";
-  inputs.nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
-  inputs.snowfall-lib = {
-    url = "github:snowfallorg/lib";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-  inputs.impermanence.url = "github:nix-community/impermanence";
-  inputs.lanzaboote = {
-    url = "github:nix-community/lanzaboote/v0.3.0";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-  inputs.lix-module = {
-    url = "git+https://git.lix.systems/lix-project/nixos-module?ref=stable";
-    inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-24.11";
+    nixpkgsStaging.url = "nixpkgs/release-24.11";
+    nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
+    snowfall-lib = {
+      url = "github:snowfallorg/lib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    impermanence.url = "github:nix-community/impermanence";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.3.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    lix-module = {
+      url = "git+https://git.lix.systems/lix-project/nixos-module?ref=release-2.92";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let
@@ -35,6 +41,7 @@
         impermanence.nixosModules.impermanence
         lanzaboote.nixosModules.lanzaboote
         lix-module.nixosModules.default
+        sops-nix.nixosModules.sops
       ];
     };
 }
