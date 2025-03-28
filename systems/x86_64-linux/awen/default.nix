@@ -15,6 +15,7 @@ in {
     boot.secureboot.enable = true;
     services = {
       authentik.enable = true;
+      immich.enable = true;
     };
   };
 
@@ -100,28 +101,6 @@ in {
     avahi = {
       enable = true;
       nssmdns4 = true;
-    };
-    immich = {
-      enable = true;
-      package = pkgs.nixpkgsUnstable.immich;
-      host = "127.0.0.1"; # "localhost" causes v6-only listen
-      mediaLocation = "/mnt/data/immich/media";
-      settings = {
-        ffmpeg = {
-          accelDecode = true; # May not work without accel="enabled", but I don't want hw encode
-          acceptedAudioCodecs = ["aac" "mp3" "libopus"];
-          acceptedContainers = ["mp4" "ogg" "webm"];
-          acceptedVideoCodecs = ["h264" "hevc" "vp9" "av1"];
-          crf = "30";
-          maxBitrate = "10000";
-          preset = "medium";
-          targetResolution = "1080";
-          targetVideoCodec = "av1";
-          transcode = "bitrate";
-        };
-        trash.days = 90;
-        user.deleteDelay = 90;
-      };
     };
     jellyfin = {
       enable = true;
@@ -344,37 +323,6 @@ in {
               Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
             }
           );
-        };
-        "photos.sec.gd" = {
-          onlySSL = true;
-          enableACME = true;
-          extraConfig = concatStrings (
-            mapAttrsToList (k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;\n") {
-              Content-Security-Policy = mapAttrsToList (k: v: "${k} ${concatStringsSep " " (toList v)};") {
-                default-src = "'self'";
-                connect-src = "'self' https://tiles.immich.cloud/ https://static.immich.cloud/tiles/";
-                frame-ancestors = "'self'";
-                img-src = "'self' blob: data:";
-                script-src = "'self' 'unsafe-inline'";
-                style-src = "'self' 'unsafe-inline'";
-                worker-src = "'self' blob:";
-              };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-            ++ mapAttrsToList (k: v: "${k} ${v};\n") {
-              client_max_body_size = "50000M";
-              proxy_read_timeout = "600s";
-              proxy_send_timeout = "600s";
-              send_timeout = "600s";
-            }
-          );
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:2283";
-            proxyWebsockets = true;
-          };
         };
         "rt.awen.sec.gd" = {
           # proxy configured by services.rutorrent
