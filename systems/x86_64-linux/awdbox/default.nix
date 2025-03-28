@@ -40,6 +40,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    immich-go
     virtio-win
   ];
 
