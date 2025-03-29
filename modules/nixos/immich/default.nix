@@ -27,7 +27,7 @@
     newVersionCheck.enabled = false;
     oauth = {
       autoLaunch = true;
-      autoRegister = false;
+      autoRegister = true;
       buttonText = "Log in with SSO";
       clientId = "${config.sops.placeholder.oauth_client_id}";
       clientSecret = "${config.sops.placeholder.oauth_client_secret}";
