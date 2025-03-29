@@ -3,7 +3,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  inherit (lib.strings) concatStringsSep;
+in {
   time.timeZone = lib.mkDefault "UTC";
   i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "eo/UTF-8"];
   i18n.defaultLocale = "en_US.UTF-8";
@@ -170,7 +172,12 @@
       };
       libdefaults = {
         default_realm = "SEC.GD";
-        permitted_enctypes = "aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96";
+        permitted_enctypes = concatStringsSep " " [
+          "aes256-cts-hmac-sha384-192"
+          "aes128-cts-hmac-sha256-128"
+          "aes256-cts-hmac-sha1-96"
+          "aes128-cts-hmac-sha1-96"
+        ];
         rdns = false;
         spake_preauth_groups = "edwards25519";
       };
@@ -349,39 +356,6 @@
     runAsRoot = false;
     swtpm.enable = true;
     ovmf.packages = [pkgs.OVMFFull.fd];
-  };
-
-  services.openssh = {
-    enable = true;
-    settings = {
-      AllowGroups = ["ssh-users"];
-      KbdInteractiveAuthentication = false;
-      PasswordAuthentication = false;
-    };
-    extraConfig = ''
-      #GSSAPIAuthentication yes
-    '';
-  };
-  programs.ssh.extraConfig = ''
-    #GSSAPIAuthentication yes
-  '';
-  programs.ssh.knownHosts = {
-    "nova" = {
-      extraHostNames = ["nova.sec.gd"];
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFdMktqbADswjjuvchDjw7yPzxEKPjVvmlDQ9KSmXETm";
-    };
-    "awdbox" = {
-      extraHostNames = ["awdbox.sec.gd"];
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaHPoXU8rSgo1xnGzdycTE4V12s7r9UCorttLN3uijo";
-    };
-    "awen" = {
-      extraHostNames = ["awen.sec.gd"];
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGX39naSG1lKKC/Ap/flCR20JTV2i3FiSgQTtJ8pL6lR";
-    };
-    "t14s" = {
-      extraHostNames = ["t14s.sec.gd"];
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID7TXKM5OichO/g4S51tAc5taggPefpazAxJV8l7kfbv";
-    };
   };
 
   services = {

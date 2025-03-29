@@ -53,17 +53,6 @@
         dataDir = "/persist/jellyfin";
       };
       ollama.models = "/persist/nobackup/ollama-models";
-      openssh.hostKeys = [
-        {
-          path = "/persist/ssh/ssh_host_ed25519_key";
-          type = "ed25519";
-        }
-        {
-          path = "/persist/ssh/ssh_host_rsa_key";
-          type = "rsa";
-          bits = 4096;
-        }
-      ];
       postgresql.dataDir = "/persist/postgresql/${config.services.postgresql.package.psqlSchema}";
     };
 

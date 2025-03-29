@@ -11,7 +11,7 @@
 
   cfg = config.${namespace}.services.authentik;
 in {
-  options.${namespace}.services.authentik= {
+  options.${namespace}.services.authentik = {
     enable = lib.mkEnableOption "Configure the authentik IDP";
     nginx = {
       enable = lib.mkOption {
