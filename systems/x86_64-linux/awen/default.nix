@@ -109,7 +109,11 @@ in {
       enable = true;
       listeners = [
         {
+          # HomeAssistant
           port = 1883;
+          users = {
+            "hass.awen.sec.gd".hashedPassword = "$7$101$ZGKtPJuxva6PLF3R$A1iUE1AAwwPLXTN9D6UwHPa0bGPgsFqFdnSj++4lwZXqnpMCxlXRuYjKHGQyVMWemhC4arNdF86CB1VVc9jHEw==";
+          };
         }
       ];
     };
