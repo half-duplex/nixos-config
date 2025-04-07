@@ -72,7 +72,6 @@
       virt-manager
       wireshark
 
-      chromium
       evince # may be implicit with gnome
       google-chrome
       libreoffice-fresh
