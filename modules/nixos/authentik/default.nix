@@ -28,10 +28,33 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    sops = {
+      secrets =
+        lib.genAttrs [
+          "AUTHENTIK_SECRET_KEY"
+          "AUTHENTIK_EMAIL__PASSWORD"
+        ] (_: {
+          sopsFile = secrets/${config.networking.hostName}.yaml;
+        });
+      templates."authentik.env" = {
+        #mode = "0440";
+        #owner = "${config.services.authentik.user}";
+        #group = "${config.services.authentik.group}";
+        content = concatStringsSep "\n" (mapAttrsToList (k: v: "${k}=${v}")
+          ((lib.genAttrs [
+              "AUTHENTIK_SECRET_KEY"
+              "AUTHENTIK_EMAIL__PASSWORD"
+            ] (v: builtins.getAttr v config.sops.placeholder))
+            // {
+              # Default includes RFC1918 too
+              AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS = concatStringsSep "," ["127.0.0.1/32" "::1/128"];
+            }));
+      };
+    };
     services = {
       authentik = {
         enable = true;
-        environmentFile = "/persist/authentik/core/env";
+        environmentFile = config.sops.templates."authentik.env".path;
         nginx = {
           enable = true;
           host = "${cfg.nginx.hostname}";
