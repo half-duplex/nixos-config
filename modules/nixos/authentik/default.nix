@@ -10,6 +10,7 @@
   inherit (lib.strings) concatStrings concatStringsSep toJSON;
 
   cfg = config.${namespace}.services.authentik;
+  impermanent = config.${namespace}.impermanence.enable;
 in {
   options.${namespace}.services.authentik = {
     enable = lib.mkEnableOption "Configure the authentik IDP";
@@ -37,9 +38,6 @@ in {
           sopsFile = secrets/${config.networking.hostName}.yaml;
         });
       templates."authentik.env" = {
-        #mode = "0440";
-        #owner = "${config.services.authentik.user}";
-        #group = "${config.services.authentik.group}";
         content = concatStringsSep "\n" (mapAttrsToList (k: v: "${k}=${v}")
           ((lib.genAttrs [
               "AUTHENTIK_SECRET_KEY"
@@ -51,6 +49,13 @@ in {
             }));
       };
     };
+
+    # Because the services use DynamicUser the media dir must be in /var/lib, so use impermanence
+    # instead of configuring the media dir.
+    environment.persistence = lib.mkIf impermanent {
+      "/persist".directories = ["/var/lib/private/authentik/media"];
+    };
+
     services = {
       authentik = {
         enable = true;
@@ -73,8 +78,8 @@ in {
           onlySSL = true;
           enableACME = lib.mkForce true; # override authentik-nix
           extraConfig = concatStrings (
-            mapAttrsToList (k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;\n") {
-              Content-Security-Policy = mapAttrsToList (k: v: "${k} ${concatStringsSep " " (toList v)};") {
+            mapAttrsToList (header: v: "add_header ${header} ${toJSON (concatStringsSep " " (toList v))} always;\n") {
+              Content-Security-Policy = mapAttrsToList (src: v: "${src} ${concatStringsSep " " (toList v)};") {
                 default-src = "'self'";
                 connect-src = "'self'";
                 img-src = "'self' data:";
