@@ -73,13 +73,17 @@ in {
   };
   programs.ssh = {
     extraConfig = ''
+      Host *.sec.gd
+          PubkeyAuthentication yes
+          ControlMaster auto
+          ControlPersist yes
       Host *.onion
           ProxyCommand socat - SOCKS4A:localhost:%h:%p,socksport=9050
       Host *
           IdentitiesOnly yes
           PasswordAuthentication no
           PubkeyAuthentication no
-          ControlPath ~/.ssh/control/%C.sock
+          ControlPath /run/user/%i/ssh-control-%C.sock
     '';
     knownHosts = lib.mapAttrs (name: value: value // {extraHostNames = ["${name}.sec.gd" "${name}.vpn.sec.gd"];}) {
       "nova".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFdMktqbADswjjuvchDjw7yPzxEKPjVvmlDQ9KSmXETm";
