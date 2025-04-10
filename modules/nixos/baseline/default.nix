@@ -340,10 +340,14 @@ in {
       ssh-users = {};
     };
     users = {
-      root.extraGroups = ["ssh-users"];
+      root = {
+        extraGroups = ["ssh-users"];
+        linger = true;
+      };
       mal = {
         isNormalUser = true;
         extraGroups = ["wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd"];
+        linger = true;
       };
     };
   };
