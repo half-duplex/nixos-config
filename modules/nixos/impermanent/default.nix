@@ -64,12 +64,15 @@
       directories = [
         "/var/log"
         "/var/lib/acme"
+        # Can't be changed without recompilation...
+        # https://stackoverflow.com/questions/65957677/bluez-change-local-storage-directory
+        "/var/lib/bluetooth"
         "/var/lib/flatpak"
         "/var/lib/libvirt"
         "/var/lib/nixos"
         "/var/lib/rasdaemon"
-        "/var/lib/tailscale"
         "/var/lib/swtpm-localca"
+        "/var/lib/tailscale"
       ];
     };
     environment.etc.secureboot.source = "/persist/secureboot";
