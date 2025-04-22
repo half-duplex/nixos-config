@@ -131,7 +131,7 @@ in {
         limit_conn_zone $binary_remote_addr zone=content_addr:5m;
         geo $content_rate_limit {
           10.0.0.0/16 0;  # lan, unlimited
-          default     2m;  # 2m=16mbps
+          default     10m;  # 80mbps
         }
       '';
       recommendedBrotliSettings = true;
@@ -215,7 +215,7 @@ in {
             "/now/" = {
               alias = "/mnt/data/downloads/";
               extraConfig = ''
-                limit_rate 4608k;  # 4m=32mbps, 4608k=4.5m=36mbps
+                limit_rate 18m;  # 144mbps
                 limit_conn content_addr 2;
               '';
             };
