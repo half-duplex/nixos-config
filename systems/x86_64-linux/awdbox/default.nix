@@ -183,6 +183,7 @@
           user = "root";
           port = 22;
           identity_file = "/persist/zrepl/ssh_awen";
+          options = ["ControlMaster=no"];
         };
         send.encrypted = true;
         replication.protection = {

@@ -254,6 +254,7 @@ in {
               user = "root";
               port = 22;
               identity_file = "/persist/zrepl/ssh_awen";
+              options = ["ControlMaster=no"];
             };
             send.encrypted = true;
             replication.protection = {
@@ -342,7 +343,6 @@ in {
     users = {
       root = {
         extraGroups = ["ssh-users"];
-        linger = true;
       };
       mal = {
         isNormalUser = true;
