@@ -20,6 +20,10 @@ in {
       };
       timeout = 1;
     };
+    extraModprobeConfig = ''
+      options kvm_amd nested=1
+      options kvm_intel nested=1
+    '';
 
     zfs.forceImportAll = false;
     zfs.forceImportRoot = false;
