@@ -72,6 +72,7 @@
         "/var/lib/nixos"
         "/var/lib/rasdaemon"
         "/var/lib/swtpm-localca"
+        "/var/lib/systemd/backlight"
         "/var/lib/tailscale"
       ];
     };
