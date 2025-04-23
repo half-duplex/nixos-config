@@ -26,7 +26,7 @@
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKu0BzxhF9J7L/0CLDuheOZurqEjPo4uSAFHNHmBXa0 mal@nova.sec.gd"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHIGpN/Enpx1FCRBqzDNYNN/QL94X4eAaPyvB+K9ekDg mal@xps"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII/86ZJNimLxLqf+vVG5iINzfhdu98PtsMOZicorzWMQ mal@t14s"
   ];
 
   hardware.printers = {
