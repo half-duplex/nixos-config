@@ -155,7 +155,6 @@ in {
     ];
   };
 
-  nix.settings.allowed-users = ["@wheel"];
   #environment.memoryAllocator.provider = "graphene-hardened"; # Breaks everything... ??
   #environment.memoryAllocator.provider = "scudo"; # Breaks firefox...
   #environment.variables.SCUDO_OPTIONS = "ZeroContents=1";
@@ -195,9 +194,6 @@ in {
       };
     };
   };
-
-  nix.settings.auto-optimise-store = true;
-  nixpkgs.config.allowUnfree = true;
 
   systemd.tmpfiles.rules = [
     "e /nix/var/log - - - 30d"
@@ -335,8 +331,18 @@ in {
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
-      experimental-features = nix-command flakes
+      experimental-features = nix-command flakes ca-derivations
     '';
+    settings = {
+      allowed-users = ["@wheel"];
+      auto-optimise-store = true;
+      substituters = ["https://cache.ngi0.nixos.org/"];
+      trusted-public-keys = ["cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA="];
+    };
+  };
+  nixpkgs.config = {
+    allowUnfree = true;
+    #contentAddressedByDefault = true;
   };
 
   users = {
