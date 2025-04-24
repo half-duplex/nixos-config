@@ -25,7 +25,8 @@
   hardware.rasdaemon.enable = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKu0BzxhF9J7L/0CLDuheOZurqEjPo4uSAFHNHmBXa0 mal@nova.sec.gd"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKu0BzxhF9J7L/0CLDuheOZurqEjPo4uSAFHNHmBXa0 mal@nova"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG8CzUQOCHIXBPVrjt9uq417h/zAyBN+hfS/Yh56CX/b mal@awen"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII/86ZJNimLxLqf+vVG5iINzfhdu98PtsMOZicorzWMQ mal@t14s"
   ];
 
