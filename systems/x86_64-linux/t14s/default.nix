@@ -17,6 +17,7 @@
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIt2xxDXFBkIOODdasb1v0253kZqUa8UydrLCOtffQot mal@awdbox"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7zzehsT3U/TAe2LYhpuVmuJzkcp6ZeDiCW3lY7FNWv mal@awen"
   ];
 
   fileSystems =
