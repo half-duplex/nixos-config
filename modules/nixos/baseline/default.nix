@@ -342,7 +342,7 @@ in {
   };
   nixpkgs.config = {
     allowUnfree = true;
-    contentAddressedByDefault = true;
+    #contentAddressedByDefault = true;
   };
 
   users = {
