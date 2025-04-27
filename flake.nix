@@ -20,6 +20,12 @@
       url = "git+https://git.lix.systems/lix-project/nixos-module?ref=release-2.92";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    blank.url = "github:divnix/blank?ref=5a5d2684073d9f563072ed07c871d577a6c614a8";
+    nixos-raspberrypi = {
+      url = "github:nvmd/nixos-raspberrypi";
+      inputs.argononed.follows = "blank";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     authentik-nix = {
       url = "github:nix-community/authentik-nix";
