@@ -46,6 +46,7 @@
 
   environment.systemPackages = with pkgs; [
     immich-go
+    simple-scan
     virtio-win
   ];
 
