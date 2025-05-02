@@ -28,7 +28,9 @@
     };
 
     authentik-nix = {
-      url = "github:nix-community/authentik-nix";
+      # the commits after this require the flake be *evaluated* with
+      # unstable|25.05 nixpkgs, and require libpq from unstable
+      url = "github:nix-community/authentik-nix?ref=105b3b6c004ce00d1d3c7a88669bea4aadfd4580";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
