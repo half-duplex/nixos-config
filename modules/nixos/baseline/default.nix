@@ -331,18 +331,15 @@ in {
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
-      experimental-features = nix-command flakes ca-derivations
+      experimental-features = nix-command flakes
     '';
     settings = {
       allowed-users = ["@wheel"];
       auto-optimise-store = true;
-      substituters = ["https://cache.ngi0.nixos.org/"];
-      trusted-public-keys = ["cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA="];
     };
   };
   nixpkgs.config = {
     allowUnfree = true;
-    #contentAddressedByDefault = true;
   };
 
   users = {
