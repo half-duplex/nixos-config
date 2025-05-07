@@ -63,6 +63,7 @@ in {
     python3
     rustc
     rustup
+    nixpkgsUnstable.uv # the python package manager
 
     # https://github.com/buckley310/nixos-config/blob/a05bdb3ee24674bd1df706f881296458f3339c6f/modules/cli.nix#L52
     (writeShellScriptBin "needs-restart" ''
