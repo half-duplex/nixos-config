@@ -12,6 +12,13 @@
     hardware = "physical";
     remoteUnlock.enable = true;
     boot.secureboot.enable = true;
+    services = {
+      nut = {
+        enable = true;
+        localCyberPower = true;
+        users.hass.passwordFile = config.sops.secrets."nut_password_hass".path;
+      };
+    };
   };
 
   boot.initrd.availableKernelModules = ["nvme" "e1000e"];

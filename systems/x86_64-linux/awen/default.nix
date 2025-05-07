@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   namespace,
   pkgs,
@@ -16,6 +17,11 @@ in {
     services = {
       authentik.enable = true;
       immich.enable = true;
+      nut = {
+        enable = true;
+        localCyberPower = true;
+        users.hass.passwordFile = config.sops.secrets."nut_password_hass".path;
+      };
     };
   };
 
