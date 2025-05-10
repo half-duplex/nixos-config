@@ -21,12 +21,15 @@
     };
   };
 
-  boot.initrd.availableKernelModules = ["nvme" "e1000e"];
-  boot.kernelParams = [
-    "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none"
-    "processor.max_cstate=5"
-    "amd_pstate=active"
-  ];
+  boot = {
+    initrd.availableKernelModules = ["nvme" "e1000e"];
+    kernelParams = [
+      "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none"
+      "processor.max_cstate=5"
+      "amd_pstate=active"
+    ];
+    kernelModules = ["i2c-dev"]; # for DDC
+  };
   console.earlySetup = true;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.rasdaemon.enable = true;
