@@ -228,7 +228,7 @@
           keep_receiver = [
             {
               type = "grid";
-              grid = "3x1d(keep=all) | 72x1h | 30x1d | 52x1w";
+              grid = "1x1d(keep=all) | 96x15m | 72x1h | 30x1d | 52x1w";
               regex = "^zrepl_.*";
             }
             {
