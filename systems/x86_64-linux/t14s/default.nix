@@ -49,6 +49,8 @@
     };
     zfs.autoScrub.enable = false; # battery
   };
+  systemd.services.libvirtd.wantedBy = lib.mkForce [];
+  systemd.services.tor.wantedBy = lib.mkForce [];
 
   programs.gnupg.agent.enable = true;
 
