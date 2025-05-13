@@ -13,11 +13,11 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.3.0";
+      url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module?ref=release-2.92";
+      url = "git+https://git.lix.systems/lix-project/nixos-module?ref=release-2.93";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     blank.url = "github:divnix/blank?ref=5a5d2684073d9f563072ed07c871d577a6c614a8";
