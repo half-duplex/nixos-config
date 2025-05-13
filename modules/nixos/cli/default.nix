@@ -12,6 +12,7 @@ in {
     binutils
     cryptsetup
     dnsutils
+    e2fsprogs
     file
     htop
     jq
