@@ -18,12 +18,15 @@ in {
         editor = false;
         rebootForBitlocker = true;
       };
-      timeout = 1;
+      timeout = 0;
     };
+    initrd.systemd.enable = true;
     extraModprobeConfig = ''
       options kvm_amd nested=1
       options kvm_intel nested=1
     '';
+
+    plymouth.enable = true;
 
     zfs.forceImportAll = false;
     zfs.forceImportRoot = false;
