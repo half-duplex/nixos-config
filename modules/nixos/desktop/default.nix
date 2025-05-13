@@ -18,6 +18,7 @@
 
     hardware.bluetooth.enable = true;
     networking.networkmanager.enable = true;
+    systemd.services.NetworkManager-wait-online.enable = lib.mkDefault false;
 
     services.xserver.xkb.options = "compose:ralt";
 
