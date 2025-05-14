@@ -21,12 +21,23 @@ in {
       timeout = 0;
     };
     initrd.systemd.enable = true;
+    # load modules before a service/mount has to wait for it
+    kernelModules = [
+      "efi_pstore"
+      "nft_chain_nat"
+      "nft_compat"
+      "nft_ct"
+      "nft_fib_inet"
+      "nft_log"
+      "xt_nat"
+      "xt_mark"
+      "xt_MASQUERADE"
+      "xt_tcpudp"
+    ];
     extraModprobeConfig = ''
       options kvm_amd nested=1
       options kvm_intel nested=1
     '';
-
-    plymouth.enable = true;
 
     zfs.forceImportAll = false;
     zfs.forceImportRoot = false;

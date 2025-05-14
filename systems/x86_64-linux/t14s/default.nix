@@ -12,7 +12,8 @@
     boot.secureboot.enable = true;
   };
 
-  boot.initrd.availableKernelModules = ["nvme"];
+  boot.initrd.kernelModules = ["nvme"];
+  boot.initrd.availableKernelModules = ["amdgpu"];
   hardware.cpu.amd.updateMicrocode = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [
@@ -52,6 +53,7 @@
 
   services = {
     avahi.enable = true;
+    openssh.startWhenNeeded = true;
     tor = {
       enable = true;
       client.enable = true;
@@ -59,6 +61,8 @@
     zfs.autoScrub.enable = false; # battery
   };
   systemd.services.libvirtd.wantedBy = lib.mkForce [];
+  systemd.services.libvirt-guests.wantedBy = lib.mkForce [];
+  virtualisation.libvirtd.onBoot = "ignore"; # doesn't disable libvirt-guests.service
   systemd.services.tor.wantedBy = lib.mkForce [];
 
   programs.gnupg.agent.enable = true;

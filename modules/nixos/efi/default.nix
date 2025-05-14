@@ -12,7 +12,11 @@
   };
 
   config = lib.mkIf (config.${namespace}.boot == "efi") {
-    boot.loader.efi.canTouchEfiVariables = true;
+    boot = {
+      # early module load may make boot.mount faster (boot critical-chain)
+      initrd.kernelModules = ["vfat"];
+      loader.efi.canTouchEfiVariables = true;
+    };
 
     security.tpm2.enable = true;
 
