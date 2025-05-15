@@ -362,14 +362,19 @@ in {
     };
   };
 
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = false;
-  };
-  virtualisation.libvirtd.qemu = {
-    runAsRoot = false;
-    swtpm.enable = true;
-    ovmf.packages = [pkgs.OVMFFull.fd];
+  virtualisation = {
+    docker = {
+      enable = true;
+      enableOnBoot = false;
+    };
+    libvirtd = {
+      parallelShutdown = 2;
+      qemu = {
+        runAsRoot = false;
+        swtpm.enable = true;
+        ovmf.packages = [pkgs.OVMFFull.fd];
+      };
+    };
   };
 
   services = {
