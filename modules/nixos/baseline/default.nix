@@ -328,6 +328,7 @@ in {
     nftables.enable = true;
     wireguard.enable = true;
   };
+  systemd.services.ModemManager.enable = false;
 
   nix = {
     package = lib.mkOverride 900 pkgs.lix; # ~Default, but override nixpkgs
