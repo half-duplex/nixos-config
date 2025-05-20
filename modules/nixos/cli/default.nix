@@ -58,7 +58,6 @@ in {
     cloc
     gcc
     git
-    nixpkgs-fmt
     nodejs
     pkg-config
     python3
