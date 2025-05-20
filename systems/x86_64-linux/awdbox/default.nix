@@ -22,9 +22,10 @@
   };
 
   boot = {
-    initrd.availableKernelModules = ["nvme" "e1000e"];
+    initrd.kernelModules = ["nvme" "e1000e"];
+    initrd.availableKernelModules = ["amdgpu"];
     kernelParams = [
-      "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:none"
+      "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:off:10.0.0.1"
       "processor.max_cstate=5"
       "amd_pstate=active"
     ];
@@ -89,6 +90,7 @@
     }));
 
   networking.firewall.allowedTCPPorts = [445];
+  networking.interfaces.eth0.wakeOnLan.enable = true;
   services = {
     ollama = {
       enable = true;
