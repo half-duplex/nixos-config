@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{inputs, pkgs, ...}: let
   powerlineOpts = [
     "-mode=flat"
     "-colorize-hostname"
@@ -82,9 +82,13 @@ in {
     '')
   ];
 
-  environment.etc.nixpkgs.source = pkgs.path;
-  environment.etc.nixpkgsUnstable.source = pkgs.nixpkgsUnstable.path;
-  nix.nixPath = ["nixpkgs=/etc/nixpkgs" "nixpkgsUnstable=/etc/nixpkgsUnstable"];
+  nix = {
+    nixPath = ["nixpkgs=flake:nixpkgs" "nixpkgsUnstable=flake:nixpkgsUnstable"];
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      nixpkgsUnstable.flake = inputs.nixpkgsUnstable;
+    };
+  };
 
   environment = {
     sessionVariables = {
