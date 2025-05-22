@@ -92,6 +92,7 @@
   networking.firewall.allowedTCPPorts = [445];
   networking.interfaces.eth0.wakeOnLan.enable = true;
   services = {
+    displayManager.defaultSession = lib.mkForce "plasmax11";
     ollama = {
       enable = true;
       package = pkgs.ollama-rocm;
