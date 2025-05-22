@@ -41,15 +41,6 @@
         options = ["noauto" "noatime"];
       };
     }));
-  # https://github.com/NixOS/nixpkgs/blob/24.11/nixos/modules/tasks/filesystems/zfs.nix#L164
-  systemd.services.zfs-import-tank = {
-    after = lib.mkForce [
-      "dev-nvme0n1p2.device"
-      "systemd-modules-load.service"
-      "systemd-ask-password-console.service"
-    ];
-    wants = lib.mkForce ["dev-nvme0n1p2.device"];
-  };
 
   services = {
     avahi.enable = true;
