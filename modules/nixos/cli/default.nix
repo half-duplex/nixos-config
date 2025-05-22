@@ -1,4 +1,8 @@
-{inputs, pkgs, ...}: let
+{
+  inputs,
+  pkgs,
+  ...
+}: let
   powerlineOpts = [
     "-mode=flat"
     "-colorize-hostname"

@@ -7,9 +7,9 @@
   inherit (lib.strings) concatStringsSep;
 in {
   time.timeZone = lib.mkDefault "UTC";
-  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "eo/UTF-8" "tok/UTF-8"];
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {LC_TIME = "C";};
+  i18n.extraLocales = ["tok/UTF-8" "eo/UTF-8"];
+  i18n.extraLocaleSettings = {LC_TIME = "C.UTF-8";};
 
   boot = {
     loader = {
@@ -339,7 +339,6 @@ in {
     nftables.enable = true;
     wireguard.enable = true;
   };
-  systemd.services.ModemManager.enable = false;
 
   nix = {
     package = lib.mkOverride 900 pkgs.lix; # ~Default, but override nixpkgs

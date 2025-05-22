@@ -1,8 +1,8 @@
 diff --git a/Telegram/SourceFiles/data/data_story.cpp b/Telegram/SourceFiles/data/data_story.cpp
-index 9adcad015..9750d5a4b 100644
+index d5a5fc57e..6a442dc1f 100644
 --- a/Telegram/SourceFiles/data/data_story.cpp
 +++ b/Telegram/SourceFiles/data/data_story.cpp
-@@ -390,12 +390,11 @@ bool Story::out() const {
+@@ -399,12 +399,11 @@ bool Story::out() const {
  }
  
  bool Story::canDownloadIfPremium() const {
@@ -18,14 +18,16 @@ index 9adcad015..9750d5a4b 100644
  
  bool Story::canShare() const {
 diff --git a/Telegram/SourceFiles/history/history_inner_widget.cpp b/Telegram/SourceFiles/history/history_inner_widget.cpp
-index 238faaccb..bb33ececf 100644
+index 227c1a5fc..3bab02e3e 100644
 --- a/Telegram/SourceFiles/history/history_inner_widget.cpp
 +++ b/Telegram/SourceFiles/history/history_inner_widget.cpp
-@@ -594,14 +594,7 @@ void HistoryInner::setupSwipeReply() {
+@@ -621,16 +621,7 @@ void HistoryInner::setupSwipeReplyAndBack() {
  }
  
  bool HistoryInner::hasSelectRestriction() const {
--	if (!_sharingDisallowed.current()) {
+-	if (session().frozen()) {
+-		return true;
+-	} else if (!_sharingDisallowed.current()) {
 -		return false;
 -	} else if (const auto chat = _peer->asChat()) {
 -		return !chat->canDeleteMessages();
@@ -37,7 +39,7 @@ index 238faaccb..bb33ececf 100644
  }
  
  void HistoryInner::messagesReceived(
-@@ -2947,12 +2940,12 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
+@@ -3023,12 +3014,12 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
  }
  
  bool HistoryInner::hasCopyRestriction(HistoryItem *item) const {
@@ -52,7 +54,7 @@ index 238faaccb..bb33ececf 100644
  }
  
  bool HistoryInner::showCopyRestriction(HistoryItem *item) {
-@@ -2976,14 +2969,6 @@ bool HistoryInner::showCopyMediaRestriction(not_null<HistoryItem*> item) {
+@@ -3052,14 +3043,6 @@ bool HistoryInner::showCopyMediaRestriction(not_null<HistoryItem*> item) {
  }
  
  bool HistoryInner::hasCopyRestrictionForSelected() const {
@@ -68,10 +70,10 @@ index 238faaccb..bb33ececf 100644
  }
  
 diff --git a/Telegram/SourceFiles/history/history_item.cpp b/Telegram/SourceFiles/history/history_item.cpp
-index 9b422e1ca..7b42051bd 100644
+index 927ea907a..90b21aae9 100644
 --- a/Telegram/SourceFiles/history/history_item.cpp
 +++ b/Telegram/SourceFiles/history/history_item.cpp
-@@ -2284,11 +2284,6 @@ bool HistoryItem::forbidsForward() const {
+@@ -2358,11 +2358,6 @@ bool HistoryItem::forbidsForward() const {
  }
  
  bool HistoryItem::forbidsSaving() const {
@@ -84,10 +86,10 @@ index 9b422e1ca..7b42051bd 100644
  }
  
 diff --git a/Telegram/SourceFiles/history/view/history_view_list_widget.cpp b/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
-index b4e6fd86e..160e82611 100644
+index 1daf0a113..118e7a56e 100644
 --- a/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
 +++ b/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
-@@ -1547,13 +1547,11 @@ bool ListWidget::isEmpty() const {
+@@ -1581,13 +1581,11 @@ bool ListWidget::isEmpty() const {
  }
  
  bool ListWidget::hasCopyRestriction(HistoryItem *item) const {
@@ -103,7 +105,7 @@ index b4e6fd86e..160e82611 100644
  }
  
  bool ListWidget::showCopyRestriction(HistoryItem *item) {
-@@ -1579,21 +1577,6 @@ bool ListWidget::showCopyMediaRestriction(not_null<HistoryItem*> item) {
+@@ -1613,21 +1611,6 @@ bool ListWidget::showCopyMediaRestriction(not_null<HistoryItem*> item) {
  }
  
  bool ListWidget::hasCopyRestrictionForSelected() const {
@@ -125,21 +127,22 @@ index b4e6fd86e..160e82611 100644
  	return false;
  }
  
-@@ -1612,8 +1595,7 @@ bool ListWidget::showCopyRestrictionForSelected() {
+@@ -1646,9 +1629,7 @@ bool ListWidget::showCopyRestrictionForSelected() {
  }
  
  bool ListWidget::hasSelectRestriction() const {
--	return _delegate->listSelectRestrictionType()
--		!= CopyRestrictionType::None;
+-	return session().frozen()
+-		|| (_delegate->listSelectRestrictionType()
+-			!= CopyRestrictionType::None);
 +	return false;
  }
  
  Element *ListWidget::lookupItemByY(int y) const {
 diff --git a/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp b/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp
-index 3912e5389..7af441963 100644
+index 62d5d43a9..4eed588bb 100644
 --- a/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp
 +++ b/Telegram/SourceFiles/history/view/history_view_top_bar_widget.cpp
-@@ -1228,15 +1228,14 @@ void TopBarWidget::updateMembersShowArea() {
+@@ -1244,15 +1244,14 @@ void TopBarWidget::updateMembersShowArea() {
  }
  
  bool TopBarWidget::showSelectedState() const {
@@ -158,14 +161,16 @@ index 3912e5389..7af441963 100644
  		&& _canDelete == canDelete
  		&& _canForward == canForward
 diff --git a/Telegram/SourceFiles/info/media/info_media_provider.cpp b/Telegram/SourceFiles/info/media/info_media_provider.cpp
-index 2fc69733e..2e830b73e 100644
+index 62f7fdfc4..6742c136c 100644
 --- a/Telegram/SourceFiles/info/media/info_media_provider.cpp
 +++ b/Telegram/SourceFiles/info/media/info_media_provider.cpp
-@@ -88,14 +88,7 @@ Type Provider::type() {
+@@ -62,16 +62,7 @@ Type Provider::type() {
  }
  
  bool Provider::hasSelectRestriction() {
--	if (_peer->allowsForwarding()) {
+-	if (_peer->session().frozen()) {
+-		return true;
+-	} else if (_peer->allowsForwarding()) {
 -		return false;
 -	} else if (const auto chat = _peer->asChat()) {
 -		return !chat->canDeleteMessages();
@@ -178,10 +183,10 @@ index 2fc69733e..2e830b73e 100644
  
  rpl::producer<bool> Provider::hasSelectRestrictionChanges() {
 diff --git a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-index 1b064274b..4e612014e 100644
+index f5cf304fd..3e9ff3812 100644
 --- a/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
 +++ b/Telegram/SourceFiles/media/view/media_view_overlay_widget.cpp
-@@ -1102,13 +1102,7 @@ QSize OverlayWidget::flipSizeByRotation(QSize size) const {
+@@ -1104,13 +1104,7 @@ QSize OverlayWidget::flipSizeByRotation(QSize size) const {
  }
  
  bool OverlayWidget::hasCopyMediaRestriction(bool skipPremiumCheck) const {

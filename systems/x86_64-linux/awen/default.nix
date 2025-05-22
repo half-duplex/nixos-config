@@ -567,5 +567,5 @@ in {
     add_bridge_mapping eth1 2
   '';
 
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 }

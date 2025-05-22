@@ -17,7 +17,13 @@
     time.timeZone = "US/Eastern";
 
     hardware.bluetooth.enable = true;
-    networking.networkmanager.enable = true;
+    networking = {
+      modemmanager.enable = false;
+      networkmanager = {
+        enable = true;
+        wifi.macAddress = "random";
+      };
+    };
     systemd.services.NetworkManager-wait-online.enable = lib.mkDefault false;
 
     services.xserver.xkb.options = "compose:ralt";
@@ -65,7 +71,6 @@
       chirp
       gedit
       gnome-text-editor
-      ghidra
       imhex
       #pgadmin # ancient
       (nixpkgsUnstable.proxmark3.override {hardwarePlatform = "PM3GENERIC";})
@@ -78,7 +83,7 @@
       libreoffice-fresh
       nixpkgsStaging.tor-browser
       yubikey-manager
-      yubikey-manager-qt
+      yubioath-flutter
       zoom-us
 
       protontricks
@@ -96,10 +101,15 @@
       })
     ];
 
-    #programs.adb.enable = true;
-    services.flatpak.enable = true;
-    services.udev.packages = [pkgs.android-udev-rules];
-    services.pcscd.enable = true; # yubikey ccid/piv
+    programs = {
+      #adb.enable = true;
+      ghidra.enable = true;
+    };
+    services = {
+      flatpak.enable = true;
+      pcscd.enable = true; # yubikey ccid/piv
+      udev.packages = [pkgs.android-udev-rules];
+    };
     users.users.mal.extraGroups = ["adbusers"];
     security = {
       polkit.enable = true;
