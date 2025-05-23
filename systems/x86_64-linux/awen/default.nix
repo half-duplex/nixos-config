@@ -545,6 +545,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     mal.immich-stacker
+    ntfs3g
     virtio-win
   ];
 
