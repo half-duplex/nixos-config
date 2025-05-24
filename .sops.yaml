@@ -5,19 +5,19 @@ keys:
   - &awen age10cq2vaw34z8870gf4p0pw9w5e58kesdhgnyh0k692eca4fgq29pswykl72
   - &t14s age14nh6ula72rtlvda90lyjpply8uezul0lhgthtl58hu0gnmspxvmsnx2q4m
 creation_rules:
-  - path_regex: ((modules/nixos/[^/]+/)?secrets/awdbox(/[^/]+)?|systems/[^/]+/awdbox/secrets)\.(yaml|json|env|ini)$
+  - path_regex: /awdbox(?:/.+)?\..+$
     key_groups:
     - age:
       - *mal_awdbox
       - *mal_awen
       - *awdbox
-  - path_regex: ((modules/nixos/[^/]+/)?secrets/awen(/[^/]+)?|systems/[^/]+/awen/secrets)\.(yaml|json|env|ini)$
+  - path_regex: /awen(?:/.+)?\..+$
     key_groups:
     - age:
       - *mal_awdbox
       - *mal_awen
       - *awen
-  - path_regex: ((modules/nixos/[^/]+/)?secrets/t14s(/[^/]+)?|systems/[^/]+/t14s/secrets)\.(yaml|json|env|ini)$
+  - path_regex: /t14s(?:/.+)?\..+$
     key_groups:
     - age:
       - *mal_awdbox
