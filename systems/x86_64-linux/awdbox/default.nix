@@ -88,15 +88,18 @@
   networking.interfaces.eth0.wakeOnLan.enable = true;
   services = {
     displayManager.defaultSession = lib.mkForce "plasmax11";
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+    };
     ollama = {
       enable = true;
       package = pkgs.ollama-rocm;
       acceleration = "rocm";
       rocmOverrideGfx = "10.1.0";
     };
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
+    openvpn.servers.commercial = {
+      config = "config ${config.sops.secrets."openvpn_awdbox_commercial".path}";
     };
     postgresql = {
       enable = true;
@@ -239,9 +242,14 @@
       }
     ];
   };
-  systemd.services.ensure-printers.wantedBy = lib.mkForce []; # fails if printer off
-  systemd.services.ollama.wantedBy = lib.mkForce [];
-  systemd.services.postgresql.wantedBy = lib.mkForce [];
+
+  sops.secrets."openvpn_awdbox_commercial".sopsFile = secrets/openvpn.yaml;
+
+  systemd.services = {
+    ensure-printers.wantedBy = lib.mkForce []; # fails if printer off
+    ollama.wantedBy = lib.mkForce [];
+    postgresql.wantedBy = lib.mkForce [];
+  };
 
   programs.gnupg.agent.enable = true;
 
