@@ -29,11 +29,6 @@
         fsType = "nfs";
         options = ["noauto" "nfsvers=4" "sec=krb5p"];
       };
-      "/mnt/mars/data" = {
-        device = "mars:/data";
-        fsType = "nfs";
-        options = ["noauto" "nfsvers=4" "sec=krb5p"];
-      };
     }
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {

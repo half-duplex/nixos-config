@@ -83,7 +83,7 @@ in {
         options = ["bind"];
       };
       "/mnt/data" = {
-        device = "pool";
+        device = "pool/data";
         fsType = "zfs";
       };
       "/mnt/data/backups" = {
@@ -92,6 +92,10 @@ in {
       };
       "/mnt/data/downloads" = {
         device = "pool/downloads";
+        fsType = "zfs";
+      };
+      "/mnt/data/nobackup" = {
+        device = "pool/nobackup";
         fsType = "zfs";
       };
     }
@@ -539,6 +543,60 @@ in {
           ];
         };
         root_fs = "pool/backups";
+      }
+      {
+        name = "data_snap_nobackup";
+        type = "snap";
+        filesystems = {
+          "pool/nobackup" = true;
+        };
+        snapshotting = {
+          type = "periodic";
+          interval = "5m";
+          prefix = "zrepl_";
+        };
+        pruning = {
+          keep = [
+            {
+              type = "grid";
+              grid = "1x1h(keep=all) | 32x15m | 24x1h";
+              regex = "^zrepl_.*";
+            }
+            {
+              type = "regex";
+              negate = true;
+              regex = "^zrepl_.*";
+            }
+          ];
+        };
+      }
+      { # TODO: replicate to nvme or awdbox
+        name = "data_snap";
+        type = "snap";
+        filesystems = {
+          "pool<" = true;
+          "pool/backups<" = false;
+          "pool/nobackup<" = false;
+        };
+        snapshotting = {
+          type = "periodic";
+          interval = "5m";
+          prefix = "zrepl_";
+        };
+        pruning = {
+          keep = [
+            {
+              type = "grid";
+              grid = "1x1d(keep=all) | 96x15m | 72x1h | 30x1d | 52x1w";
+              regex = "^zrepl_.*";
+            }
+            {
+              type = "regex";
+              negate = true;
+              regex = "^zrepl_.*";
+            }
+          ];
+        };
       }
     ];
   };
