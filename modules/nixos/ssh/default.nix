@@ -81,6 +81,7 @@ in {
           ProxyCommand socat - SOCKS4A:localhost:%h:%p,socksport=9050
       Host *
           IdentitiesOnly yes
+          IdentityAgent ~/.1password/agent.sock
           PasswordAuthentication no
           PubkeyAuthentication no
           ControlPath /run/user/%i/ssh-control-%C.sock
