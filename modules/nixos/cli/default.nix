@@ -28,6 +28,7 @@ in {
     nvd
     nvme-cli
     openssl
+    parallel
     parted
     pciutils
     psmisc
