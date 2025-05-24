@@ -173,7 +173,6 @@ in {
         set mouse=
         set nowrap
         set number
-        set pastetoggle=<F2>
         set scrolloff=8
         let &showbreak='↪ '
         set sidescroll=1
