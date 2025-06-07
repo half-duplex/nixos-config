@@ -85,7 +85,10 @@
         fsType = "tmpfs";
         options = ["mode=755"];
       };
-      "/boot" = {device = "/dev/disk/by-partlabel/_esp";};
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/_esp";
+        options = ["umask=0077"]; # protect /boot/loader/random-seed
+      };
       "/home" = {
         device = "tank/home";
         fsType = "zfs";
