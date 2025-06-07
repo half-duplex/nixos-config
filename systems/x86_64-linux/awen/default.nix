@@ -571,7 +571,8 @@ in {
           ];
         };
       }
-      { # TODO: replicate to nvme or awdbox
+      {
+        # TODO: replicate to nvme or awdbox
         name = "data_snap";
         type = "snap";
         filesystems = {
