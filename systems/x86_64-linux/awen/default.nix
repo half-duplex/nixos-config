@@ -247,6 +247,7 @@ in {
                 )
                 {
                   default-src = "'self'";
+                  connect-src = "'self' https://brands.home-assistant.io"; # icons via SW
                   font-src = "'self' data: https://cdnjs.cloudflare.com";
                   frame-ancestors = "'self'";
                   img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
