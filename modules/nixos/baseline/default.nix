@@ -169,6 +169,8 @@ in {
     ];
   };
 
+  system.etc.overlay.enable = true;
+
   #environment.memoryAllocator.provider = "graphene-hardened"; # Breaks everything... ??
   #environment.memoryAllocator.provider = "scudo"; # Breaks firefox...
   #environment.variables.SCUDO_OPTIONS = "ZeroContents=1";
