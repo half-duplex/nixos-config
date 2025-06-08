@@ -10,7 +10,6 @@
   inherit (lib.strings) concatStrings concatStringsSep toJSON;
 
   cfg = config.${namespace}.services.authentik;
-  impermanent = config.${namespace}.impermanence.enable;
 in {
   options.${namespace}.services.authentik = {
     enable = lib.mkEnableOption "Configure the authentik IDP";
@@ -48,12 +47,6 @@ in {
               AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS = concatStringsSep "," ["127.0.0.1/32" "::1/128"];
             }));
       };
-    };
-
-    # Because the services use DynamicUser the media dir must be in /var/lib, so use impermanence
-    # instead of configuring the media dir.
-    environment.persistence = lib.mkIf impermanent {
-      "/persist".directories = ["/var/lib/private/authentik/media"];
     };
 
     services = {

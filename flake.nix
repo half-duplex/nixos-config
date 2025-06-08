@@ -11,7 +11,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence.url = "github:nix-community/impermanence";
+    intransience = {
+      url = "github:anna328p/intransience";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,7 +54,7 @@
       ];
       systems.modules.nixos = with inputs; [
         authentik-nix.nixosModules.default
-        impermanence.nixosModules.impermanence
+        intransience.nixosModules.default
         lanzaboote.nixosModules.lanzaboote
         lix-module.nixosModules.default
         sops-nix.nixosModules.sops

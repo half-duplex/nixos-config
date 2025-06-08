@@ -36,11 +36,64 @@
 }: {
   options.${namespace}.impermanence.enable = lib.mkOption {
     default = true;
-    description = "Use tmpfs root filesystem";
+    description = "Use intransience for tmpfs root filesystem";
     type = lib.types.bool;
   };
 
   config = lib.mkIf config.${namespace}.impermanence.enable {
+    intransience = {
+      enable = true;
+      datastores = {
+        "/persist" = {
+          enable = true;
+          etc = {
+            files = [
+              "machine-id"
+            ];
+            dirs = [
+              "NetworkManager/system-connections"
+              "secureboot"
+            ];
+          };
+          dirs = [
+            "/var/log"
+          ];
+          byPath = {
+            "/var/lib" = {
+              dirs = [
+                "acme"
+                "bluetooth" # https://stackoverflow.com/questions/65957677/
+                "flatpak"
+                "libvirt"
+                "nixos"
+                "rasdaemon"
+                "swtpm-localca"
+                "systemd/backlight"
+                "systemd/rfkill"
+                "systemd/timers"
+                "tailscale"
+              ];
+              files = [
+                "NetworkManager/secret_key"
+                "systemd/random-seed"
+              ];
+            };
+            "/var/lib/private".dirs = [
+              # Because the services use DynamicUser the media dir must be in /var/lib
+              (lib.mkIf config.${namespace}.services.authentik.enable "authentik/media")
+            ];
+          };
+        };
+        "/persist/nobackup/cache" = {
+          enable = true;
+          dirs = [
+            "/var/cache/fwupd"
+            "/var/lib/sddm/.cache"
+          ];
+        };
+      };
+    };
+
     users.mutableUsers = false;
     users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
 
@@ -49,41 +102,18 @@
 
     services = {
       jellyfin = {
-        cacheDir = "/persist/nobackup/jellyfin/cache";
+        cacheDir = "/persist/nobackup/cache/jellyfin";
         dataDir = "/persist/jellyfin";
       };
       ollama.models = "/persist/nobackup/ollama-models";
       postgresql.dataDir = "/persist/postgresql/${config.services.postgresql.package.psqlSchema}";
     };
 
-    environment.persistence."/persist" = {
-      files = [
-        "/etc/krb5.keytab"
-        "/etc/machine-id"
-      ];
-      directories = [
-        "/var/log"
-        "/var/lib/acme"
-        # Can't be changed without recompilation...
-        # https://stackoverflow.com/questions/65957677/bluez-change-local-storage-directory
-        "/var/lib/bluetooth"
-        "/var/lib/flatpak"
-        "/var/lib/libvirt"
-        "/var/lib/nixos"
-        "/var/lib/rasdaemon"
-        "/var/lib/swtpm-localca"
-        "/var/lib/systemd/backlight"
-        "/var/lib/tailscale"
-      ];
-    };
-    environment.etc.secureboot.source = "/persist/secureboot";
-    environment.etc."NetworkManager/system-connections".source = "/persist/NetworkManager/system-connections";
-
     fileSystems = {
       "/" = {
         device = "tmpfs";
         fsType = "tmpfs";
-        options = ["mode=755"];
+        options = ["mode=755" "size=25%" "huge=within_size"];
       };
       "/boot" = {
         device = "/dev/disk/by-partlabel/_esp";

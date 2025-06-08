@@ -206,7 +206,7 @@
     },
     "flake-utils_2": {
       "inputs": {
-        "systems": "systems_2"
+        "systems": "systems_4"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -224,7 +224,7 @@
     },
     "flake-utils_3": {
       "inputs": {
-        "systems": "systems_3"
+        "systems": "systems_5"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -255,18 +255,25 @@
         "type": "github"
       }
     },
-    "impermanence": {
+    "intransience": {
+      "inputs": {
+        "nix-prelude": "nix-prelude",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_3"
+      },
       "locked": {
-        "lastModified": 1737831083,
-        "narHash": "sha256-LJggUHbpyeDvNagTUrdhe/pRVp4pnS6wVKALS782gRI=",
-        "owner": "nix-community",
-        "repo": "impermanence",
-        "rev": "4b3e914cdf97a5b536a889e939fb2fd2b043a170",
+        "lastModified": 1743971099,
+        "narHash": "sha256-EfnqDs4KfDJNdNI94JszePrp+2ubgZZ4yxQGbgVOAc8=",
+        "owner": "anna328p",
+        "repo": "intransience",
+        "rev": "698ea4355aedef7275b3316fab1aaa21d7190454",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "impermanence",
+        "owner": "anna328p",
+        "repo": "intransience",
         "type": "github"
       }
     },
@@ -359,6 +366,25 @@
         "owner": "willibutz",
         "ref": "avoid-foldl-stack-overflow",
         "repo": "napalm",
+        "type": "github"
+      }
+    },
+    "nix-prelude": {
+      "inputs": {
+        "parsec": "parsec",
+        "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1733173960,
+        "narHash": "sha256-m7tMD/vrAi17vtRakjBHIyvVXsXkuGNz6YVEAe6DY5o=",
+        "owner": "anna328p",
+        "repo": "nix-prelude",
+        "rev": "e1cf55026bd0185e77a39c4c81113051ac126305",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anna328p",
+        "repo": "nix-prelude",
         "type": "github"
       }
     },
@@ -472,6 +498,21 @@
         "type": "indirect"
       }
     },
+    "parsec": {
+      "locked": {
+        "lastModified": 1668890541,
+        "narHash": "sha256-I6ZODAu2aSVr8xiBVewefQQL12wOrTGnLKhX3GFFCwM=",
+        "owner": "milahu",
+        "repo": "nix-parsec",
+        "rev": "34dea7a47fc49b45bf965eba660250b86312707d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "milahu",
+        "repo": "nix-parsec",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -526,7 +567,7 @@
       "inputs": {
         "authentik-nix": "authentik-nix",
         "blank": "blank",
-        "impermanence": "impermanence",
+        "intransience": "intransience",
         "lanzaboote": "lanzaboote",
         "lix-module": "lix-module",
         "nixos-raspberrypi": "nixos-raspberrypi",
@@ -631,6 +672,36 @@
       }
     },
     "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_5": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
