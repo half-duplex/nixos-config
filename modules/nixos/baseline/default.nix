@@ -218,6 +218,7 @@ in {
   # Filesystems
   systemd.services.zfs-mount.enable = false;
   services = {
+    journald.extraConfig = "MaxRetentionSec=7d";
     udev.extraRules = ''
       SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
     '';
