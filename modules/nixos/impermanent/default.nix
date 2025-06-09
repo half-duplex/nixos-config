@@ -69,6 +69,7 @@
                 "rasdaemon"
                 "swtpm-localca"
                 "systemd/backlight"
+                "systemd/pstore"
                 "systemd/rfkill"
                 "systemd/timers"
                 "tailscale"
