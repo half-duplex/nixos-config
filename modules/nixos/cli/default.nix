@@ -1,5 +1,7 @@
 {
+  config,
   inputs,
+  lib,
   pkgs,
   ...
 }: let
@@ -87,11 +89,8 @@ in {
   ];
 
   nix = {
-    nixPath = ["nixpkgs=flake:nixpkgs" "nixpkgsUnstable=flake:nixpkgsUnstable"];
-    registry = {
-      nixpkgs.flake = inputs.nixpkgs;
-      nixpkgsUnstable.flake = inputs.nixpkgsUnstable;
-    };
+    generateRegistryFromInputs = true;
+    nixPath = lib.attrsets.mapAttrsToList (name: _: "${name}=flake:${name}") config.nix.registry;
   };
 
   environment = {
