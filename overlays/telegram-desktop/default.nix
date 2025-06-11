@@ -18,6 +18,7 @@
             hash = "sha256-PZWCFdGE/TTJ1auG1JXNpnTUko2rCWla6dYKaQNzreg=";
           })
         ];
+      separateDebugInfo = true;
     };
   });
 }
