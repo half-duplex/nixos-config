@@ -44,8 +44,9 @@
     intransience = {
       enable = true;
       datastores = {
-        "/persist" = {
+        persist = {
           enable = true;
+          path = "/persist";
           etc = {
             files = [
               "machine-id"
@@ -74,7 +75,7 @@
                 "systemd/timers"
                 "tailscale"
               ];
-              files = [
+              files = map (path: {inherit path; method="symlink";}) [
                 "NetworkManager/secret_key"
                 "systemd/random-seed"
               ];
@@ -85,8 +86,9 @@
             ];
           };
         };
-        "/persist/nobackup/cache" = {
+        persist-nobackup-cache = {
           enable = true;
+          path = "/persist/nobackup/cache";
           dirs = [
             "/var/cache/fwupd"
             "/var/lib/sddm/.cache"
