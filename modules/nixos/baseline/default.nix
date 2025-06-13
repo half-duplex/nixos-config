@@ -168,7 +168,7 @@ in {
     ];
   };
 
-  #system.etc.overlay.enable = true;
+  system.etc.overlay.enable = true;
 
   #environment.memoryAllocator.provider = "graphene-hardened"; # Breaks everything... ??
   #environment.memoryAllocator.provider = "scudo"; # Breaks firefox...
