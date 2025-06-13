@@ -5,6 +5,7 @@
   namespace,
   ...
 }: let
+  inherit (lib) mkIf;
   impermanent = config.${namespace}.impermanence.enable;
 in {
   services.openssh = {
@@ -71,6 +72,16 @@ in {
       && !config.services.forgejo.enable
     ) (lib.mkForce ["/etc/ssh/authorized_keys.d/%u"]);
   };
+  # Don't stop with multi-user, stay while services stop
+  systemd.${
+    if config.services.openssh.startWhenNeeded
+    then "sockets"
+    else "services"
+  }.sshd = {
+    unitConfig.DefaultDependencies = "no";
+    wantedBy = ["shutdown.target"];
+  };
+
   programs.ssh = {
     extraConfig = ''
       Host *.sec.gd
