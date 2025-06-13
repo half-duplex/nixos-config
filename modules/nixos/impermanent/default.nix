@@ -94,10 +94,6 @@
                 }
               ];
             };
-            "/var/lib/private".dirs = [
-              # Because the services use DynamicUser the media dir must be in /var/lib
-              (lib.mkIf config.${namespace}.services.authentik.enable "authentik/media")
-            ];
           };
         };
         persist-nobackup-cache = {
@@ -117,6 +113,12 @@
         };
       };
     };
+
+    # DynamicUser=true so StateDir must be in /var/lib. Having mounts there
+    # before namespace setup breaks that. So just have preStart symlink it in.
+    systemd.services = lib.genAttrs ["authentik" "authentik-worker"] (_: {
+      preStart = ''ln -svf /persist/authentik/media /var/lib/authentik/'';
+    });
 
     users.mutableUsers = false;
     users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
