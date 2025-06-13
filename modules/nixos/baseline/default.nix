@@ -18,7 +18,7 @@ in {
         editor = false;
         rebootForBitlocker = true;
       };
-      timeout = 0;
+      timeout = lib.mkDefault 1;
     };
     initrd.systemd.enable = true;
     # load modules before a service/mount has to wait for it

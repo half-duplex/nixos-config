@@ -14,6 +14,7 @@
   };
 
   config = lib.mkIf config.${namespace}.archetypes.desktop.enable {
+    boot.loader.timeout = 0;
     time.timeZone = "US/Eastern";
 
     hardware.bluetooth.enable = true;
