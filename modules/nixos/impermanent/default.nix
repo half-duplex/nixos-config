@@ -52,8 +52,14 @@
               "machine-id"
             ];
             dirs = [
-              "NetworkManager/system-connections"
-              "secureboot"
+              {
+                path = "NetworkManager/system-connections";
+                mode = "0700";
+              }
+              {
+                path = "secureboot";
+                mode = "0700";
+              }
             ];
           };
           dirs = [
@@ -75,9 +81,17 @@
                 "systemd/timers"
                 "tailscale"
               ];
-              files = map (path: {inherit path; method="symlink";}) [
-                "NetworkManager/secret_key"
-                "systemd/random-seed"
+              files = [
+                {
+                  path = "NetworkManager/secret_key";
+                  method = "symlink";
+                  mode = "0600";
+                }
+                {
+                  path = "systemd/random-seed";
+                  method = "symlink";
+                  mode = "0600";
+                }
               ];
             };
             "/var/lib/private".dirs = [
@@ -91,7 +105,14 @@
           path = "/persist/nobackup/cache";
           dirs = [
             "/var/cache/fwupd"
-            "/var/lib/sddm/.cache"
+            {
+              path = "/var/lib/sddm/.cache";
+              parentDirectory = {
+                user = "sddm";
+                group = "sddm";
+                mode = "0750";
+              };
+            }
           ];
         };
       };
