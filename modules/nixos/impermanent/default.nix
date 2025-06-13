@@ -33,14 +33,16 @@
   lib,
   namespace,
   ...
-}: {
+}: let
+  inherit (lib) mkIf;
+in {
   options.${namespace}.impermanence.enable = lib.mkOption {
     default = true;
     description = "Use intransience for tmpfs root filesystem";
     type = lib.types.bool;
   };
 
-  config = lib.mkIf config.${namespace}.impermanence.enable {
+  config = mkIf config.${namespace}.impermanence.enable {
     intransience = {
       enable = true;
       datastores = {
@@ -52,10 +54,10 @@
               "machine-id"
             ];
             dirs = [
-              {
+              (mkIf config.networking.networkmanager.enable {
                 path = "NetworkManager/system-connections";
                 mode = "0700";
-              }
+              })
               {
                 path = "secureboot";
                 mode = "0700";
@@ -68,25 +70,26 @@
           byPath = {
             "/var/lib" = {
               dirs = [
-                "acme"
-                "bluetooth" # https://stackoverflow.com/questions/65957677/
-                "flatpak"
-                "libvirt"
                 "nixos"
-                "rasdaemon"
-                "swtpm-localca"
                 "systemd/backlight"
                 "systemd/pstore"
                 "systemd/rfkill"
                 "systemd/timers"
-                "tailscale"
+                (mkIf (config.security.acme.certs != {}) "acme")
+                # https://stackoverflow.com/questions/65957677/
+                (mkIf config.hardware.bluetooth.enable "bluetooth")
+                (mkIf config.services.flatpak.enable "flatpak")
+                (mkIf config.virtualisation.libvirtd.enable "libvirt")
+                (mkIf config.hardware.rasdaemon.enable "rasdaemon")
+                (mkIf config.virtualisation.libvirtd.qemu.swtpm.enable "swtpm-localca")
+                (mkIf config.services.tailscale.enable "tailscale")
               ];
               files = [
-                {
+                (mkIf config.networking.networkmanager.enable {
                   path = "NetworkManager/secret_key";
                   method = "symlink";
                   mode = "0600";
-                }
+                })
                 {
                   path = "systemd/random-seed";
                   method = "symlink";
@@ -100,15 +103,15 @@
           enable = true;
           path = "/persist/nobackup/cache";
           dirs = [
-            "/var/cache/fwupd"
-            {
+            (mkIf config.services.fwupd.enable "/var/cache/fwupd")
+            (mkIf config.services.displayManager.sddm.enable {
               path = "/var/lib/sddm/.cache";
               parentDirectory = {
                 user = "sddm";
                 group = "sddm";
                 mode = "0750";
               };
-            }
+            })
           ];
         };
       };
@@ -120,12 +123,6 @@
       preStart = ''ln -svf /persist/authentik/media /var/lib/authentik/'';
     });
 
-    users.mutableUsers = false;
-    users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
-
-    # Otherwise we're lectured again every boot
-    security.sudo.extraConfig = "Defaults lecture=never";
-
     services = {
       jellyfin = {
         cacheDir = "/persist/nobackup/cache/jellyfin";
@@ -134,6 +131,12 @@
       ollama.models = "/persist/nobackup/ollama-models";
       postgresql.dataDir = "/persist/postgresql/${config.services.postgresql.package.psqlSchema}";
     };
+
+    users.mutableUsers = false;
+    users.users.mal.hashedPasswordFile = "/persist/shadow/mal";
+
+    # Otherwise we're lectured again every boot
+    security.sudo.extraConfig = "Defaults lecture=never";
 
     fileSystems = {
       "/" = {
