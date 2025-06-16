@@ -93,6 +93,10 @@ in {
         device = "pool/downloads";
         fsType = "zfs";
       };
+      "/mnt/data/immich" = {
+        device = "pool/immich";
+        fsType = "zfs";
+      };
       "/mnt/data/nobackup" = {
         device = "pool/nobackup";
         fsType = "zfs";
