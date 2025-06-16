@@ -51,9 +51,7 @@
       carla
       rnnoise-plugin
       ffmpeg-full
-      mediainfo
       gimp
-      exiftool
       yt-dlp
 
       wine
