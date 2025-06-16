@@ -356,6 +356,7 @@ in {
                 )
                 {
                   default-src = "'self'";
+                  font-src = "'self' data:";
                   script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
                   style-src = "'self' 'unsafe-inline'";
                   frame-ancestors = "'self'";
