@@ -7,14 +7,14 @@
 }: let
   self = buildGoModule rec {
     pname = "immich-stacker";
-    version = "1.4.0";
+    version = "1.6.0";
     src = fetchFromGitHub {
       owner = "mattdavis90";
       repo = "immich-stacker";
-      rev = "b9a7d712c0ee729804ff2baae76bbc1a54b68332";
-      hash = "sha256-/qsw+vU02WZXEzcMaXwGGnlHW5uYUbBR47l8CGrqAWE=";
+      rev = "v${version}";
+      hash = "sha256-RDND5nS8VfS3NgFqK/OEhp+Z5R0U0yvdjPeYwTSxEcw=";
     };
-    vendorHash = "sha256-tfgSn9C6ez+/35Ke5lmhtb0D4ey/r4i7Sz7dU7OSTnw=";
+    vendorHash = "sha256-Fi7OkzH4o8tUieRHrcak47UI4nu3TC5l2PucpmtY4h4=";
     meta = {
       description = "A small application to help you stack images in Immich";
       homepage = "https://github.com/mattdavis90/immich-stacker";
