@@ -98,7 +98,7 @@ in {
           ControlPath /run/user/%i/ssh-control-%C.sock
     '';
     knownHosts = lib.mapAttrs (name: value: value // {extraHostNames = ["${name}.sec.gd" "${name}.vpn.sec.gd"];}) {
-      "nova".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFdMktqbADswjjuvchDjw7yPzxEKPjVvmlDQ9KSmXETm";
+      "nova".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIecRpKsuZHGIzSv83PE/9xXwoEdtMUhC+8R3uUWyr2";
       "awdbox".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaHPoXU8rSgo1xnGzdycTE4V12s7r9UCorttLN3uijo";
       "awen".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGX39naSG1lKKC/Ap/flCR20JTV2i3FiSgQTtJ8pL6lR";
       "t14s".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID7TXKM5OichO/g4S51tAc5taggPefpazAxJV8l7kfbv";
