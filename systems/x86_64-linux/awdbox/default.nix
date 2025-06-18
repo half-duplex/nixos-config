@@ -32,28 +32,34 @@
     kernelModules = ["i2c-dev"]; # for DDC
   };
   console.earlySetup = true;
-  hardware.cpu.amd.updateMicrocode = true;
-  hardware.rasdaemon.enable = true;
+
+  hardware = {
+    cpu.amd.updateMicrocode = true;
+    rasdaemon.enable = true;
+
+    # Needed for Resolve
+    graphics.extraPackages = with pkgs; [rocmPackages.clr.icd];
+
+    printers = {
+      ensurePrinters = [
+        {
+          name = "Canon-Pixma-TR4520-WiFi";
+          deviceUri = "ipp://956151000000.local:631/ipp/print";
+          model = "everywhere";
+          ppdOptions = {
+            Duplex = "DuplexNoTumble";
+            PageSize = "US Letter";
+          };
+        }
+      ];
+    };
+  };
 
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKu0BzxhF9J7L/0CLDuheOZurqEjPo4uSAFHNHmBXa0 mal@nova"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG8CzUQOCHIXBPVrjt9uq417h/zAyBN+hfS/Yh56CX/b mal@awen"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII/86ZJNimLxLqf+vVG5iINzfhdu98PtsMOZicorzWMQ mal@t14s"
   ];
-
-  hardware.printers = {
-    ensurePrinters = [
-      {
-        name = "Canon-Pixma-TR4520-WiFi";
-        deviceUri = "ipp://956151000000.local:631/ipp/print";
-        model = "everywhere";
-        ppdOptions = {
-          Duplex = "DuplexNoTumble";
-          PageSize = "US Letter";
-        };
-      }
-    ];
-  };
 
   environment.systemPackages = with pkgs; [
     immich-go
