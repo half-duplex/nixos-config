@@ -151,6 +151,15 @@ in {
 
   programs.bash.interactiveShellInit = ''
     stty -ixon
+
+    TMUXA="`tmux list-sessions -f '#{session_attached}' 2>/dev/null | wc -l`"
+    TMUXU="`tmux list-sessions -f '#{?session_attached,0,1}' 2>/dev/null | wc -l`"
+    [ "$TMUXA" -gt 0 ] && TMUXAS="\e[92m$TMUXA attached\e[0m"
+    [ "$TMUXU" -gt 0 ] && TMUXUS="\e[93m$TMUXU unattached\e[0m"
+    [ "$TMUXA" -gt 0 -a "$TMUXU" -gt 0 ] && TMUXAND=","
+    [ "$((TMUXA+TMUXU))" -gt 1 -o '(' ! -v TMUX -a "$((TMUXA+TMUXU))" -gt 0 ')' ] && \
+        echo -e "tmux sessions: $TMUXAS$TMUXAND $TMUXUS" | sed -re 's/ +/ /g'
+    unset TMUXA TMUXU TMUXAS TMUXUS TMUXAND
   '';
 
   programs.neovim = {
