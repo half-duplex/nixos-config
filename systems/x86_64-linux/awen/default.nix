@@ -146,6 +146,11 @@ in {
           10.0.0.0/16 0;  # lan, unlimited
           default     10m;  # 80mbps
         }
+        map $request_method $webdav_location {
+          GET     @direct;
+          HEAD    @direct;
+          default @webdav;
+        }
       '';
       recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
@@ -199,6 +204,9 @@ in {
               set_real_ip_from 100.64.0.6;
               limit_rate $content_rate_limit;
               limit_conn content_addr 2;
+              proxy_buffering off;
+              proxy_request_buffering off;
+              try_files /dev/null $webdav_location;
             ''
             + concatStringsSep "\n" (
               mapAttrsToList
@@ -223,7 +231,9 @@ in {
               }
             );
           locations = {
-            "/dav/".proxyPass = "http://127.0.0.1:45496";
+            "@direct" = {};
+            "@webdav".proxyPass = "http://127.0.0.1:45496";
+            "/dav/".proxyPass = "http://127.0.0.1:45496/";
             "/library/".alias = "/mnt/data/library/";
             "/now/" = {
               alias = "/mnt/data/downloads/";
@@ -522,8 +532,7 @@ in {
         noSniff = true;
         behindProxy = true;
         permissions = "R";
-        prefix = "/dav/";
-        directory = "/data/downloads";
+        directory = "/mnt/data/downloads";
         noPassword = true;
         users = [
           # https://github.com/hacdias/webdav/issues/216
