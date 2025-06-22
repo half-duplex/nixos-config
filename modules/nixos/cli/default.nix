@@ -4,15 +4,7 @@
   lib,
   pkgs,
   ...
-}: let
-  powerlineOpts = [
-    "-mode=flat"
-    "-colorize-hostname"
-    "-cwd-mode=dironly"
-    "-modules=user,host,cwd,nix-shell,git,jobs"
-    "-git-assume-unchanged-size 0"
-  ];
-in {
+}: {
   #console.font = "Lat2-Terminus16"; # todo pick
   environment.systemPackages = with pkgs; [
     binutils
