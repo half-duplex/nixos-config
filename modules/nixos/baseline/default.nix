@@ -352,6 +352,7 @@ in {
     settings = {
       allowed-users = ["@wheel"];
       auto-optimise-store = true;
+      keep-outputs = true;
     };
   };
   nixpkgs.config = {
