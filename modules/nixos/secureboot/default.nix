@@ -19,6 +19,7 @@
       lanzaboote = {
         enable = true;
         pkiBundle = "/etc/secureboot";
+        settings.reboot-for-bitlocker = config.boot.loader.systemd-boot.rebootForBitlocker;
       };
     };
     environment.systemPackages = [pkgs.sbctl];
