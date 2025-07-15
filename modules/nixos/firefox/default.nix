@@ -47,9 +47,10 @@ in {
           SponsoredTopSites = false;
         };
         FirefoxSuggest = {
-          WebSuggest = false;
+          Locked = true;
           ImproveSuggest = false;
           SponsoredSuggestions = false;
+          WebSuggestions = false;
         };
         HttpsOnlyMode = "force_enabled";
         NetworkPrediction = false;
