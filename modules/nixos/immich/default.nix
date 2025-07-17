@@ -24,6 +24,10 @@
       targetVideoCodec = "av1";
       transcode = "bitrate";
     };
+    job = {
+      #smartSearch.concurrency = 12;
+    };
+    machineLearning.clip.modelName = "ViT-B-16-SigLIP-384__webli";
     newVersionCheck.enabled = false;
     oauth = {
       autoLaunch = true;
