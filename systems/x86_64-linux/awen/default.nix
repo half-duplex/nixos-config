@@ -646,5 +646,8 @@ in {
     add_bridge_mapping eth1 2
   '';
 
+  # while the ups is away
+  systemd.services.upsdrv.wantedBy = lib.mkForce [];
+
   system.stateVersion = "25.05";
 }
