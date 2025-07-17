@@ -126,6 +126,7 @@ in {
         mode = "0440";
         owner = "${config.services.immich.user}";
         group = "${config.services.immich.group}";
+        restartUnits = ["immich-server.service" "immich-machine-learning.service"];
         content = toJSON immichSettings;
       };
     };
