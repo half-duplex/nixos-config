@@ -110,6 +110,11 @@ in {
     }));
 
   networking.firewall.allowedTCPPorts = [80 443 445 1883];
+  # work around etc.overlay permissions bug
+  environment.etc."mosquitto/acl-0.conf" = {
+    uid = config.users.users.mosquitto.uid;
+    gid = config.users.groups.mosquitto.gid;
+  };
   services = {
     avahi = {
       enable = true;
