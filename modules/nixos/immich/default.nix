@@ -39,6 +39,8 @@
     trash.days = 90;
     user.deleteDelay = 90;
   };
+
+  cachePath = "/persist/nobackup/immich/";
 in {
   options.${namespace}.services.immich = {
     enable = lib.mkEnableOption "Configure immich";
@@ -60,11 +62,14 @@ in {
     services = {
       immich = {
         enable = true;
+        accelerationDevices = ["/dev/dri/renderD128"];
         environment = {
           IMMICH_CONFIG_FILE = config.sops.templates."immich.json".path;
         };
         machine-learning.environment = {
-          MACHINE_LEARNING_CACHE_FOLDER = lib.mkForce "/persist/immich/model-cache";
+          HF_XET_CACHE = cachePath + "huggingface-xet-cache";
+          MACHINE_LEARNING_CACHE_FOLDER = lib.mkForce (cachePath + "model-cache");
+          MPLCONFIGDIR = cachePath + "matplotlib-cache";
         };
         package = pkgs.nixpkgsUnstable.immich;
         host = "127.0.0.1"; # "localhost" causes v6-only listen
