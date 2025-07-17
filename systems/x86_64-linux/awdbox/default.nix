@@ -34,6 +34,7 @@
   console.earlySetup = true;
 
   hardware = {
+    amdgpu.opencl.enable = true;
     cpu.amd.updateMicrocode = true;
     rasdaemon.enable = true;
 
