@@ -43,6 +43,9 @@
       src = ./.;
       snowfall.namespace = "mal";
       channels-config.allowUnfree = true;
+      outputs-builder = channels: {
+        formatter = channels.nixpkgs.alejandra;
+      };
       systems.modules.nixos = with inputs; [
         authentik-nix.nixosModules.default
         intransience.nixosModules.default
