@@ -88,6 +88,7 @@ in {
           "browser.tabs.tabMinWidth".Value = 70;
           "browser.uidensity".Value = 1;
           "browser.uitour.enabled".Value = false;
+          "browser.urlbar.showSearchTerms.enabled".Value = false;
           "browser.urlbar.sponsoredTopSites" = ffLocked false;
           "browser.urlbar.suggest.quicksuggest.sponsored" = ffLocked false;
           "dom.disable_window_move_resize".Value = true;
