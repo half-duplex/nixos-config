@@ -57,8 +57,30 @@
       },
       "original": {
         "owner": "divnix",
-        "ref": "5a5d2684073d9f563072ed07c871d577a6c614a8",
         "repo": "blank",
+        "rev": "5a5d2684073d9f563072ed07c871d577a6c614a8",
+        "type": "github"
+      }
+    },
+    "cosmo": {
+      "inputs": {
+        "nixpkgs": [
+          "werehouse",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1751079941,
+        "narHash": "sha256-uYNYPR28pLny7dSpyKvLD5XjoinhnND5i/mMj6CsUCY=",
+        "owner": "half-duplex",
+        "repo": "cosmopolitan",
+        "rev": "cf7daaa523f4fff43aa0bc9a5dc55d36e3cbbede",
+        "type": "github"
+      },
+      "original": {
+        "owner": "half-duplex",
+        "ref": "s0ph0s-patches",
+        "repo": "cosmopolitan",
         "type": "github"
       }
     },
@@ -503,7 +525,8 @@
         "nixpkgsStaging": "nixpkgsStaging",
         "nixpkgsUnstable": "nixpkgsUnstable",
         "snowfall-lib": "snowfall-lib",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "werehouse": "werehouse"
       }
     },
     "rust-overlay": {
@@ -651,6 +674,27 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "werehouse": {
+      "inputs": {
+        "cosmo": "cosmo",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1753649914,
+        "narHash": "sha256-BzdsMS0JCL1EO5avYnXxV1Pf+Jyf0/sxMwPhAod3XnQ=",
+        "owner": "half-duplex",
+        "repo": "werehouse",
+        "rev": "e6935b43e8fc0f76e784422110d697ffd7355609",
+        "type": "github"
+      },
+      "original": {
+        "owner": "half-duplex",
+        "repo": "werehouse",
         "type": "github"
       }
     }

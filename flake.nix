@@ -31,6 +31,10 @@
       url = "github:nix-community/authentik-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    werehouse = {
+      url = "github:s0ph0s-dog/werehouse";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
@@ -47,6 +51,7 @@
         intransience.nixosModules.default
         lanzaboote.nixosModules.lanzaboote
         sops-nix.nixosModules.sops
+        werehouse.nixosModules.default
       ];
     };
 }

@@ -22,6 +22,10 @@ in {
         localCyberPower = true;
         users.hass.passwordFile = config.sops.secrets."nut_password_hass".path;
       };
+      werehouse = {
+        enable = true;
+        domain = "artchive.sec.gd";
+      };
     };
   };
 
