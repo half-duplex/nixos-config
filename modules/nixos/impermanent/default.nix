@@ -120,7 +120,7 @@ in {
     # DynamicUser=true so StateDir must be in /var/lib. Having mounts there
     # before namespace setup breaks that. So just have preStart symlink it in.
     systemd.services = lib.genAttrs ["authentik" "authentik-worker"] (_: {
-      preStart = ''ln -svf /persist/authentik/media /var/lib/authentik/'';
+      preStart = ''ln -svfn /persist/authentik/media /var/lib/authentik/media'';
     });
 
     services = {

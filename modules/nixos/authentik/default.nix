@@ -75,8 +75,9 @@ in {
               Content-Security-Policy = mapAttrsToList (src: v: "${src} ${concatStringsSep " " (toList v)};") {
                 default-src = "'self'";
                 connect-src = "'self'";
+                font-src = "'self' data:";
                 img-src = "'self' data:";
-                script-src = "'self' 'unsafe-inline'";
+                script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
                 style-src = "'self' 'unsafe-inline'";
                 frame-ancestors = "'none'";
               };
