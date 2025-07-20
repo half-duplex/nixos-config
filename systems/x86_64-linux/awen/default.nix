@@ -139,12 +139,6 @@ in {
       enable = true;
       # default headers, if none are overridden in a location block
       appendHttpConfig = ''
-        add_header Content-Security-Policy "default-src 'self'; frame-ancestors 'none';" always;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header Referrer-Policy "same-origin" always;
-        add_header Permissions-Policy "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()" always;
-
         # content vhost
         limit_conn_zone $binary_remote_addr zone=content_addr:5m;
         geo $content_rate_limit {
