@@ -343,7 +343,8 @@ in {
   };
 
   nix = {
-    package = lib.mkOverride 900 pkgs.lix; # ~Default, but override nixpkgs
+    #package = lib.mkOverride 900 pkgs.lix; # ~Default, but override nixpkgs
+    package = pkgs.nixVersions.stable; # lix, when the overlay is applied
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
