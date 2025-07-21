@@ -343,12 +343,13 @@ in {
   };
 
   nix = {
-    package = lib.mkOverride 900 pkgs.lix; # ~Default, but override nixpkgs
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    # snowfall-lib prevents the lix-module overlay from working
+    package = pkgs.lixPackageSets.latest.lix;
     settings = {
       allowed-users = ["@wheel"];
       auto-optimise-store = true;

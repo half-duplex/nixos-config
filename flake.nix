@@ -13,10 +13,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.pre-commit-hooks-nix.follows = "blank";
     };
-    lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module?ref=release-2.93";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixos-raspberrypi = {
       url = "github:nvmd/nixos-raspberrypi";
       inputs.argononed.follows = "blank";
@@ -50,7 +46,6 @@
         authentik-nix.nixosModules.default
         intransience.nixosModules.default
         lanzaboote.nixosModules.lanzaboote
-        lix-module.nixosModules.default
         sops-nix.nixosModules.sops
       ];
     };
