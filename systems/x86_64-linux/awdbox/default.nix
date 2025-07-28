@@ -41,6 +41,7 @@
     # Needed for Resolve
     graphics.extraPackages = with pkgs; [rocmPackages.clr.icd];
 
+    keyboard.qmk.enable = true;
     printers = {
       ensurePrinters = [
         {
@@ -66,6 +67,8 @@
     immich-go
     simple-scan
     virtio-win
+    qmk
+    qmk_hid
   ];
 
   fileSystems =
