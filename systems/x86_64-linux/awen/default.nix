@@ -518,7 +518,7 @@ in {
       enable = true;
       package = pkgs.trilium-next-server;
       port = 37962;
-      dataDir = "/persist/var/lib/trilium";
+      dataDir = "/persist/trilium";
       nginx.enable = true;
       nginx.hostName = "notes.sec.gd";
     };
