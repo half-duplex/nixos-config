@@ -30,7 +30,7 @@
     machineLearning.clip.modelName = "ViT-B-16-SigLIP-384__webli";
     newVersionCheck.enabled = false;
     oauth = {
-      autoLaunch = true;
+      #autoLaunch = true;
       autoRegister = true;
       buttonText = "Log in with SSO";
       clientId = "${config.sops.placeholder.oauth_client_id}";
