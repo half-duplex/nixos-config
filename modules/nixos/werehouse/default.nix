@@ -85,6 +85,7 @@ in {
       basicAuthFile = "/persist/rutorrent/htpasswd";
       onlySSL = true;
       extraConfig = ''access_log /var/log/nginx/artchive.log;'';
+      locations."/accel/".alias = lib.mkForce "${cfg.dataDir}/";
     };
 
     sops.secrets."werehouse.env" = {
