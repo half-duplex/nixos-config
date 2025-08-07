@@ -77,6 +77,7 @@ in {
       dataDir = "/werehouse";
       verboseLevel = 1;
       enableNginxVhost = true;
+      ports = [15167];
       publicDomainName = cfg.hostname;
     };
 
