@@ -16,6 +16,35 @@ in {
     boot.secureboot.enable = true;
     services = {
       authentik.enable = true;
+      frigate = {
+        enable = true;
+        hostname = "panopticon.sec.gd";
+        settings = {
+          mqtt = {
+            host = "10.0.0.6";
+          };
+          cameras = {
+            wyze = {
+              enabled = true;
+              live = {stream_name = "wyze_360";};
+              ffmpeg.inputs = [
+                {
+                  path = "rtsp://[::1]:8554/wyze_360?mp4";
+                  roles = ["detect"];
+                }
+                {
+                  path = "rtsp://[::1]:8554/wyze_1080?mp4";
+                  roles = ["record"];
+                }
+              ];
+            };
+          };
+          go2rtc.streams = {
+            wyze_360 = "rtsp://10.0.65.203:8554/360p?mp4";
+            wyze_1080 = "rtsp://10.0.65.203:8554/1080p?mp4";
+          };
+        };
+      };
       immich.enable = true;
       nut = {
         enable = true;
