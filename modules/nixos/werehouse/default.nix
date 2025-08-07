@@ -18,8 +18,8 @@ in {
       description = "Configure the werehouse art archival service";
       type = lib.types.bool;
     };
-    domain = lib.mkOption {
-      description = "The domain werehouse will be accessible on";
+    hostname = lib.mkOption {
+      description = "The hostname werehouse will be accessible on";
       type = lib.types.str;
     };
     dataDir = lib.mkOption {
@@ -77,10 +77,10 @@ in {
       dataDir = "/werehouse";
       verboseLevel = 1;
       enableNginxVhost = true;
-      publicDomainName = cfg.domain;
+      publicDomainName = cfg.hostname;
     };
 
-    services.nginx.virtualHosts.${cfg.domain} = {
+    services.nginx.virtualHosts.${cfg.hostname} = {
       # proxy configured by services.werehouse
       basicAuthFile = "/persist/rutorrent/htpasswd";
       onlySSL = true;

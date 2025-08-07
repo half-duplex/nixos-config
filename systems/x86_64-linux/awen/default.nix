@@ -24,7 +24,7 @@ in {
       };
       werehouse = {
         enable = true;
-        domain = "artchive.sec.gd";
+        hostname = "artchive.sec.gd";
       };
     };
   };
