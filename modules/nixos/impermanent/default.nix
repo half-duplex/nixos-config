@@ -128,6 +128,7 @@ in {
         cacheDir = "/persist/nobackup/cache/jellyfin";
         dataDir = "/persist/jellyfin";
       };
+      mosquitto.dataDir = "/persist/mosquitto";
       ollama.models = "/persist/nobackup/ollama-models";
       postgresql.dataDir = "/persist/postgresql/${config.services.postgresql.package.psqlSchema}";
     };
