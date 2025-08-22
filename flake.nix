@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     werehouse = {
-      url = "github:s0ph0s-dog/werehouse";
+      url = "git+https://codeberg.org/s0ph0s/werehouse.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

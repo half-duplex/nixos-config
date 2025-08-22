@@ -707,17 +707,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1754932675,
-        "narHash": "sha256-nR4wDnM1YzHrEEaHr4qjEKlCXT2gcNDzVGkCujKvgs8=",
-        "owner": "s0ph0s-dog",
-        "repo": "werehouse",
-        "rev": "b8ad57017d190a9576be71b72d473916fa095c73",
-        "type": "github"
+        "lastModified": 1755745875,
+        "narHash": "sha256-cBIfPBW/Py3QGnk7EtD6WuGOmey29Ki0LrCKdOJ2eeA=",
+        "ref": "refs/heads/main",
+        "rev": "b79021c97af8ff021a08cae330c7f5bcec56e1ea",
+        "revCount": 483,
+        "type": "git",
+        "url": "https://codeberg.org/s0ph0s/werehouse.git"
       },
       "original": {
-        "owner": "s0ph0s-dog",
-        "repo": "werehouse",
-        "type": "github"
+        "type": "git",
+        "url": "https://codeberg.org/s0ph0s/werehouse.git"
       }
     }
   },

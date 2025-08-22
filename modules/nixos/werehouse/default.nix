@@ -66,7 +66,7 @@ in {
         RestrictAddressFamilies = ["AF_INET" "AF_INET6"]; # "AF_UNIX" "AF_NETLINK"];
         SystemCallFilter = ["@system-service" "~@privileged"];
         SystemCallArchitectures = "native";
-        UMask = "0077";
+        UMask = "0027";
 
         EnvironmentFile = config.sops.secrets."werehouse.env".path;
       };
