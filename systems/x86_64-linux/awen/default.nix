@@ -51,6 +51,7 @@ in {
         };
       };
       immich.enable = true;
+      navidrome.enable = true;
       nut = {
         enable = true;
         localCyberPower = true;
