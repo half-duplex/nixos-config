@@ -14,12 +14,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets =
-      lib.genAttrs (
-        map (x: "nut_password_${x}") (builtins.attrNames config.power.ups.users)
-      ) (_: {
-        sopsFile = lib.mkDefault secrets/${config.networking.hostName}.yaml;
-      });
     power.ups = {
       enable = true;
       mode = "netserver";
@@ -42,5 +36,12 @@ in {
       upsmon.monitor.local.user = "local";
     };
     networking.firewall.extraInputRules = "ip saddr 10.0.0.0/24 tcp dport 3493 accept";
+    sops.secrets =
+      lib.genAttrs (
+        map (x: "nut_password_${x}") (builtins.attrNames config.power.ups.users)
+      ) (_: {
+        restartUnits = ["upsd.service" "upsdrv.service" "upsmon.service"];
+        sopsFile = lib.mkDefault secrets/${config.networking.hostName}.yaml;
+      });
   };
 }

@@ -4,8 +4,7 @@
   namespace,
   pkgs,
   ...
-}: let
-in {
+}: {
   options.${namespace}.remoteUnlock.enable = lib.mkEnableOption "Configure remote-unlock for FDE";
 
   config = lib.mkIf config.${namespace}.remoteUnlock.enable {

@@ -72,6 +72,9 @@ in {
       enableACME = true;
       # impractical to add security headers to all of the locations =\
     };
-    sops.secrets."frigate.env".sopsFile = secrets/${config.networking.hostName}.yaml;
+    sops.secrets."frigate.env" = {
+      restartUnits = ["frigate.service"];
+      sopsFile = secrets/${config.networking.hostName}.yaml;
+    };
   };
 }

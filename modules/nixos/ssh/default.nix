@@ -1,11 +1,9 @@
 {
   config,
-  pkgs,
   lib,
   namespace,
   ...
 }: let
-  inherit (lib) mkIf;
   impermanent = config.${namespace}.impermanence.enable;
 in {
   services.openssh = {

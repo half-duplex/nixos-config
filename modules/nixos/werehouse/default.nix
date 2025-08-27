@@ -5,12 +5,8 @@
   ...
 }: let
   inherit (lib) mkIf;
-  inherit (lib.attrsets) mapAttrsToList;
-  inherit (lib.lists) toList;
-  inherit (lib.strings) concatStringsSep toJSON;
 
   cfg = config.${namespace}.services.werehouse;
-  impermanent = config.${namespace}.impermanence.enable;
 in {
   options.${namespace}.services.werehouse = {
     enable = lib.mkOption {
@@ -90,6 +86,7 @@ in {
     };
 
     sops.secrets."werehouse.env" = {
+      restartUnits = ["werehouse.service"];
       sopsFile = secrets/${config.networking.hostName}.yaml;
     };
   };

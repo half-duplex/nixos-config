@@ -2,7 +2,6 @@
   config,
   lib,
   namespace,
-  pkgs,
   ...
 }: let
   inherit (lib.attrsets) mapAttrsToList;
@@ -34,6 +33,7 @@ in {
           "AUTHENTIK_SECRET_KEY"
           "AUTHENTIK_EMAIL__PASSWORD"
         ] (_: {
+          restartUnits = ["authentik.service"];
           sopsFile = secrets/${config.networking.hostName}.yaml;
         });
       templates."authentik.env" = {
