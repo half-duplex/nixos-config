@@ -83,7 +83,7 @@ in {
 
     services.nginx.virtualHosts.${cfg.hostname} = {
       # proxy configured by services.werehouse
-      basicAuthFile = "/persist/rutorrent/htpasswd";
+      basicAuthFile = "${cfg.dataDir}/htpasswd";
       onlySSL = true;
       extraConfig = ''access_log /var/log/nginx/artchive.log;'';
       locations."/accel/".alias = lib.mkForce "${cfg.dataDir}/";
