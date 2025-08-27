@@ -22,6 +22,8 @@ in {
         settings = {
           mqtt = {
             host = "10.0.0.6";
+            user = "frigate";
+            password = "{FRIGATE_MQTT_PASSWORD}";
           };
           cameras = {
             wyze = {
@@ -37,6 +39,9 @@ in {
                   roles = ["record"];
                 }
               ];
+              detect.enabled = true;
+              record.enabled = true;
+              motion.enabled = true;
             };
           };
           go2rtc.streams = {
@@ -164,6 +169,7 @@ in {
           port = 1883;
           users = {
             "hass.awen.sec.gd".hashedPassword = "$7$101$ZGKtPJuxva6PLF3R$A1iUE1AAwwPLXTN9D6UwHPa0bGPgsFqFdnSj++4lwZXqnpMCxlXRuYjKHGQyVMWemhC4arNdF86CB1VVc9jHEw==";
+            "frigate".hashedPassword = "$7$101$LYQGV/6R0ooY6CfN$kgh9oUq//bV9jS73Ogu6B4rMhq4eZRtTWEOe+I+KRZxIEJj9LDzCWtrcoGWOub88xz87AHJWmClVYEkfkNXA3g==";
           };
         }
       ];

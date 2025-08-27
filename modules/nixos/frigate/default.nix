@@ -51,6 +51,7 @@ in {
     };
     systemd.services.frigate = {
       serviceConfig = {
+        EnvironmentFile = config.sops.secrets."frigate.env".path;
         SupplementaryGroups = ["video"];
       };
     };
@@ -71,5 +72,6 @@ in {
       enableACME = true;
       # impractical to add security headers to all of the locations =\
     };
+    sops.secrets."frigate.env".sopsFile = secrets/${config.networking.hostName}.yaml;
   };
 }
