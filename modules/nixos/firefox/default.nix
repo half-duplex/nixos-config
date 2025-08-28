@@ -77,6 +77,7 @@ in {
           "browser.discovery.enabled".Value = false;
           "browser.ml.chat.enabled".Value = false;
           "browser.ml.chat.sidebar".Value = false;
+          "browser.ml.linkPreview.enabled".Value = false;
           "browser.newtabpage.enabled".Value = false;
           "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
           "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
@@ -91,6 +92,7 @@ in {
           "browser.urlbar.showSearchTerms.enabled".Value = false;
           "browser.urlbar.sponsoredTopSites" = ffLocked false;
           "browser.urlbar.suggest.quicksuggest.sponsored" = ffLocked false;
+          "browser.urlbar.trimURLs".Value = false;
           "dom.disable_window_move_resize".Value = true;
           "dom.disable_window_flip".Value = true;
           "extensions.activeThemeID".Value = "firefox-compact-dark@mozilla.org";
