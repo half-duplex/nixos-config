@@ -219,6 +219,11 @@ in {
   # Filesystems
   systemd.services.zfs-mount.enable = false;
   services = {
+    avahi = lib.mkIf config.services.avahi.enable {
+      nssmdns4 = true;
+      nssmdns6 = true;
+      extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
+    };
     journald.extraConfig = "MaxRetentionSec=7d";
     udev.extraRules = ''
       SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"

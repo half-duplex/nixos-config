@@ -7,7 +7,7 @@
 }: let
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists) toList;
-  inherit (lib.strings) concatStrings concatStringsSep toJSON;
+  inherit (lib.strings) concatStringsSep toJSON;
 in {
   ${namespace} = {
     dvorak = true;
@@ -56,6 +56,11 @@ in {
         enable = true;
         localCyberPower = true;
         users.hass.passwordFile = config.sops.secrets."nut_password_hass".path;
+      };
+      samba = {
+        enable = true;
+        discoverable = true;
+        interface = "br0";
       };
       werehouse = {
         enable = true;
@@ -155,10 +160,7 @@ in {
     gid = config.users.groups.mosquitto.gid;
   };
   services = {
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-    };
+    avahi.enable = true;
     jellyfin = {
       enable = true;
     };
@@ -166,7 +168,6 @@ in {
       enable = true;
       listeners = [
         {
-          # HomeAssistant
           port = 1883;
           users = {
             "hass.awen.sec.gd".hashedPassword = "$7$101$ZGKtPJuxva6PLF3R$A1iUE1AAwwPLXTN9D6UwHPa0bGPgsFqFdnSj++4lwZXqnpMCxlXRuYjKHGQyVMWemhC4arNdF86CB1VVc9jHEw==";
@@ -504,38 +505,7 @@ in {
       hostName = "rt.awen.sec.gd";
     };
     samba = {
-      enable = true;
-      nmbd.enable = false;
-      winbindd.enable = false;
       settings = {
-        global = {
-          "server string" = "%h";
-          "passdb backend" = "tdbsam:/persist/etc/samba/private/passdb.tdb";
-          "hosts deny" = "ALL";
-          "hosts allow" = ["::1" "127.0.0.1" "10.0.0.0/16"];
-          "logging" = "syslog";
-          "printing" = "bsd";
-          "printcap name" = "/dev/null";
-          "load printers" = "no";
-          "disable spoolss" = "yes";
-          "disable netbios" = "yes";
-          "dns proxy" = "no";
-          "inherit permissions" = "yes";
-          "map to guest" = "Bad User";
-          "client min protocol" = "SMB3";
-          "server min protocol" = "SMB3";
-          #"restrict anonymous" = 2;  # even =1 breaks anon from windows
-          "smb ports" = 445;
-          "client signing" = "desired";
-          "client smb encrypt" = "desired";
-          "server signing" = "desired";
-          #"server smb encrypt" = "desired";  # breaks anon from windows
-        };
-        homes = {
-          browseable = "no";
-          writeable = "yes";
-          "valid users" = "%S";
-        };
         public = {
           path = "/data/public";
           #writeable = "yes";

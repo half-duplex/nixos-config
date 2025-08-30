@@ -27,7 +27,7 @@
     };
     systemd.services.NetworkManager-wait-online.enable = lib.mkDefault false;
 
-    services.xserver.xkb.options = "compose:ralt";
+    services.avahi.enable = true;
 
     security.rtkit.enable = true;
     services.pipewire = {
@@ -37,6 +37,7 @@
       pulse.enable = true;
       jack.enable = true;
     };
+    services.xserver.xkb.options = "compose:ralt";
 
     environment.systemPackages = with pkgs; [
       amdgpu_top

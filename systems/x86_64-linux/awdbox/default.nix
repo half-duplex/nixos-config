@@ -18,6 +18,10 @@
         localCyberPower = true;
         users.hass.passwordFile = config.sops.secrets."nut_password_hass".path;
       };
+      samba = {
+        enable = true;
+        discoverable = true;
+      };
     };
   };
 
@@ -98,10 +102,6 @@
   networking.interfaces.eth0.wakeOnLan.enable = true;
   services = {
     displayManager.defaultSession = lib.mkForce "plasmax11";
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-    };
     ollama = {
       enable = true;
       package = pkgs.ollama-rocm;
