@@ -84,27 +84,6 @@
         "type": "github"
       }
     },
-    "cosmopolitan": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1754238530,
-        "narHash": "sha256-cXlN1bFpdMBSJ9G+Un5vdTEsp/kYuRGcWdYmyhyNT9Y=",
-        "owner": "half-duplex",
-        "repo": "cosmopolitan",
-        "rev": "843318f0c94986c94e5ae41344573f804e9250d7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "half-duplex",
-        "ref": "s0ph0s-patches",
-        "repo": "cosmopolitan",
-        "type": "github"
-      }
-    },
     "crane": {
       "locked": {
         "lastModified": 1731098351,
@@ -555,7 +534,6 @@
       "inputs": {
         "authentik-nix": "authentik-nix",
         "blank": "blank",
-        "cosmopolitan": "cosmopolitan",
         "intransience": "intransience",
         "lanzaboote": "lanzaboote",
         "nixos-raspberrypi": "nixos-raspberrypi",

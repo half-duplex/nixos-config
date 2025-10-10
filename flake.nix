@@ -32,10 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    cosmopolitan = {
-      url = "github:half-duplex/cosmopolitan/s0ph0s-patches";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     werehouse = {
       url = "git+https://codeberg.org/s0ph0s/werehouse.git";
       inputs.nixpkgs.follows = "nixpkgs";
