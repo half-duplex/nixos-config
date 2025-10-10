@@ -130,7 +130,7 @@
           "server string" = "%h";
           "passdb backend" = "tdbsam:/persist/etc/samba/private/passdb.tdb";
           "hosts deny" = "ALL";
-          "hosts allow" = ["::1" "127.0.0.1" "10.0.0.0/16"];
+          "hosts allow" = ["::1" "127.0.0.1" "10.0.0.0/16" "100.64.0.0/24"];
           "logging" = "syslog";
           "printing" = "bsd";
           "printcap name" = "/dev/null";
