@@ -28,7 +28,7 @@ in {
             # TODO: deploy with sops
             "passdb backend" = "tdbsam:/persist/etc/samba/private/passdb.tdb";
             "hosts deny" = "ALL";
-            "hosts allow" = ["127.0.0.1" "::1" "10.0.0.0/16" "fe80::/10"];
+            "hosts allow" = ["127.0.0.1" "::1" "10.0.0.0/16" "fe80::/10" "100.64.0.0/24"];
             "logging" = "syslog";
             "printing" = "bsd";
             "printcap name" = "/dev/null";

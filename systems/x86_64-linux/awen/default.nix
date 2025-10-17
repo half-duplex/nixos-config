@@ -69,6 +69,8 @@ in {
     };
   };
 
+  imports = [./backup-repo.nix];
+
   boot.kernelParams = ["ip=10.0.0.6::10.0.0.1:255.255.255.0::eth0:off:10.0.0.1"];
   boot.initrd.availableKernelModules = ["nvme" "r8169"];
   console.earlySetup = true;
@@ -499,14 +501,10 @@ in {
       enable = true;
       hostName = "rt.awen.sec.gd";
     };
-    samba = {
-      settings = {
-        public = {
-          path = "/data/public";
-          #writeable = "yes";
-          public = "yes";
-        };
-      };
+    samba.settings.public = {
+      path = "/data/public";
+      #writeable = "yes";
+      public = "yes";
     };
     smartd.enable = true;
     teamspeak3 = {
