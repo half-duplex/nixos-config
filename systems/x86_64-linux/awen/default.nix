@@ -89,13 +89,7 @@ in {
   ];
 
   networking = {
-    bridges = {
-      br0 = {
-        interfaces = [
-          "eth0"
-        ];
-      };
-    };
+    bridges.br0.interfaces = ["eth0"];
     defaultGateway = "10.0.0.1";
     interfaces = {
       br0 = {
@@ -186,6 +180,7 @@ in {
           10.0.0.0/16 0;  # lan, unlimited
           default     10m;  # 80mbps
         }
+        set $content_rate_limit_now 18m;  # 144mbps
         map $request_method $webdav_location {
           GET     @direct;
           HEAD    @direct;
@@ -278,7 +273,7 @@ in {
             "/now/" = {
               alias = "/mnt/data/downloads/";
               extraConfig = ''
-                limit_rate 18m;  # 144mbps
+                limit_rate $content_rate_limit_now;
                 limit_conn content_addr 2;
               '';
             };
