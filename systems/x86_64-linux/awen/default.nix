@@ -55,6 +55,11 @@ in {
         localCyberPower = true;
         users.hass.passwordFile = config.sops.secrets."nut_password_hass".path;
       };
+      rtorrent = {
+        enable = true;
+        port = 41519;
+      };
+      rutorrent.enable = true;
       samba = {
         enable = true;
         discoverable = true;
@@ -317,19 +322,6 @@ in {
             };
           };
         };
-        "rt.awen.sec.gd" = {
-          # proxy configured by services.rutorrent
-          basicAuthFile = "/persist/rutorrent/htpasswd";
-          onlySSL = true;
-          enableACME = true;
-          extraConfig = nginxHeaders {
-            Content-Security-Policy = {
-              font-src = "'self' data:";
-              script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
-              style-src = "'self' 'unsafe-inline'";
-            };
-          };
-        };
       };
     };
     postgresql = {
@@ -340,77 +332,6 @@ in {
         host all all 127.0.0.1/32 scram-sha-256
         host all all ::1/128 scram-sha-256
       '';
-    };
-    rtorrent = {
-      enable = true;
-      dataDir = "/persist/rtorrent";
-      openFirewall = true;
-      port = 41519;
-      configText = lib.mkOverride 10 ''
-        directory.default.set = "/mnt/data/downloads"
-        network.port_range.set = 41519-41519
-        method.insert = cfg.basedir, private|const|string, (cat,"/persist/rtorrent/")
-
-        method.insert = cfg.watch,   private|const|string, (cat,(cfg.basedir),"watch/")
-        method.insert = cfg.logs,    private|const|string, (cat,(cfg.basedir),"log/")
-        method.insert = cfg.logfile, private|const|string, (cat,(cfg.logs),(system.time),".log")
-        method.insert = cfg.rpcsock, private|const|string, (cat,"/run/rtorrent/rpc.sock")
-        execute.throw = sh, -c, (cat, "mkdir -p ", (cfg.basedir), "/session ", (cfg.watch), " ", (cfg.logs))
-
-        network.port_random.set = no
-
-        dht.mode.set = disable
-        protocol.pex.set = no
-        trackers.use_udp.set = no
-
-        throttle.max_uploads.set = 100
-        throttle.max_uploads.global.set = 250
-
-        # min/max peers to try to connect
-        throttle.min_peers.normal.set = 20
-        throttle.max_peers.normal.set = 60
-        throttle.min_peers.seed.set = 30
-        throttle.max_peers.seed.set = 80
-        trackers.numwant.set = 80
-
-        protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
-
-        network.http.max_open.set = 128
-        network.max_open_files.set = 600
-        network.max_open_sockets.set = 3000
-
-        pieces.memory.max.set = 1800M
-        network.xmlrpc.size_limit.set = 8M
-
-        session.path.set = (cat, (cfg.basedir), "session/")
-        log.execute = (cat, (cfg.logs), "execute.log")
-        #log.xmlrpc = (cat, (cfg.logs), "xmlrpc.log")
-        execute.nothrow = sh, -c, (cat, "echo >", (session.path), "rtorrent.pid", " ", (system.pid))
-
-        encoding.add = utf8
-        system.umask.set = 0027
-        system.cwd.set = (cfg.basedir)
-        network.http.dns_cache_timeout.set = 25
-
-        schedule2 = watch_start, 120, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))
-        schedule2 = watch_load, 130, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))
-
-        # Logging:
-        #   Levels = critical error warn notice info debug
-        #   Groups = connection_* dht_* peer_* rpc_* storage_* thread_* tracker_* torrent_*
-        print = (cat, "Logging to ", (cfg.logfile))
-        log.open_file = "log", (cfg.logfile)
-        log.add_output = "info", "log"
-        ##log.add_output = "tracker_debug", "log"
-
-        scgi_local = (cfg.rpcsock)
-        schedule = scgi_group,0,0,"execute.nothrow=chown,\":rtorrent\",(cfg.rpcsock)"
-        schedule = scgi_permission,0,0,"execute.nothrow=chmod,\"g+w,o=\",(cfg.rpcsock)"
-      '';
-    };
-    rutorrent = {
-      enable = true;
-      hostName = "rt.awen.sec.gd";
     };
     samba.settings.public = {
       path = "/data/public";
