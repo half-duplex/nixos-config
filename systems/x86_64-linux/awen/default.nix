@@ -5,9 +5,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib.attrsets) mapAttrsToList;
-  inherit (lib.lists) toList;
-  inherit (lib.strings) concatStringsSep toJSON;
+  inherit (lib.${namespace}) nginxHeaders;
 in {
   ${namespace} = {
     dvorak = true;
@@ -245,28 +243,7 @@ in {
               proxy_request_buffering off;
               try_files /dev/null $webdav_location;
             ''
-            + concatStringsSep "\n" (
-              mapAttrsToList
-              (
-                k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-              )
-              {
-                Content-Disposition = "inline";
-                Content-Security-Policy =
-                  mapAttrsToList
-                  (
-                    k: v: "${k} ${concatStringsSep " " (toList v)};"
-                  )
-                  {
-                    default-src = "'self'";
-                    frame-ancestors = "'none'";
-                  };
-                Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-                X-Content-Type-Options = "nosniff";
-                Referrer-Policy = "same-origin";
-                Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-              }
-            );
+            + nginxHeaders {Content-Disposition = "inline";};
           locations = {
             "@direct" = {};
             "@webdav".proxyPass = "http://127.0.0.1:45496";
@@ -284,32 +261,16 @@ in {
         "hass.sec.gd" = {
           onlySSL = true;
           enableACME = true;
-          extraConfig = concatStringsSep "\n" (
-            mapAttrsToList
-            (
-              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            )
-            {
-              Content-Security-Policy =
-                mapAttrsToList
-                (
-                  k: v: "${k} ${concatStringsSep " " (toList v)};"
-                )
-                {
-                  default-src = "'self'";
-                  connect-src = "'self' https://brands.home-assistant.io"; # icons via SW
-                  font-src = "'self' data: https://cdnjs.cloudflare.com";
-                  frame-ancestors = "'self'";
-                  img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
-                  script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-                  style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-                };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-          );
+          extraConfig = nginxHeaders {
+            Content-Security-Policy = {
+              connect-src = "'self' https://brands.home-assistant.io"; # icons via SW
+              font-src = "'self' data: https://cdnjs.cloudflare.com";
+              frame-ancestors = "'self'";
+              img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
+              script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+              style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+            };
+          };
           locations."/" = {
             proxyPass = "http://10.0.0.7:8123";
             proxyWebsockets = true;
@@ -318,39 +279,23 @@ in {
         "media.sec.gd" = {
           onlySSL = true;
           enableACME = true;
-          extraConfig = concatStringsSep "\n" (
-            mapAttrsToList
-            (
-              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            )
-            {
-              Content-Security-Policy =
-                mapAttrsToList
-                (
-                  k: v: "${k} ${concatStringsSep " " (toList v)};"
-                )
-                {
-                  default-src = "'self'";
-                  font-src = "'self' data:";
-                  img-src = [
-                    "'self'"
-                    "blob:"
-                    "https://repo.jellyfin.org/releases/plugin/images/"
-                    "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
-                  ];
-                  script-src = "'self' 'unsafe-inline' blob:";
-                  style-src = "'self' 'unsafe-inline' blob:";
-                  frame-ancestors = "'self'";
-                };
-              Cross-Origin-Opener-Policy = "same-origin";
-              Cross-Origin-Embedder-Policy = "credentialless";
-              Cross-Origin-Resource-Policy = "same-origin";
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-          );
+          extraConfig = nginxHeaders {
+            Content-Security-Policy = {
+              font-src = "'self' data:";
+              img-src = [
+                "'self'"
+                "blob:"
+                "https://repo.jellyfin.org/releases/plugin/images/"
+                "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
+              ];
+              script-src = "'self' 'unsafe-inline' blob:";
+              style-src = "'self' 'unsafe-inline' blob:";
+              frame-ancestors = "'self'";
+            };
+            Cross-Origin-Opener-Policy = "same-origin";
+            Cross-Origin-Embedder-Policy = "credentialless";
+            Cross-Origin-Resource-Policy = "same-origin";
+          };
           locations."/" = {
             proxyPass = "http://127.0.0.1:8096";
             proxyWebsockets = true;
@@ -363,61 +308,27 @@ in {
           # proxy configured by services.trilium-server
           onlySSL = true;
           enableACME = true;
-          extraConfig = concatStringsSep "\n" (
-            mapAttrsToList
-            (
-              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            )
-            {
-              Content-Security-Policy =
-                mapAttrsToList
-                (
-                  k: v: "${k} ${concatStringsSep " " (toList v)};"
-                )
-                {
-                  default-src = "'self'";
-                  connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
-                  img-src = "'self' data:";
-                  script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
-                  style-src = "'self' 'unsafe-inline'";
-                  frame-ancestors = "'none'";
-                };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-          );
+          extraConfig = nginxHeaders {
+            Content-Security-Policy = {
+              connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
+              img-src = "'self' data:";
+              script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
+              style-src = "'self' 'unsafe-inline'";
+            };
+          };
         };
         "rt.awen.sec.gd" = {
           # proxy configured by services.rutorrent
           basicAuthFile = "/persist/rutorrent/htpasswd";
           onlySSL = true;
           enableACME = true;
-          extraConfig = concatStringsSep "\n" (
-            mapAttrsToList
-            (
-              k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;"
-            )
-            {
-              Content-Security-Policy =
-                mapAttrsToList
-                (
-                  k: v: "${k} ${concatStringsSep " " (toList v)};"
-                )
-                {
-                  default-src = "'self'";
-                  font-src = "'self' data:";
-                  script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
-                  style-src = "'self' 'unsafe-inline'";
-                  frame-ancestors = "'self'";
-                };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-          );
+          extraConfig = nginxHeaders {
+            Content-Security-Policy = {
+              font-src = "'self' data:";
+              script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
+              style-src = "'self' 'unsafe-inline'";
+            };
+          };
         };
       };
     };

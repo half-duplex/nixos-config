@@ -5,8 +5,9 @@
   ...
 }: let
   inherit (lib.attrsets) mapAttrsToList;
-  inherit (lib.lists) toList;
-  inherit (lib.strings) concatStrings concatStringsSep toJSON;
+  inherit (lib.strings) concatStringsSep;
+
+  inherit (lib.${namespace}) nginxHeaders;
 
   cfg = config.${namespace}.services.authentik;
 in {
@@ -70,23 +71,15 @@ in {
           # proxy configured by services.authentik
           onlySSL = true;
           enableACME = lib.mkForce true; # override authentik-nix
-          extraConfig = concatStrings (
-            mapAttrsToList (header: v: "add_header ${header} ${toJSON (concatStringsSep " " (toList v))} always;\n") {
-              Content-Security-Policy = mapAttrsToList (src: v: "${src} ${concatStringsSep " " (toList v)};") {
-                default-src = "'self'";
-                connect-src = "'self'";
-                font-src = "'self' data:";
-                img-src = "'self' data:";
-                script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
-                style-src = "'self' 'unsafe-inline'";
-                frame-ancestors = "'none'";
-              };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-          );
+          extraConfig = nginxHeaders {
+            Content-Security-Policy = {
+              connect-src = "'self'";
+              font-src = "'self' data:";
+              img-src = "'self' data:";
+              script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
+              style-src = "'self' 'unsafe-inline'";
+            };
+          };
         };
       };
     };

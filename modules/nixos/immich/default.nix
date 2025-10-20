@@ -6,8 +6,9 @@
   ...
 }: let
   inherit (lib.attrsets) mapAttrsToList;
-  inherit (lib.lists) toList;
   inherit (lib.strings) concatStringsSep toJSON;
+
+  inherit (lib.${namespace}) nginxHeaders;
 
   cfg = config.${namespace}.services.immich;
 
@@ -84,10 +85,9 @@ in {
         "${cfg.nginx.hostname}" = {
           onlySSL = true;
           enableACME = true;
-          extraConfig = concatStringsSep "\n" (
-            mapAttrsToList (k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;") {
-              Content-Security-Policy = mapAttrsToList (k: v: "${k} ${concatStringsSep " " (toList v)};") {
-                default-src = "'self'";
+          extraConfig =
+            nginxHeaders {
+              Content-Security-Policy = {
                 connect-src = "'self' https://tiles.immich.cloud/ https://static.immich.cloud/tiles/";
                 frame-ancestors = "'self'";
                 img-src = "'self' blob: data:";
@@ -95,18 +95,15 @@ in {
                 style-src = "'self' 'unsafe-inline'";
                 worker-src = "'self' blob:";
               };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
             }
-            ++ mapAttrsToList (k: v: "${k} ${v};\n") {
-              client_max_body_size = "50000M";
-              proxy_read_timeout = "600s";
-              proxy_send_timeout = "600s";
-              send_timeout = "600s";
-            }
-          );
+            + concatStringsSep "\n" (
+              mapAttrsToList (k: v: "${k} ${v};") {
+                client_max_body_size = "50000M";
+                proxy_read_timeout = "600s";
+                proxy_send_timeout = "600s";
+                send_timeout = "600s";
+              }
+            );
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString config.services.immich.port}";
             proxyWebsockets = true;

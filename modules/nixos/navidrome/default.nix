@@ -4,9 +4,7 @@
   namespace,
   ...
 }: let
-  inherit (lib.attrsets) mapAttrsToList;
-  inherit (lib.lists) toList;
-  inherit (lib.strings) concatStringsSep toJSON;
+  inherit (lib.${namespace}) nginxHeaders;
 
   cfg = config.${namespace}.services.navidrome;
 in {
@@ -53,24 +51,14 @@ in {
         "${cfg.nginx.hostname}" = {
           onlySSL = true;
           enableACME = true;
-          extraConfig = concatStringsSep "\n" (
-            mapAttrsToList (k: v: "add_header ${k} ${toJSON (concatStringsSep " " (toList v))} always;") {
-              Content-Security-Policy = mapAttrsToList (k: v: "${k} ${concatStringsSep " " (toList v)};") {
-                default-src = "'self'";
-                img-src = "'self' data:";
-                font-src = "'self' data:";
-                frame-ancestors = "'none'";
-                script-src = "'self' 'unsafe-inline'";
-                style-src = "'self' 'unsafe-inline'";
-              };
-              Strict-Transport-Security = "max-age=31536000; includeSubdomains; preload";
-              X-Content-Type-Options = "nosniff";
-              Referrer-Policy = "same-origin";
-              Permissions-Policy = "join-ad-interest-group=(), run-ad-auction=(), interest-cohort=()";
-            }
-            ++ mapAttrsToList (k: v: "${k} ${v};\n") {
-            }
-          );
+          extraConfig = nginxHeaders {
+            Content-Security-Policy = {
+              img-src = "'self' data:";
+              font-src = "'self' data:";
+              script-src = "'self' 'unsafe-inline'";
+              style-src = "'self' 'unsafe-inline'";
+            };
+          };
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString config.services.navidrome.settings.Port}";
             proxyWebsockets = true;
