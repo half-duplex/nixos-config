@@ -1,5 +1,6 @@
 {
   inputs = {
+    # system
     nixpkgs.url = "nixpkgs/nixos-25.05";
     nixpkgsStaging.url = "nixpkgs/release-25.05";
     nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
@@ -14,7 +15,7 @@
       inputs.pre-commit-hooks-nix.follows = "blank";
     };
     nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi";
+      url = "github:nvmd/nixos-raspberrypi/main";
       inputs.argononed.follows = "blank";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -27,11 +28,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # applications
     authentik-nix = {
       url = "github:nix-community/authentik-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     werehouse = {
       url = "git+https://codeberg.org/s0ph0s/werehouse.git";
       inputs.nixpkgs.follows = "nixpkgs";
