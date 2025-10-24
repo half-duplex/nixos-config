@@ -1,19 +1,18 @@
 {
-  config,
-  pkgs,
+  flake,
   lib,
-  namespace,
+  pkgs,
   ...
 }: {
-  options.${namespace}.archetypes.desktop = {
-    enable = lib.mkOption {
-      default = false;
-      description = "Install a desktop environment and related tools and config";
-      type = lib.types.bool;
-    };
-  };
+  imports = with flake.modules.nixos; [
+    cli
+    ./plymouth.nix
 
-  config = lib.mkIf config.${namespace}.archetypes.desktop.enable {
+    ./chromium.nix
+    ./firefox.nix
+  ];
+
+  config = {
     boot.loader.timeout = 0;
     time.timeZone = "US/Eastern";
 
@@ -61,7 +60,6 @@
       discord
       element-desktop
       evolution
-      #nixpkgsUnstable.obsidian  # Requires ancient electron
       signal-desktop
       teamspeak_client
       nixpkgsUnstable.teamspeak6-client
@@ -73,7 +71,6 @@
       gedit
       gnome-text-editor
       imhex
-      #pgadmin # ancient
       (nixpkgsUnstable.proxmark3.override {hardwarePlatform = "PM3GENERIC";})
       remmina
       virt-manager
@@ -126,8 +123,8 @@
       steam.enable = true;
     };
     nixpkgs.overlays = [
-      (final: prev: {
-        steam = prev.steam.override ({extraLibraries ? pkgs': [], ...}: {
+      (_: prev: {
+        steam = prev.steam.override ({extraLibraries ? _: [], ...}: {
           extraLibraries = pkgs':
             (extraLibraries pkgs')
             ++ [

@@ -1,14 +1,16 @@
 {
   config,
+  inputs,
   lib,
-  namespace,
   ...
 }: let
   inherit (lib) mkIf;
 
-  cfg = config.${namespace}.services.werehouse;
+  cfg = config.mal.services.werehouse;
 in {
-  options.${namespace}.services.werehouse = {
+  imports = [inputs.werehouse.nixosModules.default];
+
+  options.mal.services.werehouse = {
     enable = lib.mkOption {
       default = false;
       description = "Configure the werehouse art archival service";

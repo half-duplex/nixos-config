@@ -5,6 +5,14 @@
     nixpkgsStaging.url = "nixpkgs/release-25.05";
     nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
     blank.url = "github:divnix/blank?ref=5a5d2684073d9f563072ed07c871d577a6c614a8";
+    blueprint = {
+      url = "github:numtide/blueprint";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     intransience = {
       url = "github:anna328p/intransience";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,11 +25,8 @@
     nixos-raspberrypi = {
       url = "github:nvmd/nixos-raspberrypi/main";
       inputs.argononed.follows = "blank";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # https://github.com/nvmd/nixos-raspberrypi/issues/90
+      #inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -40,20 +45,7 @@
   };
 
   outputs = inputs:
-    inputs.snowfall-lib.mkFlake {
+    inputs.blueprint {
       inherit inputs;
-      src = ./.;
-      snowfall.namespace = "mal";
-      channels-config.allowUnfree = true;
-      outputs-builder = channels: {
-        formatter = channels.nixpkgs.alejandra;
-      };
-      systems.modules.nixos = with inputs; [
-        authentik-nix.nixosModules.default
-        intransience.nixosModules.default
-        lanzaboote.nixosModules.lanzaboote
-        sops-nix.nixosModules.sops
-        werehouse.nixosModules.default
-      ];
     };
 }

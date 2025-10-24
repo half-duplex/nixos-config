@@ -1,4 +1,5 @@
-{lib, ...}: let
+{inputs, ...}: let
+  inherit (inputs.nixpkgs) lib;
   inherit (builtins) filter isString mapAttrs;
   inherit (lib.attrsets) mapAttrsToList recursiveUpdate;
   inherit (lib.lists) toList;

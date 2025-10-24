@@ -1,14 +1,14 @@
 {
   config,
+  flake,
   lib,
-  namespace,
   ...
 }: let
-  inherit (lib.${namespace}) nginxHeaders;
+  inherit (flake.lib) nginxHeaders;
 
-  cfg = config.${namespace}.services.navidrome;
+  cfg = config.mal.services.navidrome;
 in {
-  options.${namespace}.services.navidrome = {
+  options.mal.services.navidrome = {
     enable = lib.mkEnableOption "Configure navidrome";
     nginx = {
       enable = lib.mkOption {

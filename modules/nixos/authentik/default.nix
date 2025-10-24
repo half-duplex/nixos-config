@@ -1,17 +1,20 @@
 {
   config,
+  flake,
+  inputs,
   lib,
-  namespace,
   ...
 }: let
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.strings) concatStringsSep;
 
-  inherit (lib.${namespace}) nginxHeaders;
+  inherit (flake.lib) nginxHeaders;
 
-  cfg = config.${namespace}.services.authentik;
+  cfg = config.mal.services.authentik;
 in {
-  options.${namespace}.services.authentik = {
+  imports = [inputs.authentik-nix.nixosModules.default];
+
+  options.mal.services.authentik = {
     enable = lib.mkEnableOption "Configure the authentik IDP";
     nginx = {
       enable = lib.mkOption {

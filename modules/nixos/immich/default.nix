@@ -1,16 +1,16 @@
 {
   config,
+  flake,
   lib,
-  namespace,
   pkgs,
   ...
 }: let
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.strings) concatStringsSep toJSON;
 
-  inherit (lib.${namespace}) nginxHeaders;
+  inherit (flake.lib) nginxHeaders;
 
-  cfg = config.${namespace}.services.immich;
+  cfg = config.mal.services.immich;
 
   immichSettings = {
     ffmpeg = {
@@ -47,7 +47,7 @@
 
   cachePath = "/persist/nobackup/immich/";
 in {
-  options.${namespace}.services.immich = {
+  options.mal.services.immich = {
     enable = lib.mkEnableOption "Configure immich";
     nginx = {
       enable = lib.mkOption {

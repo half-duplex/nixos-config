@@ -1,13 +1,12 @@
 {
   config,
   lib,
-  namespace,
   pkgs,
   ...
 }: let
-  cfg = config.${namespace}.services.frigate;
+  cfg = config.mal.services.frigate;
 in {
-  options.${namespace}.services.frigate = {
+  options.mal.services.frigate = {
     enable = lib.mkEnableOption "Configure Frigate NVR";
     hostname = lib.mkOption {
       default = "panopticon.sec.gd";

@@ -1,13 +1,12 @@
 {
   config,
   lib,
-  namespace,
   options,
   ...
 }: let
-  cfg = config.${namespace}.services.nut;
+  cfg = config.mal.services.nut;
 in {
-  options.${namespace}.services.nut = {
+  options.mal.services.nut = {
     enable = lib.mkEnableOption "Configure Network UPS Tools";
     localCyberPower = lib.mkEnableOption "Configure a local CyberPower UPS";
     users = options.power.ups.users;
