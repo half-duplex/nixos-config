@@ -185,7 +185,8 @@ in {
           10.0.0.0/16 0;  # lan, unlimited
           default     10m;  # 80mbps
         }
-        set $content_rate_limit_now 18m;  # 144mbps
+        # less cursed than it looks - actually allowed by spec:
+        # https://www.rfc-editor.org/rfc/rfc4918#section-9.4
         map $request_method $webdav_location {
           GET     @direct;
           HEAD    @direct;
@@ -198,12 +199,21 @@ in {
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       #recommendedZstdSettings = true;  # causes response truncation
-      virtualHosts = {
+      virtualHosts = let
+        webdavDestination = ''
+          # fix COPY/MOVE: https://github.com/hacdias/webdav#nginx-configuration-example
+          set $destination $http_destination;
+          if ($http_destination ~ "^$scheme://$host/(?<path>.*)") {
+            set $destination /$path;
+          }
+          proxy_set_header Destination $destination;
+        '';
+      in {
         "default" = {
           default = true;
           # Can't use globalRedirect because it adds a bonus http://
           extraConfig = ''
-            return 301 https://$host$request_uri;
+            return 301 https://$http_host$request_uri;
           '';
           listen = [
             {
@@ -235,7 +245,8 @@ in {
           onlySSL = true;
           root = "/mnt/data/downloads";
           extraConfig =
-            ''
+            nginxHeaders {Content-Disposition = "inline";}
+            + ''
               access_log /var/log/nginx/content.log;
               aio threads;
               autoindex on;
@@ -247,21 +258,42 @@ in {
               proxy_buffering off;
               proxy_request_buffering off;
               try_files /dev/null $webdav_location;
-            ''
-            + nginxHeaders {Content-Disposition = "inline";};
-          locations = {
+            '';
+          locations = let
+            contentDavConfig =
+              ''proxy_set_header Authorization "Basic Y29udGVudDp0bmV0bm9j";''
+              + webdavDestination;
+          in {
             "@direct" = {};
-            "@webdav".proxyPass = "http://127.0.0.1:45496";
-            "/dav/".proxyPass = "http://127.0.0.1:45496/";
+            "@webdav" = {
+              extraConfig = contentDavConfig;
+              proxyPass = "http://127.0.0.1:45496";
+            };
             "/library/".alias = "/mnt/data/library/";
             "/now/" = {
               alias = "/mnt/data/downloads/";
               extraConfig = ''
-                limit_rate $content_rate_limit_now;
+                try_files $uri $uri/ =404; # no webdav
+                limit_rate 18m; # 144mbps
                 limit_conn content_addr 2;
               '';
             };
           };
+        };
+        "dav.awen.sec.gd" = {
+          # this vhost must have nginx basic auth, else the content-dav proxy credentials can be abused
+          basicAuthFile = pkgs.writeText "htpasswd-dav" ''
+            mal-seedvault:$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C
+          '';
+          enableACME = true;
+          onlySSL = true;
+          extraConfig =
+            webdavDestination
+            + ''
+              proxy_buffering off;
+              proxy_request_buffering off;
+            '';
+          locations."/".proxyPass = "http://127.0.0.1:45496";
         };
         "hass.sec.gd" = {
           onlySSL = true;
@@ -365,16 +397,21 @@ in {
         debug = true;
         noSniff = true;
         behindProxy = true;
-        permissions = "R";
-        directory = "/mnt/data/downloads";
-        noPassword = true;
+        permissions = "";
+        directory = "/dev/null";
         users = [
-          # https://github.com/hacdias/webdav/issues/216
-          #{
-          #  username = "mal-seedvault";
-          #  directory = "/data/backups/phone/";
-          #  permissions = "CRUD";
-          #}
+          {
+            username = "content";
+            password = "tnetnoc";
+            directory = "/mnt/data/downloads/";
+            permissions = "R";
+          }
+          {
+            username = "mal-seedvault";
+            password = "{bcrypt}$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C";
+            directory = "/data/backups/phone/";
+            permissions = "CRUD";
+          }
         ];
       };
     };
