@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -44,6 +43,11 @@ in {
           ImproveSuggest = false;
           SponsoredSuggestions = false;
           WebSuggestions = false;
+        };
+        GenerativeAI = {
+          Chatbot = false;
+          LinkPreviews = false;
+          Locked = true;
         };
         HttpsOnlyMode = "force_enabled";
         NetworkPrediction = false;
