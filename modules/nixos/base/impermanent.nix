@@ -152,10 +152,8 @@ in {
           fsType = "tmpfs";
           options = ["mode=755" "size=25%" "huge=within_size"];
         };
-      }
-      // lib.optionalAttrs (!options?disko || !config.disko.enableConfig) {
         "/boot" = {
-          device = "/dev/disk/by-partlabel/_esp";
+          device = "/dev/disk/by-partlabel/esp";
           options = ["umask=0077"]; # protect /boot/loader/random-seed
         };
         "/home" = {

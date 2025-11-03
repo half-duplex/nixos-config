@@ -9,10 +9,6 @@
       url = "github:numtide/blueprint";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     intransience = {
       url = "github:anna328p/intransience";
       inputs.nixpkgs.follows = "nixpkgs";

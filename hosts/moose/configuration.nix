@@ -7,7 +7,6 @@
   imports = with flake.modules.nixos; [
     nixos-raspberrypi.nixosModules.raspberry-pi-4.base
     base
-    ./disks.nix
     cli-minimal
 
     samba

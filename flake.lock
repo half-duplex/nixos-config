@@ -120,26 +120,6 @@
         "type": "github"
       }
     },
-    "disko": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1760701190,
-        "narHash": "sha256-y7UhnWlER8r776JsySqsbTUh2Txf7K30smfHlqdaIQw=",
-        "owner": "nix-community",
-        "repo": "disko",
-        "rev": "3a9450b26e69dcb6f8de6e2b07b3fc1c288d85f5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "disko",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -522,7 +502,6 @@
         "authentik-nix": "authentik-nix",
         "blank": "blank",
         "blueprint": "blueprint",
-        "disko": "disko",
         "intransience": "intransience",
         "lanzaboote": "lanzaboote",
         "nixos-raspberrypi": "nixos-raspberrypi",
