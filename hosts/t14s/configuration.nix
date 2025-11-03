@@ -12,6 +12,7 @@
 
   mal = {
     hardware = "physical";
+    remoteUnlock.enable = false;
   };
 
   boot.initrd.kernelModules = ["nvme"];
