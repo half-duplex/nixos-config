@@ -18,6 +18,7 @@ in {
     dnsutils
     e2fsprogs
     file
+    gptfdisk
     htop
     lm_sensors
     lsof
@@ -25,7 +26,7 @@ in {
     nvd
     openssl
     parallel
-    parted
+    parted # incl. partprobe
     psmisc # killall, etc
     pv
     sbctl
