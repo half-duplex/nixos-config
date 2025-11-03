@@ -27,15 +27,17 @@ in {
         DisplayBookmarksToolbar = "never";
         EnableTrackingProtection = {
           Value = true;
+          BaselineExceptions = true;
           Cryptomining = true;
-          Fingerprinting = true;
           EmailTracking = true;
+          Fingerprinting = true;
+          SuspectedFingerprinting = true;
         };
         FirefoxHome = {
           Locked = true; # only locks params we set here
-          Pocket = false;
           Search = false;
-          SponsoredPocket = false;
+          Stories = false;
+          SponsoredStories = false;
           SponsoredTopSites = false;
         };
         FirefoxSuggest = {
@@ -59,6 +61,60 @@ in {
         };
         PopupBlocking.Default = false;
         SanitizeOnShutdown.Cache = true; # History=true clears session
+        SearchEngines = {
+          Add = [
+            {
+              Name = "Google Maps";
+              URLTemplate = "https://www.google.com/maps/search/{searchTerms}";
+              Method = "GET";
+              IconURL = "https://www.google.com/images/branding/product/ico/maps15_bnuw3a_48dp.ico";
+              Alias = "maps";
+            }
+            {
+              Name = "Google Translate";
+              URLTemplate = "https://translate.google.com/#auto|auto|{searchTerms}";
+              Method = "GET";
+              IconURL = "https://www.gstatic.com/translate/favicon.ico";
+              Alias = "tr";
+            }
+            {
+              Name = "IMDB";
+              URLTemplate = "https://www.imdb.com/find/?q={searchTerms}";
+              Method = "GET";
+              IconURL = "https://www.imdb.com/favicon.ico";
+              Alias = "imdb";
+            }
+            {
+              Name = "NixOS Options";
+              URLTemplate = "https://search.nixos.org/options?query={searchTerms}";
+              Method = "GET";
+              IconURL = "https://search.nixos.org/favicon.png";
+              Alias = "nixo";
+            }
+            {
+              Name = "Nix Packages";
+              URLTemplate = "https://search.nixos.org/packages?query={searchTerms}";
+              Method = "GET";
+              IconURL = "https://search.nixos.org/favicon.png";
+              Alias = "nixp";
+            }
+            {
+              Name = "Wayback Machine";
+              URLTemplate = "https://web.archive.org/web/*/{searchTerms}";
+              Method = "GET";
+              IconURL = "https://web-static.archive.org/_static/images/logo_archive-sm.png";
+              Alias = "wb";
+            }
+            {
+              Name = "YouTube";
+              URLTemplate = "https://www.youtube.com/results?search_query={searchTerms}";
+              Method = "GET";
+              IconURL = "https://www.youtube.com/favicon.ico";
+              Alias = "yt";
+            }
+          ];
+          Remove = ["Perplexity"];
+        };
         SearchSuggestEnabled = false;
         SSLVersionMin = "tls1.2";
         ExtensionSettings = {

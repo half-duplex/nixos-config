@@ -20,6 +20,7 @@ in {
       enable = true;
       extensions = [
         "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+        "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
       ];
       # Mandatory
       extraOpts = {
