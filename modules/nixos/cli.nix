@@ -1,13 +1,4 @@
-{
-  config,
-  inputs,
-  lib,
-  pkgs,
-  ...
-}: let
-  inherit (builtins) mapAttrs;
-  inherit (lib) filterAttrs;
-in {
+{pkgs, ...}: {
   imports = [
     ./cli-minimal.nix
   ];

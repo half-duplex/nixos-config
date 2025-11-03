@@ -145,38 +145,37 @@ in {
     # Otherwise we're lectured again every boot
     security.sudo.extraConfig = "Defaults lecture=never";
 
-    fileSystems =
-      {
-        "/" = {
-          device = "tmpfs";
-          fsType = "tmpfs";
-          options = ["mode=755" "size=25%" "huge=within_size"];
-        };
-        "/boot" = {
-          device = "/dev/disk/by-partlabel/esp";
-          options = ["umask=0077"]; # protect /boot/loader/random-seed
-        };
-        "/home" = {
-          device = "tank/home";
-          fsType = "zfs";
-        };
-        "/home/nobackup" = {
-          device = "tank/home/nobackup";
-          fsType = "zfs";
-        };
-        "/nix" = {
-          device = "tank/nix";
-          fsType = "zfs";
-        };
-        "/persist" = {
-          device = "tank/persist";
-          fsType = "zfs";
-          neededForBoot = true;
-        };
-        "/persist/nobackup" = {
-          device = "tank/persist/nobackup";
-          fsType = "zfs";
-        };
+    fileSystems = {
+      "/" = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = ["mode=755" "size=25%" "huge=within_size"];
       };
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/esp";
+        options = ["umask=0077"]; # protect /boot/loader/random-seed
+      };
+      "/home" = {
+        device = "tank/home";
+        fsType = "zfs";
+      };
+      "/home/nobackup" = {
+        device = "tank/home/nobackup";
+        fsType = "zfs";
+      };
+      "/nix" = {
+        device = "tank/nix";
+        fsType = "zfs";
+      };
+      "/persist" = {
+        device = "tank/persist";
+        fsType = "zfs";
+        neededForBoot = true;
+      };
+      "/persist/nobackup" = {
+        device = "tank/persist/nobackup";
+        fsType = "zfs";
+      };
+    };
   };
 }
