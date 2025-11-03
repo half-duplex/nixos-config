@@ -17,32 +17,13 @@ in {
       type = types.path;
     };
     package = lib.mkPackageOption pkgs "vintagestory" {};
-    #config = mkOption {
-    #  default = {};
-    #  description = ''
-    #    Configuration for the Vintage Story server.
-    #    See <https://wiki.vintagestory.at/Special:MyLanguage/Server_Config>
-    #  '';
-    #  type = types.submodule {
-    #    freeformType = settingsFormat.type;
-    #    options = {
-    #      port = mkOption {
-    #        type = types.port;
-    #        default = 42420;
-    #        description = "Which port the server will listen on";
-    #      };
-    #      ServerIdentifier = mkOption {
-    #        type = types.nullOr (types.strMatching "^[a-z0-9]{8}(-[a-z0-9]{4}){3}-[a-z0-9]{12}$");
-    #        default = null;
-    #        description = "A UUID generated for this server, or null";
-    #      };
-    #    };
-    #  };
-    #};
-    firewallPort = mkOption {
+    port = mkOption {
       type = types.nullOr types.port;
       default = 42420;
-      description = "Which port to open for the server. Should match your config file.";
+      description = ''
+        Which port to open in the firewall and listen on for socket activation.
+        Must match your config file.
+      '';
     };
     user = mkOption {
       type = types.str;
@@ -54,23 +35,42 @@ in {
       default = "vintagestory";
       description = "The group the Vintage Story server should run as.";
     };
+    addGroupManagementPolicy = lib.mkEnableOption ''
+      Add polkit and sudoers rules to allow users in the service's group to
+      restart the service and view its logs
+    '';
   };
 
   config = mkIf cfg.enable {
-    systemd.services.vintagestory-server = {
+    mal.services.vintagestory.package = pkgs.vintagestory.overrideAttrs (_: rec {
+      version = "1.21.5";
+      src = pkgs.fetchurl {
+        url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
+        hash = "sha256-dG1D2Buqht+bRyxx2ie34Z+U1bdKgi5R3w29BG/a5jg=";
+      };
+    });
+
+    networking.firewall = {
+      allowedTCPPorts = [cfg.port];
+      allowedUDPPorts = [cfg.port];
+    };
+    systemd.services.vintagestory = {
       inherit description;
       after = ["network.target"];
       wantedBy = ["multi-user.target"];
-      path = [cfg.package pkgs.strace];
+      path = [
+        cfg.package
+        pkgs.coreutils
+        pkgs.cacert
+        #pkgs.strace
+      ];
       confinement = {
         enable = true;
         binSh = null;
-        #mode = "chroot-only";
+        #mode = "chroot-only"; # TODO: why does this break CoreCLR
         mode = "full-apivfs";
       };
-      #environment = {"COMPlus_EnableDiagnostics" = "0";};
       serviceConfig = {
-        #ExecStart = ''${pkgs.strace}/bin/strace -f -- ${cfg.package}/bin/vintagestory-server --dataPath "${cfg.dataPath}"'';
         ExecStart = ''${cfg.package}/bin/vintagestory-server --dataPath "${cfg.dataPath}"'';
 
         Type = "simple";
@@ -81,11 +81,15 @@ in {
         Group = cfg.group;
 
         BindPaths = [cfg.dataPath];
-        ##BindReadOnlyPaths = ["/etc/resolv.conf"];
-        #CapabilityBoundingSet = "";
+        BindReadOnlyPaths = [
+          "/etc/resolv.conf"
+          "/etc/ssl/certs/ca-bundle.crt"
+          "/etc/passwd" # it really wants to get the user info itself
+        ];
+        CapabilityBoundingSet = "";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        #MountAPIVFS = false;
+        #MemoryDenyWriteExecute = true; # dotnet...
+        MountAPIVFS = false;
         NoNewPrivileges = true;
         PrivateTmp = true;
         ProtectClock = true;
@@ -97,10 +101,10 @@ in {
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        RestrictAddressFamilies = ["AF_INET" "AF_INET6"]; # "AF_UNIX" "AF_NETLINK"];
-        #SystemCallFilter = ["@system-service" "~@privileged"];
+        RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
+        SystemCallFilter = ["@system-service" "~@privileged"];
         SystemCallArchitectures = "native";
-        UMask = "0027";
+        UMask = "0007";
       };
     };
     systemd.tmpfiles.settings.vintagestory."${cfg.dataPath}".d = {
@@ -115,5 +119,32 @@ in {
       };
     };
     users.groups = mkIf (cfg.group == "vintagestory") {${cfg.group} = {};};
+
+    security.polkit.extraConfig = mkIf cfg.addGroupManagementPolicy ''
+      polkit.addRule(function(action, subject) {
+        if (
+          action.id === "org.freedesktop.systemd1.manage-units" &&
+          action.lookup("unit") === "vintagestory.service" &&
+          subject.isInGroup("${cfg.group}")
+        ) {
+          const verb = action.lookup("verb");
+          if (verb === "start" || verb === "stop" || verb === "restart") {
+            return polkit.Result.YES;
+          }
+        }
+      });
+    '';
+    security.sudo = mkIf cfg.addGroupManagementPolicy {
+      execWheelOnly = false;
+      extraRules = [
+        {
+          groups = [cfg.group];
+          commands = map (args: {
+            options = ["NOPASSWD"];
+            command = "/run/current-system/sw/bin/journalctl -u vintagestory.service ${args}";
+          }) ["" "-f"];
+        }
+      ];
+    };
   };
 }

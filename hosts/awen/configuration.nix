@@ -82,6 +82,10 @@ in {
         discoverable = true;
         interface = "br0";
       };
+      vintagestory = {
+        enable = true;
+        addGroupManagementPolicy = true;
+      };
       werehouse = {
         enable = true;
         hostname = "artchive.sec.gd";
@@ -107,6 +111,15 @@ in {
     "command=\"zrepl stdinserver awen\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEtpIj6zB4jeoYCWUH9jAxvTaNKfWQ7OMqTVD3lXw3Xh root@awen"
     "command=\"zrepl stdinserver t14s\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBlIAZVeRbfsFpbsoywqneHtIDvXTWv7myK5YOvnSsx7 root@t14s"
   ];
+
+  # vintage story
+  users.users.nadia = {
+    isNormalUser = true;
+    extraGroups = ["ssh-users" "vintagestory"];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ59U5sahxc6qtBdtJuk+83Hn0pEb0V6LepQWQo63mlU"
+    ];
+  };
 
   networking = {
     inherit hostName;
