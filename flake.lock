@@ -389,11 +389,11 @@
     },
     "nixpkgsStaging": {
       "locked": {
-        "lastModified": 1762454345,
-        "narHash": "sha256-5VwAsuZSEGvAv1ha8S0U9mNJqLLQLCLbLBxU+IwXYY0=",
+        "lastModified": 1762624078,
+        "narHash": "sha256-OOIx4M9YQc9xrtxuUVogr7M4ISXzZP3il+n1cbHG98o=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5f7aa4d91409168fd99c82e44b010769cff1addd",
+        "rev": "baf20a0ba2568e289fe60677986ad2dadd8bab22",
         "type": "github"
       },
       "original": {
@@ -404,11 +404,11 @@
     },
     "nixpkgsUnstable": {
       "locked": {
-        "lastModified": 1762111121,
-        "narHash": "sha256-4vhDuZ7OZaZmKKrnDpxLZZpGIJvAeMtK6FKLJYUtAdw=",
+        "lastModified": 1762363567,
+        "narHash": "sha256-YRqMDEtSMbitIMj+JLpheSz0pwEr0Rmy5mC7myl17xs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b3d51a0365f6695e7dd5cdf3e180604530ed33b4",
+        "rev": "ae814fd3904b621d8ab97418f1d0f2eb0d3716f4",
         "type": "github"
       },
       "original": {
@@ -419,11 +419,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1762233356,
-        "narHash": "sha256-cGS3lLTYusbEP/IJIWGgnkzIl+FA5xDvtiHyjalGr4k=",
+        "lastModified": 1762498405,
+        "narHash": "sha256-Zg/SCgCaAioc0/SVZQJxuECGPJy+OAeBcGeA5okdYDc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ca534a76c4afb2bdc07b681dbc11b453bab21af8",
+        "rev": "6faeb062ee4cf4f105989d490831713cc5a43ee1",
         "type": "github"
       },
       "original": {
@@ -646,11 +646,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1761187499,
-        "narHash": "sha256-eI+WOEfdi8v9MxQsH4yw0kR3HSlL6iGYj4RvlXxizNs=",
+        "lastModified": 1762484003,
+        "narHash": "sha256-qi117VgAdLf/tCQ5XguWswjGecYn5DGKDZTCSHwHS38=",
         "ref": "refs/heads/main",
-        "rev": "cb83e5be164ccf906fefd930ff69e756d99ef685",
-        "revCount": 515,
+        "rev": "29fc0e3a55c17b281a09013429e12157124b8eff",
+        "revCount": 516,
         "type": "git",
         "url": "https://codeberg.org/s0ph0s/werehouse.git"
       },
