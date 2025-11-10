@@ -38,18 +38,27 @@ in {
     wireguard-tools
 
     darkhttpd
+    exiftool
+    git
+    mediainfo
     mosh
     nmap
     rsync
     socat
+    nixpkgsUnstable.uv # the python package manager
     wol
     zip
 
-    git
-    python3
-    nixpkgsUnstable.uv # the python package manager
-    exiftool
-    mediainfo
+    # make nix-ld work for python
+    (let
+      pyWithPkgs = python3.withPackages (py-pkgs:
+        with py-pkgs; [
+          requests
+        ]);
+    in (pkgs.writeShellScriptBin "python" ''
+      export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
+      exec ${pyWithPkgs}/bin/python "$@"
+    ''))
 
     # https://github.com/buckley310/nixos-config/blob/a05bdb3ee24674bd1df706f881296458f3339c6f/modules/cli.nix#L52
     (writeShellScriptBin "needs-restart" ''
