@@ -215,6 +215,7 @@ in {
       };
     };
   };
+  security.pam.krb5.enable = false;
 
   systemd.tmpfiles.rules = [
     "e /nix/var/log - - - 30d"
