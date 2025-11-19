@@ -128,9 +128,9 @@ in {
           "browser.aboutConfig.showWarning" = ffLocked false;
           "browser.contentblocking.category".Value = "strict";
           "browser.discovery.enabled".Value = false;
-          "browser.ml.chat.enabled".Value = false;
-          "browser.ml.chat.sidebar".Value = false;
-          "browser.ml.linkPreview.enabled".Value = false;
+          "browser.ml.chat.menu" = ffLocked false; # why are these not set by GenerativeAI policy?
+          "browser.ml.chat.sidebar" = ffLocked false;
+          "browser.ml.linkPreview.enabled" = ffLocked false;
           "browser.newtabpage.enabled".Value = false;
           "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
           "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
