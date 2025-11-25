@@ -78,6 +78,14 @@
     virtio-win
     qmk
     qmk_hid
+
+    (writeShellApplication {
+      name = "bright";
+      runtimeInputs = with pkgs; [ddcutil];
+      text = lib.strings.removePrefix "#!/usr/bin/env bash\nset -euo pipefail\n\n" (
+        builtins.readFile ./bright.sh
+      );
+    })
   ];
 
   fileSystems =
