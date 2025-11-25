@@ -64,6 +64,13 @@ in {
         SearchEngines = {
           Add = [
             {
+              Name = "Google Images";
+              URLTemplate = "https://www.google.com/search?tbm=isch&q={searchTerms}";
+              Method = "GET";
+              IconURL = "https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico";
+              Alias = "gi";
+            }
+            {
               Name = "Google Maps";
               URLTemplate = "https://www.google.com/maps/search/{searchTerms}";
               Method = "GET";
