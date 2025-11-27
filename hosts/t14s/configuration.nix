@@ -1,4 +1,5 @@
 {
+  config,
   flake,
   hostName,
   lib,
@@ -45,15 +46,22 @@
   services = {
     avahi.enable = true;
     openssh.startWhenNeeded = true;
+    openvpn.servers.commercial = {
+      config = "config ${config.sops.secrets."openvpn_t14s_commercial".path}";
+    };
     tor = {
       enable = true;
       client.enable = true;
     };
     zfs.autoScrub.enable = false; # battery
   };
+
+  sops.secrets."openvpn_t14s_commercial".sopsFile = secrets/openvpn.yaml;
+
   systemd.services.libvirtd.wantedBy = lib.mkForce [];
   systemd.services.libvirt-guests.wantedBy = lib.mkForce [];
   virtualisation.libvirtd.onBoot = "ignore"; # doesn't disable libvirt-guests.service
+  systemd.services.openvpn-commercial.wantedBy = lib.mkForce [];
   systemd.services.tor.wantedBy = lib.mkForce [];
 
   programs.gnupg.agent.enable = true;
