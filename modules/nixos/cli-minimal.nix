@@ -55,7 +55,7 @@ in {
         with py-pkgs; [
           requests
         ]);
-    in (pkgs.writeShellScriptBin "python" ''
+    in (writeShellScriptBin "python" ''
       export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
       exec ${pyWithPkgs}/bin/python "$@"
     ''))
