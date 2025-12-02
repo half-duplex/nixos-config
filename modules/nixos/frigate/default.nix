@@ -29,6 +29,7 @@ in {
   config = lib.mkIf cfg.enable {
     services.frigate = {
       enable = true;
+      checkConfig = false; # doesn't work when using env vars
       hostname = cfg.hostname;
       vaapiDriver = "radeonsi";
       settings =

@@ -61,7 +61,7 @@
       element-desktop
       evolution
       signal-desktop
-      teamspeak_client
+      teamspeak3
       nixpkgsUnstable.teamspeak6-client
       telegram-desktop
       thunderbird
@@ -98,6 +98,9 @@
         ];
       })
     ];
+    nixpkgs.config.permittedInsecurePackages = [
+      "qtwebengine-5.15.19" # for teamspeak3
+    ];
 
     programs = {
       #adb.enable = true;
@@ -106,7 +109,6 @@
     services = {
       flatpak.enable = true;
       pcscd.enable = true; # yubikey ccid/piv
-      udev.packages = [pkgs.android-udev-rules];
     };
     users.users.mal.extraGroups = ["adbusers"];
     security = {

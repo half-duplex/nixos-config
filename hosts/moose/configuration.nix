@@ -1,10 +1,12 @@
 {
   flake,
   hostName,
+  modulesPath,
   nixos-raspberrypi,
   ...
 }: {
   imports = with flake.modules.nixos; [
+    (modulesPath + "/installer/scan/not-detected.nix")
     nixos-raspberrypi.nixosModules.raspberry-pi-4.base
     base
     cli-minimal

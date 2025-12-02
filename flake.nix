@@ -1,8 +1,8 @@
 {
   inputs = {
     # system
-    nixpkgs.url = "nixpkgs/nixos-25.05";
-    nixpkgsStaging.url = "nixpkgs/release-25.05";
+    nixpkgs.url = "nixpkgs/nixos-25.11";
+    nixpkgsStaging.url = "nixpkgs/release-25.11";
     nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
     blank.url = "github:divnix/blank?ref=5a5d2684073d9f563072ed07c871d577a6c614a8";
     blueprint = {
@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.2";
+      url = "github:nix-community/lanzaboote/v0.4.3";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.pre-commit-hooks-nix.follows = "blank";
     };

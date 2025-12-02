@@ -1,10 +1,12 @@
 {
   flake,
   hostName,
+  modulesPath,
   pkgs,
   ...
 }: {
   imports = with flake.modules.nixos; [
+    (modulesPath + "/profiles/qemu-guest.nix")
     base
     cli
   ];

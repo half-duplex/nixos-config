@@ -3,9 +3,11 @@
   flake,
   hostName,
   lib,
+  modulesPath,
   ...
 }: {
   imports = with flake.modules.nixos; [
+    (modulesPath + "/installer/scan/not-detected.nix")
     base
     desktop
     plasma

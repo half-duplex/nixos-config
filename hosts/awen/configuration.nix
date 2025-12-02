@@ -3,6 +3,7 @@
   flake,
   hostName,
   lib,
+  modulesPath,
   perSystem,
   pkgs,
   ...
@@ -10,6 +11,7 @@
   inherit (flake.lib) nginxHeaders;
 in {
   imports = with flake.modules.nixos; [
+    (modulesPath + "/installer/scan/not-detected.nix")
     base
     cli
 

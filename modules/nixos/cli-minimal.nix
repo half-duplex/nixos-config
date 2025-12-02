@@ -122,7 +122,6 @@ in {
       RANDFILE = "$XDG_DATA_HOME/openssl/rnd";
       TERMINFO = "$XDG_DATA_HOME/terminfo";
       TERMINFO_DIRS = "$XDG_DATA_HOME/terminfo:$TERMINFO_DIRS";
-      VIMINIT = ":source $XDG_CONFIG_HOME/vim/vimrc";
       WGETRC = "$XDG_CONFIG_HOME/wget/wgetrc";
       WINEPREFIX = "$XDG_DATA_HOME/wineprefixes/default";
     };
