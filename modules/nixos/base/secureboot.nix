@@ -21,7 +21,7 @@ in {
       loader.systemd-boot.enable = lib.mkForce false;
       lanzaboote = {
         enable = true;
-        pkiBundle = "/etc/secureboot";
+        pkiBundle = "/var/lib/sbctl";
         settings.reboot-for-bitlocker = config.boot.loader.systemd-boot.rebootForBitlocker;
       };
     };

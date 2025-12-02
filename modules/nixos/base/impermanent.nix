@@ -32,7 +32,6 @@
   config,
   inputs,
   lib,
-  options,
   ...
 }: let
   inherit (lib) mkIf;
@@ -64,10 +63,6 @@ in {
                 path = "NetworkManager/system-connections";
                 mode = "0700";
               })
-              {
-                path = "secureboot";
-                mode = "0700";
-              }
             ];
           };
           dirs = [
@@ -89,6 +84,11 @@ in {
                 (mkIf config.hardware.rasdaemon.enable "rasdaemon")
                 (mkIf config.virtualisation.libvirtd.qemu.swtpm.enable "swtpm-localca")
                 (mkIf config.services.tailscale.enable "tailscale")
+                {
+                  # bound instead of configured with pkiBundle so that `sbctl` works
+                  path = "sbctl";
+                  mode = "0700";
+                }
               ];
               files = [
                 (mkIf config.networking.networkmanager.enable {
