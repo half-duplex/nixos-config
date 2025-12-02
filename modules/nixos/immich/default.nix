@@ -91,7 +91,7 @@ in {
                 connect-src = "'self' https://tiles.immich.cloud/ https://static.immich.cloud/tiles/";
                 frame-ancestors = "'self'";
                 img-src = "'self' blob: data:";
-                script-src = "'self' 'unsafe-inline'";
+                script-src = "'self' 'unsafe-inline' 'wasm-unsafe-eval'";
                 style-src = "'self' 'unsafe-inline'";
                 worker-src = "'self' blob:";
               };
