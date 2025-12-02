@@ -50,7 +50,7 @@ in {
       "xt_tcpudp"
     ];
     extraModprobeConfig = ''
-      options kvm_amd nested=1
+      options kvm_amd nested=1 sev=1 sev_es=1 avic=1
       options kvm_intel nested=1
     '';
 
@@ -119,6 +119,7 @@ in {
       #"loglevel=0"
       "intel_iommu=on" # Having both OK
       "efi=disable_early_pci_dma"
+      "mem_encrypt=on"
 
       # TODO apply per-machine based on cpu
       #"spectre_v2=on"
