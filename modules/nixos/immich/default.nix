@@ -68,6 +68,7 @@ in {
       immich = {
         enable = true;
         accelerationDevices = ["/dev/dri/renderD128"];
+        database.enableVectors = false; # remove when system.stateVersion >= 25.11
         environment = {
           IMMICH_CONFIG_FILE = config.sops.templates."immich.json".path;
         };
