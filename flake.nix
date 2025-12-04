@@ -19,7 +19,7 @@
       inputs.pre-commit-hooks-nix.follows = "blank";
     };
     nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi/main";
+      url = "github:nvmd/nixos-raspberrypi/develop";
       inputs.argononed.follows = "blank";
       # https://github.com/nvmd/nixos-raspberrypi/issues/90
       #inputs.nixpkgs.follows = "nixpkgs";

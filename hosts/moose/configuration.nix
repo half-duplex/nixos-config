@@ -8,6 +8,7 @@
   imports = with flake.modules.nixos; [
     (modulesPath + "/installer/scan/not-detected.nix")
     nixos-raspberrypi.nixosModules.raspberry-pi-4.base
+    nixos-raspberrypi.nixosModules.raspberry-pi-4.display-vc4
     base
     cli-minimal
 
@@ -34,7 +35,10 @@
     };
   };
 
-  boot.kernelParams = ["console=serial0,115200"];
+  boot.kernelParams = [
+    "ip=10.0.0.9::10.0.0.1:255.255.255.0::eth0:off:10.0.0.1"
+    "console=serial0,115200"
+  ];
   networking.hostName = hostName;
 
   users.users.mal.openssh.authorizedKeys.keys = [
