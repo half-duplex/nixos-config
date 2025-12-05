@@ -354,6 +354,7 @@ in {
   };
 
   nix = {
+    channel.enable = false;
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     extraOptions = ''
