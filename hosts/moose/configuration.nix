@@ -15,6 +15,9 @@
     samba
     #./backup-repo.nix
   ];
+  # fix output dying in stage1 when vc4 fails to load a fw blob or something
+  # https://github.com/nvmd/nixos-raspberrypi/issues/49
+  boot.blacklistedKernelModules = [ "vc4" ];
 
   mal = {
     hardware = "rpi4";
