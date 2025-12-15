@@ -79,6 +79,7 @@ in {
         port = 41519;
       };
       rutorrent.enable = true;
+      flood.enable = true;
       samba = {
         enable = true;
         discoverable = true;

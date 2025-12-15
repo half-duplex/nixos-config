@@ -9,6 +9,7 @@
 
   inherit (flake.lib) nginxHeaders;
 
+  floodCfg = config.mal.services.flood;
   rtCfg = config.mal.services.rtorrent;
   rutCfg = config.mal.services.rutorrent;
 in {
@@ -22,6 +23,11 @@ in {
       watchDir = mkOption {
         default = "/persist/rtorrent/watch";
         description = "Path for watched load/start directories";
+        type = types.path;
+      };
+      rpcSocket = mkOption {
+        default = "/run/rtorrent/rpc.sock";
+        description = "Path for rtorrent's RPC socket";
         type = types.path;
       };
       sessionDir = mkOption {
@@ -64,6 +70,22 @@ in {
         type = types.path;
       };
     };
+    flood = {
+      enable = lib.mkEnableOption "Configure the Flood frontend for rtorrent";
+      hostName = mkOption {
+        default = "dl.${config.networking.fqdn}";
+        description = "The hostname rutorrent will be accessible on";
+        type = types.str;
+      };
+      htpasswdFile = mkOption {
+        default = "/persist/rutorrent/htpasswd";
+        description = ''
+          The htpasswd file protecting rutorrent.
+          Generate hashes with `mkpasswd -m yescrypt`
+        '';
+        type = types.path;
+      };
+    };
   };
 
   config = mkIf rtCfg.enable {
@@ -71,6 +93,7 @@ in {
       pyrosimple
       transmission_4 # useful for transmission-show etc
     ];
+    users.users.mal.extraGroups = [config.services.rtorrent.group];
     services.rtorrent = {
       enable = true;
       dataDir = rtCfg.dataDir;
@@ -79,7 +102,6 @@ in {
       # TODO: create sessionDir and watchDir/{start,load} with tmpfiles.d
       configText = lib.mkOverride 10 ''
         directory.default.set = "${rtCfg.dataDir}"
-        method.insert = cfg.rpcsock, private|const|string, (cat,"/run/rtorrent/rpc.sock")
 
         network.port_range.set = ${toString config.services.rtorrent.port}-${toString config.services.rtorrent.port}
         network.port_random.set = no
@@ -128,12 +150,25 @@ in {
         log.add_output = "info", "log"
         #log.add_output = "tracker_debug", "log"
 
-        scgi_local = (cfg.rpcsock)
-        schedule = scgi_group,0,0,"execute.nothrow=chown,\":rtorrent\",(cfg.rpcsock)"
-        schedule = scgi_permission,0,0,"execute.nothrow=chmod,\"g+w,o=\",(cfg.rpcsock)"
+        scgi_local = "${rtCfg.rpcSocket}"
+        schedule = scgi_group,0,0,"execute.nothrow=chown,\":rtorrent\",${rtCfg.rpcSocket}"
+        schedule = scgi_permission,0,0,"execute.nothrow=chmod,\"g+w,o=\",${rtCfg.rpcSocket}"
+
+        # flood
+        method.redirect=load.throw,load.normal
+        method.redirect=load.start_throw,load.start
+        method.insert=d.down.sequential,value|const,0
+        method.insert=d.down.sequential.set,value|const,0
       '';
     };
 
+    services.flood = mkIf floodCfg.enable {
+      enable = true;
+      extraArgs = [
+        "--rtsocket=${rtCfg.rpcSocket}"
+        "--assets=false"
+      ];
+    };
     services.rutorrent = mkIf rutCfg.enable {
       # This nixpkgs module is cursed, it creates a service to dumps the
       # entire application into the dataDir... TODO: fix it
@@ -164,18 +199,47 @@ in {
         "tracklabels"
       ];
     };
-    services.nginx.virtualHosts.${rutCfg.hostName} = mkIf rutCfg.enable {
-      # proxy configured by services.rutorrent
-      basicAuthFile = rutCfg.htpasswdFile;
-      onlySSL = true;
-      enableACME = true;
-      extraConfig = nginxHeaders {
-        Content-Security-Policy = {
-          font-src = "'self' data:";
-          script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
-          style-src = "'self' 'unsafe-inline'";
-          frame-ancestors = "'self'";
+    services.nginx.virtualHosts = {
+      ${floodCfg.hostName} = mkIf floodCfg.enable {
+        basicAuthFile = floodCfg.htpasswdFile;
+        onlySSL = true;
+        enableACME = true;
+        extraConfig = nginxHeaders {
+          Content-Security-Policy = {
+            font-src = "'self' data:";
+            style-src = "'self' 'unsafe-inline'";
+          };
         };
+        root = "${config.services.flood.package}/lib/node_modules/flood/dist/assets";
+        locations."/".tryFiles = "$uri /index.html";
+        locations."/api" = {
+          proxyPass = "http://localhost:${toString config.services.flood.port}";
+          extraConfig = ''
+            proxy_buffering off;
+            proxy_cache off;
+          '';
+        };
+      };
+      ${rutCfg.hostName} = mkIf rutCfg.enable {
+        # proxy configured by services.rutorrent
+        basicAuthFile = rutCfg.htpasswdFile;
+        onlySSL = true;
+        enableACME = true;
+        extraConfig = nginxHeaders {
+          Content-Security-Policy = {
+            font-src = "'self' data:";
+            script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
+            style-src = "'self' 'unsafe-inline'";
+            frame-ancestors = "'self'";
+          };
+        };
+      };
+    };
+    systemd.services.flood = mkIf floodCfg.enable {
+      path = [pkgs.mediainfo];
+      serviceConfig = {
+        BindReadOnlyPaths = [rtCfg.dataDir];
+        SupplementaryGroups = [config.services.rtorrent.group];
       };
     };
   };
