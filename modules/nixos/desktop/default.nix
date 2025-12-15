@@ -93,8 +93,9 @@
 
       (vscode-with-extensions.override {
         vscodeExtensions = with pkgs.vscode-extensions; [
-          #ms-python.python  # https://github.com/NixOS/nixpkgs/issues/262000
+          ms-python.python
           ms-vscode.cpptools
+          vscodevim.vim
         ];
       })
     ];
