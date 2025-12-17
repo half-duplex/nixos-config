@@ -153,7 +153,7 @@ in {
       };
       "/boot" = {
         device = "/dev/disk/by-partlabel/esp";
-        options = ["umask=0077"]; # protect /boot/loader/random-seed
+        options = ["noatime" "umask=0077"]; # protect /boot/loader/random-seed
       };
       "/home" = {
         device = "tank/home";
