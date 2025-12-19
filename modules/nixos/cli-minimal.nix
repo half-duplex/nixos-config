@@ -45,7 +45,7 @@ in {
     nmap
     rsync
     socat
-    nixpkgsUnstable.uv # the python package manager
+    uv
     wol
     zip
 

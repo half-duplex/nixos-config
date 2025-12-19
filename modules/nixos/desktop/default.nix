@@ -62,7 +62,7 @@
       evolution
       signal-desktop
       teamspeak3
-      nixpkgsUnstable.teamspeak6-client
+      #nixpkgsUnstable.teamspeak6-client
       telegram-desktop
       thunderbird
 
@@ -71,7 +71,7 @@
       gedit
       gnome-text-editor
       imhex
-      (nixpkgsUnstable.proxmark3.override {hardwarePlatform = "PM3GENERIC";})
+      (proxmark3.override {hardwarePlatform = "PM3GENERIC";})
       remmina
       virt-manager
       wireshark

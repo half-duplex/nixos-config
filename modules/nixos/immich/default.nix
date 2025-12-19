@@ -77,7 +77,7 @@ in {
           MACHINE_LEARNING_CACHE_FOLDER = lib.mkForce (cachePath + "model-cache");
           MPLCONFIGDIR = cachePath + "matplotlib-cache";
         };
-        package = pkgs.nixpkgsUnstable.immich;
+        #package = pkgs.nixpkgsUnstable.immich;
         host = "127.0.0.1"; # "localhost" causes v6-only listen
         mediaLocation = "/mnt/data/immich/media";
         settings = null; # let sops write it

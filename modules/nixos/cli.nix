@@ -22,7 +22,6 @@
 
     alejandra
     black # python-black
-    cargo
     cloc
     gcc
     gnumake
