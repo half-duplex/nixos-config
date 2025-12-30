@@ -228,6 +228,7 @@ in {
         extraConfig = nginxHeaders {
           Content-Security-Policy = {
             font-src = "'self' data:";
+            img-src = "'self' data:";
             script-src = "'self' 'unsafe-eval' 'unsafe-inline'";
             style-src = "'self' 'unsafe-inline'";
             frame-ancestors = "'self'";
