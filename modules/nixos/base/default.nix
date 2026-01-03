@@ -247,8 +247,8 @@ in {
             name = "tank_snap_nobackup";
             type = "snap";
             filesystems = {
-              #"tank/nix<" = true;
-              "tank/home/nobackup" = true;
+              "tank/nix<" = true;
+              "tank/home/nobackup<" = true;
               "tank/persist/nobackup<" = true;
             };
             snapshotting = {
@@ -291,7 +291,7 @@ in {
             filesystems = {
               "tank<" = true;
               "tank/nix<" = false;
-              "tank/home/nobackup" = false;
+              "tank/home/nobackup<" = false;
               "tank/persist/nobackup<" = false;
             };
             snapshotting = {
