@@ -67,6 +67,7 @@
       thunderbird
 
       alacritty
+      android-tools
       chirp
       gedit
       gnome-text-editor
@@ -75,6 +76,9 @@
       remmina
       virt-manager
       wireshark
+
+      corefonts
+      vista-fonts
 
       evince # may be implicit with gnome
       google-chrome
@@ -86,8 +90,6 @@
 
       protontricks
       r2modman
-
-      android-tools
 
       (mpv.override {scripts = [mpvScripts.mpris];})
 
