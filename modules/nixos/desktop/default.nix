@@ -79,6 +79,7 @@
 
       corefonts
       vista-fonts
+      noto-fonts
 
       evince # may be implicit with gnome
       google-chrome
