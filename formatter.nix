@@ -22,9 +22,8 @@
 
       set -x
 
-      deadnix --no-lambda-pattern-names --fail "$@"
-
       alejandra "$@"
+      deadnix --no-lambda-pattern-names --fail "$@"
     '';
 
     meta = {
