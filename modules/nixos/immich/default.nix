@@ -36,10 +36,11 @@
       buttonText = "Log in with SSO";
       clientId = "${config.sops.placeholder.oauth_client_id}";
       clientSecret = "${config.sops.placeholder.oauth_client_secret}";
-      defaultStorageQuota = 1;
+      defaultStorageQuota = 0;
       enabled = true;
-      issuerUrl = "https://auth.sec.gd/application/o/photos/";
-      #signingAlgorithm = "EdDSA"; # not supported by authentik yet?
+      issuerUrl = "https://auth.sec.gd/.well-known/openid-configuration";
+      scope = "openid profile email immich";
+      storageQuotaClaim = "immich_quota_gb";
     };
     trash.days = 90;
     user.deleteDelay = 90;
