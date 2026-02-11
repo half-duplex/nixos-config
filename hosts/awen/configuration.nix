@@ -522,7 +522,6 @@ in {
 
   environment.systemPackages = with pkgs; [
     perSystem.self.immich-stacker
-    ntfs3g
     virtio-win
   ];
 
