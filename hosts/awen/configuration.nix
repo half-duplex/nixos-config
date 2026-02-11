@@ -38,21 +38,21 @@ in {
         hostname = "panopticon.sec.gd";
         settings = {
           mqtt = {
-            host = "10.0.0.6";
+            host = "[::1]";
             user = "frigate";
             password = "{FRIGATE_MQTT_PASSWORD}";
           };
           cameras = {
             wyze = {
               enabled = true;
-              live = {stream_name = "wyze_360";};
+              live = {stream_name = "wyze";};
               ffmpeg.inputs = [
                 {
-                  path = "rtsp://[::1]:8554/wyze_360?mp4";
+                  path = "rtsp://[::1]:8554/wyze";
                   roles = ["detect"];
                 }
                 {
-                  path = "rtsp://[::1]:8554/wyze_1080?mp4";
+                  path = "rtsp://[::1]:8554/wyze_hd";
                   roles = ["record"];
                 }
               ];
@@ -62,10 +62,11 @@ in {
             };
           };
           go2rtc.streams = {
-            wyze_360 = "rtsp://10.0.65.203:8554/360p?mp4";
-            wyze_1080 = "rtsp://10.0.65.203:8554/1080p?mp4";
+            wyze = "rtsp://\${cam_wyze}/sd";
+            wyze_hd = "rtsp://\${cam_wyze}/hd";
           };
         };
+        secrets = ["cam_wyze"];
       };
       immich.enable = true;
       navidrome.enable = true;

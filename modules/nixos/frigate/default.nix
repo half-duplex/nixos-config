@@ -19,6 +19,10 @@ in {
         freeformType = (pkgs.formats.yaml {}).type;
       };
     };
+    secrets = lib.mkOption {
+      description = "Names of sops/systemd secrets for go2rtc";
+      type = lib.types.listOf lib.types.str;
+    };
     directories = {
       # TODO: patch frigate to let me configure its media directories.
       # alternatively, wrap it in a pile of service bind mounts.
@@ -72,9 +76,20 @@ in {
       enableACME = true;
       # impractical to add security headers to all of the locations =\
     };
-    sops.secrets."frigate.env" = {
-      restartUnits = ["frigate.service"];
-      sopsFile = secrets/${config.networking.hostName}.yaml;
-    };
+    systemd.services.go2rtc.serviceConfig.LoadCredential =
+      lib.map (secret: "${secret}:${config.sops.secrets.${secret}.path}") cfg.secrets;
+    sops.secrets =
+      (
+        lib.genAttrs cfg.secrets (_: {
+          restartUnits = ["go2rtc.service"];
+          sopsFile = secrets/${config.networking.hostName}.yaml;
+        })
+      )
+      // {
+        "frigate.env" = {
+          restartUnits = ["frigate.service"];
+          sopsFile = secrets/${config.networking.hostName}.yaml;
+        };
+      };
   };
 }
