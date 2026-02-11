@@ -3,7 +3,7 @@
     # system
     nixpkgs.url = "nixpkgs/nixos-25.11";
     nixpkgsStaging.url = "nixpkgs/release-25.11";
-    nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
+    #nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
     blank.url = "github:divnix/blank?ref=5a5d2684073d9f563072ed07c871d577a6c614a8";
     blueprint = {
       url = "github:numtide/blueprint";
@@ -20,8 +20,7 @@
     nixos-raspberrypi = {
       url = "github:nvmd/nixos-raspberrypi/develop";
       inputs.argononed.follows = "blank";
-      # https://github.com/nvmd/nixos-raspberrypi/issues/90
-      #inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
