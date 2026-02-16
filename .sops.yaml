@@ -5,6 +5,14 @@ keys:
   - &awen age10cq2vaw34z8870gf4p0pw9w5e58kesdhgnyh0k692eca4fgq29pswykl72
   - &t14s age14nh6ula72rtlvda90lyjpply8uezul0lhgthtl58hu0gnmspxvmsnx2q4m
 creation_rules:
+  - path_regex: /all-hosts(?:/.+)?\..+$
+    key_groups:
+    - age:
+      - *mal_awdbox
+      - *mal_awen
+      - *awdbox
+      - *awen
+      - *t14s
   - path_regex: /awdbox(?:/.+)?\..+$
     key_groups:
     - age:

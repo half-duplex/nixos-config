@@ -9,6 +9,7 @@
 in {
   imports = with flake.modules.nixos; [
     overlays
+    nix-cache
     ./efi.nix
     ./impermanent.nix
     ./remote-unlock.nix
@@ -362,7 +363,7 @@ in {
     '';
     package = pkgs.lixPackageSets.latest.lix;
     settings = {
-      allowed-users = ["@wheel"];
+      allowed-users = ["@wheel" "nix-ssh"];
       auto-optimise-store = true;
       keep-outputs = true;
     };

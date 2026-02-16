@@ -70,6 +70,8 @@ in {
 
   programs.ssh = {
     extraConfig = ''
+      Match user nix-ssh
+          PubkeyAuthentication yes
       Host *.sec.gd
           PubkeyAuthentication yes
           ControlMaster auto

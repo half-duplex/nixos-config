@@ -18,6 +18,7 @@
 
   mal = {
     hardware = "physical";
+    nix-cache.serve.enable = true;
     services = {
       nut = {
         enable = true;
