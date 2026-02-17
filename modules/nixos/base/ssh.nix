@@ -4,32 +4,28 @@
   ...
 }: let
   impermanent = config.mal.impermanence.enable;
+  cfgdir =
+    (
+      if impermanent
+      then "/persist"
+      else "/etc"
+    )
+    + "/ssh/";
 in {
   services.openssh = {
     enable = lib.mkDefault true;
     hostKeys = [
       {
-        path =
-          (
-            if impermanent
-            then "/persist"
-            else "/etc"
-          )
-          + "/ssh/ssh_host_ed25519_key";
+        path = cfgdir + "ssh_host_ed25519_key";
         type = "ed25519";
       }
       {
-        path =
-          (
-            if impermanent
-            then "/persist"
-            else "/etc"
-          )
-          + "/ssh/ssh_host_rsa_key";
+        path = cfgdir + "ssh_host_rsa_key";
         type = "rsa";
         bits = 4096;
       }
     ];
+    authorizedKeysInHomedir = false;
     settings = {
       AllowGroups = ["ssh-users"];
       KbdInteractiveAuthentication = false;
@@ -61,13 +57,6 @@ in {
         "umac-128@openssh.com"
       ];
     };
-    authorizedKeysFiles = lib.mkIf (
-      !config.services.gitea.enable
-      && !config.services.gitlab.enable
-      && !config.services.gitolite.enable
-      && !config.services.gerrit.enable
-      && !config.services.forgejo.enable
-    ) (lib.mkForce ["/etc/ssh/authorized_keys.d/%u"]);
   };
   # Don't stop with multi-user, stay while services stop
   systemd.${
