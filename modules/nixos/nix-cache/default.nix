@@ -38,7 +38,7 @@ in {
 
     sops.secrets = {
       nixCacheSSHKey.sopsFile = secrets/all-hosts.yaml;
-      nix-store-key.sopsFile = storeKeySopsFile;
+      nix-store-key = lib.mkIf (builtins.pathExists storeKeySopsFile) {sopsFile = storeKeySopsFile;};
     };
   };
 }
