@@ -46,7 +46,7 @@ in {
           cameras = {
             wyze = {
               enabled = true;
-              live = {stream_name = "wyze";};
+              live = {stream_name = "wyze_hd";};
               ffmpeg.inputs = [
                 {
                   path = "rtsp://[::1]:8554/wyze";
