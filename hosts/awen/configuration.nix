@@ -318,6 +318,8 @@ in {
           # this vhost must have nginx basic auth, else the content-dav proxy credentials can be abused
           basicAuthFile = pkgs.writeText "htpasswd-dav" ''
             mal-seedvault:$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C
+            nadia-seedvault:$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6
+            ivy-seedvault:$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q
           '';
           enableACME = true;
           onlySSL = true;
@@ -444,6 +446,18 @@ in {
             username = "mal-seedvault";
             password = "{bcrypt}$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C";
             directory = "/data/backups/phone/";
+            permissions = "CRUD";
+          }
+          {
+            username = "nadia-seedvault";
+            password = "{bcrypt}$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6";
+            directory = "/data/backups/phone-nadia/";
+            permissions = "CRUD";
+          }
+          {
+            username = "ivy-seedvault";
+            password = "{bcrypt}$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q";
+            directory = "/data/backups/phone-ivy/";
             permissions = "CRUD";
           }
         ];
