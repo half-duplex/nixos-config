@@ -326,6 +326,7 @@ in {
           extraConfig =
             webdavDestination
             + ''
+              access_log /var/log/nginx/dav.log;
               proxy_buffering off;
               proxy_request_buffering off;
             '';
@@ -334,16 +335,20 @@ in {
         "hass.sec.gd" = {
           onlySSL = true;
           enableACME = true;
-          extraConfig = nginxHeaders {
-            Content-Security-Policy = {
-              connect-src = "'self' https://brands.home-assistant.io"; # icons via SW
-              font-src = "'self' data: https://cdnjs.cloudflare.com";
-              frame-ancestors = "'self'";
-              img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
-              script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-              style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-            };
-          };
+          extraConfig =
+            nginxHeaders {
+              Content-Security-Policy = {
+                connect-src = "'self' https://brands.home-assistant.io"; # icons via SW
+                font-src = "'self' data: https://cdnjs.cloudflare.com";
+                frame-ancestors = "'self'";
+                img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
+                script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+                style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+              };
+            }
+            + ''
+              access_log /var/log/nginx/homeassistant.log;
+            '';
           locations."/" = {
             proxyPass = "http://10.0.0.7:8123";
             proxyWebsockets = true;
@@ -352,23 +357,27 @@ in {
         "media.sec.gd" = {
           onlySSL = true;
           enableACME = true;
-          extraConfig = nginxHeaders {
-            Content-Security-Policy = {
-              font-src = "'self' data:";
-              img-src = [
-                "'self'"
-                "blob:"
-                "https://repo.jellyfin.org/releases/plugin/images/"
-                "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
-              ];
-              script-src = "'self' 'unsafe-inline' blob:";
-              style-src = "'self' 'unsafe-inline' blob:";
-              frame-ancestors = "'self'";
-            };
-            Cross-Origin-Opener-Policy = "same-origin";
-            Cross-Origin-Embedder-Policy = "credentialless";
-            Cross-Origin-Resource-Policy = "same-origin";
-          };
+          extraConfig =
+            nginxHeaders {
+              Content-Security-Policy = {
+                font-src = "'self' data:";
+                img-src = [
+                  "'self'"
+                  "blob:"
+                  "https://repo.jellyfin.org/releases/plugin/images/"
+                  "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
+                ];
+                script-src = "'self' 'unsafe-inline' blob:";
+                style-src = "'self' 'unsafe-inline' blob:";
+                frame-ancestors = "'self'";
+              };
+              Cross-Origin-Opener-Policy = "same-origin";
+              Cross-Origin-Embedder-Policy = "credentialless";
+              Cross-Origin-Resource-Policy = "same-origin";
+            }
+            + ''
+              access_log /var/log/nginx/media.log;
+            '';
           locations."/" = {
             proxyPass = "http://127.0.0.1:8096";
             proxyWebsockets = true;
@@ -381,14 +390,18 @@ in {
           # proxy configured by services.trilium-server
           onlySSL = true;
           enableACME = true;
-          extraConfig = nginxHeaders {
-            Content-Security-Policy = {
-              connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
-              img-src = "'self' data:";
-              script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
-              style-src = "'self' 'unsafe-inline'";
-            };
-          };
+          extraConfig =
+            nginxHeaders {
+              Content-Security-Policy = {
+                connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
+                img-src = "'self' data:";
+                script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
+                style-src = "'self' 'unsafe-inline'";
+              };
+            }
+            + ''
+              access_log /var/log/nginx/notes.log;
+            '';
         };
       };
     };
