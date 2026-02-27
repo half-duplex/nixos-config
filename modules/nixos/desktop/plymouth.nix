@@ -12,21 +12,27 @@ in {
       description = "Configure plymouth";
       type = lib.types.bool;
     };
+    bgrtFallback = lib.mkOption {
+      default = null;
+      description = "BGRT fallback image";
+      type = lib.types.nullOr lib.types.package;
+    };
   };
 
   config = lib.mkIf cfg.enable {
     boot = {
       consoleLogLevel = 3;
-      kernelParams = ["plymouth.use-simpledrm"];
       plymouth = {
         enable = true;
-        # todo: non-bgrt default
         theme = "bgrt-clean";
-        themePackages = [perSystem.self.plymouth-bgrt-clean-theme];
-        # not available in 24.11, so kernelCommandline for now
-        #extraConfig = ''
-        #  UseSimpledrm=1
-        #'';
+        themePackages = [
+          (perSystem.self.plymouth-bgrt-clean-theme.override {
+            bgrtFallback = cfg.bgrtFallback;
+          })
+        ];
+        extraConfig = ''
+          UseSimpledrm=1
+        '';
       };
     };
   };

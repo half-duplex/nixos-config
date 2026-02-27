@@ -1,6 +1,7 @@
 {
   pname,
   pkgs,
+  bgrtFallback ? null,
   ...
 }: let
   inherit (pkgs) lib;
@@ -11,7 +12,11 @@ in
 
     src = ./source;
     dontBuild = true;
-    installPhase = ''
+    installPhase = let
+      bgrtFallbackCp = lib.optionalString (!isNull bgrtFallback) ''
+        cp "${bgrtFallback}" "$out/share/plymouth/themes/bgrt-clean/images/bgrt-fallback.png"
+      '';
+    in ''
       runHook preInstall
 
       mkdir -p "$out/share/plymouth/themes/bgrt-clean/images"
@@ -20,7 +25,8 @@ in
         "$out/share/plymouth/themes/bgrt-clean/bgrt-clean.plymouth"
       cp "${pkgs.plymouth}"/share/plymouth/themes/spinner/*.png \
         "$out/share/plymouth/themes/bgrt-clean/images"
-      rm "$out/share/plymouth/themes/bgrt-clean/images/watermark.png" || true
+      ${bgrtFallbackCp}
+      rm -f "$out/share/plymouth/themes/bgrt-clean/images/watermark.png"
 
       runHook postInstall
     '';
