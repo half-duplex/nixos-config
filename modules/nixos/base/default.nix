@@ -406,6 +406,7 @@ in {
     tailscale = {
       enable = true;
       interfaceName = "ts0";
+      disableUpstreamLogging = true;
     };
   };
 
