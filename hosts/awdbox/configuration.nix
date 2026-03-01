@@ -2,6 +2,7 @@
   config,
   flake,
   hostName,
+  inputs,
   lib,
   modulesPath,
   pkgs,
@@ -14,6 +15,7 @@
     plasma
     samba
     ups
+    inputs.picotron.nixosModules.default
   ];
 
   mal = {
@@ -84,6 +86,7 @@
     simple-scan
     qmk
     qmk_hid
+    picotron
 
     (writeShellApplication {
       name = "bright";

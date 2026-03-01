@@ -32,6 +32,10 @@
       url = "github:nix-community/authentik-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    picotron = {
+      url = "github:half-duplex/picotron-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     werehouse = {
       url = "git+https://codeberg.org/s0ph0s/werehouse.git";
       inputs.nixpkgs.follows = "nixpkgs";

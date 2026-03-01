@@ -448,6 +448,26 @@
         "type": "github"
       }
     },
+    "picotron": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772401938,
+        "narHash": "sha256-EKgaHyORrBGZZl89DkO/vQu+4lVlk6VryU4iTudeQ48=",
+        "owner": "half-duplex",
+        "repo": "picotron-nix",
+        "rev": "22d08987fa7e688aba0d55d284464f1a1703cfa1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "half-duplex",
+        "repo": "picotron-nix",
+        "type": "github"
+      }
+    },
     "pre-commit": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -531,6 +551,7 @@
         "nixos-raspberrypi": "nixos-raspberrypi",
         "nixpkgs": "nixpkgs",
         "nixpkgsStaging": "nixpkgsStaging",
+        "picotron": "picotron",
         "sops-nix": "sops-nix",
         "werehouse": "werehouse"
       }
