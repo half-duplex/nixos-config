@@ -37,6 +37,8 @@ in {
       frigate = {
         enable = true;
         hostname = "panopticon.sec.gd";
+        secrets = ["cam_wyze"];
+        useUSBCoral = true;
         settings = {
           mqtt = {
             host = "[::1]";
@@ -67,7 +69,6 @@ in {
             wyze_hd = "rtsp://\${cam_wyze}/hd";
           };
         };
-        secrets = ["cam_wyze"];
       };
       immich.enable = true;
       navidrome.enable = true;
