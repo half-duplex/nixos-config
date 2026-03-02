@@ -572,9 +572,6 @@ in {
     add_bridge_mapping eth1 2
   '';
 
-  # while the ups is away
-  systemd.services.upsdrv.wantedBy = lib.mkForce [];
-
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "25.05";
 }
