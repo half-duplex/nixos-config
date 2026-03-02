@@ -9,7 +9,7 @@
 in {
   imports = with flake.modules.nixos; [
     overlays
-    nix-cache
+    nix-remote
     ./efi.nix
     ./impermanent.nix
     ./remote-unlock.nix

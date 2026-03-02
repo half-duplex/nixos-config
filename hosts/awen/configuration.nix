@@ -31,7 +31,7 @@ in {
 
   mal = {
     hardware = "physical";
-    nix-cache.serve.enable = true;
+    nix-cache.serve = true;
     services = {
       authentik.enable = true;
       frigate = {

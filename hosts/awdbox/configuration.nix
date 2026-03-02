@@ -20,7 +20,7 @@
 
   mal = {
     hardware = "physical";
-    nix-cache.serve.enable = true;
+    nix-cache.serve = true;
     plymouth.bgrtFallback = builtins.path {
       path = /persist/bgrt-fallback.png;
       sha256 = "sha256-tCWAN2P5MvdYmFh3TCxyI2kp/zRNWYvh9gObTIgKbRU=";
