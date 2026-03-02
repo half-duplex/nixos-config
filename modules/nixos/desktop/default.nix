@@ -53,6 +53,7 @@
       rnnoise-plugin
       ffmpeg-full
       gimp
+      pulseaudio # for pactl - no pw equivalent
       yt-dlp
 
       wine
