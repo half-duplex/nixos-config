@@ -9,6 +9,7 @@
     "awdbox" = "FAx+su7wzUxR94JhN31M0PVkV3SlLn6Ofuxg3VHA6tg=";
     "awen" = "0EdqqRpCM7okCedZYN3YX1bv7A3Y6Iuo2mO4Ty30w6M=";
   } [config.networking.hostName];
+  builders = lib.remove cfg.nix-builders.builders [config.networking.hostName];
 in {
   options.mal = {
     nix-cache = {
@@ -71,7 +72,7 @@ in {
         speedFactor = 4;
         supportedFeatures = ["big-parallel" "kvm" "nixos-test"];
       })
-      cfg.nix-builders.builders);
+      builders);
     nix.distributedBuilds = cfg.nix-builders.enable;
     nix.extraOptions = ''
       builders-use-substitutes = true
