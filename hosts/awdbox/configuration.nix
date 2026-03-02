@@ -46,7 +46,6 @@
       "amd_pstate=active"
       "amdgpu.ppfeaturemask=0xfff7ffff"
     ];
-    kernelModules = ["i2c-dev"]; # for DDC
     kernelPackages = lib.mkForce pkgs.linuxPackages;
   };
   console.earlySetup = true;
@@ -58,6 +57,8 @@
 
     # Needed for Resolve
     graphics.extraPackages = with pkgs; [rocmPackages.clr.icd];
+
+    i2c.enable = true; # for DDC
 
     keyboard.qmk.enable = true;
     printers = {
@@ -75,6 +76,7 @@
     };
   };
 
+  users.users.mal.extraGroups = [config.hardware.i2c.group];
   users.users.mal.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKu0BzxhF9J7L/0CLDuheOZurqEjPo4uSAFHNHmBXa0 mal@nova"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG8CzUQOCHIXBPVrjt9uq417h/zAyBN+hfS/Yh56CX/b mal@awen"
@@ -126,7 +128,6 @@
     interfaces.eth0.wakeOnLan.enable = true;
   };
   services = {
-    displayManager.defaultSession = lib.mkForce "plasmax11";
     ollama = {
       enable = true;
       package = pkgs.ollama-rocm;
@@ -249,9 +250,10 @@
 
   systemd.services = {
     ensure-printers.wantedBy = lib.mkForce []; # fails if printer off
+    cups-browsed.wantedBy = lib.mkForce []; # causes cups.socket to start cups.service
     ollama.wantedBy = lib.mkForce [];
-    postgresql.wantedBy = lib.mkForce [];
   };
+  systemd.targets.postgresql.wantedBy = lib.mkForce [];
 
   programs.gnupg.agent.enable = true;
 
