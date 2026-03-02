@@ -1,10 +1,16 @@
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     vimAlias = true;
     configure = {
       packages.sconfig.start = with pkgs.vimPlugins; [
+        vim-autoswap
         vim-bracketed-paste
         vim-gitgutter
         vim-nix
@@ -42,6 +48,7 @@
         set smartcase
         set tabstop=4
         set textwidth=99
+        set title
         set shiftwidth=4
         highlight ColorColumn ctermbg=0
         map <F8> <Esc>:w<CR>:!clear<CR>:! time ./%<CR>
@@ -166,4 +173,7 @@
       '';
     };
   };
+  environment.systemPackages = lib.mkIf config.services.xserver.enable [
+    pkgs.wmctrl # required by vim-autoswap
+  ];
 }
