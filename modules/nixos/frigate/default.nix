@@ -8,6 +8,7 @@
 in {
   options.mal.services.frigate = {
     enable = lib.mkEnableOption "Configure Frigate NVR";
+    useUSBCoral = lib.mkEnableOption "Use a USB Coral TPU for detection";
     hostname = lib.mkOption {
       default = "panopticon.sec.gd";
       description = "The nginx vhost to configure";
@@ -36,8 +37,8 @@ in {
       checkConfig = false; # doesn't work when using env vars
       hostname = cfg.hostname;
       vaapiDriver = "radeonsi";
-      settings =
-        lib.attrsets.recursiveUpdate {
+      settings = lib.mkMerge [
+        {
           auth = {
             enabled = true;
             cookie_secure = true;
@@ -51,12 +52,20 @@ in {
           };
           ffmpeg.hwaccel_args = "preset-vaapi";
         }
-        cfg.settings;
+        (lib.optionalAttrs cfg.useUSBCoral {
+          detectors.coral = {
+            type = "edgetpu";
+            device = "usb";
+          };
+        })
+        cfg.settings
+      ];
     };
+    hardware.coral.usb.enable = cfg.useUSBCoral;
     systemd.services.frigate = {
       serviceConfig = {
         EnvironmentFile = config.sops.secrets."frigate.env".path;
-        SupplementaryGroups = ["video"];
+        SupplementaryGroups = ["render" "video"];
       };
     };
     services.go2rtc = {
