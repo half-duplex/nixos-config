@@ -184,7 +184,7 @@ in {
   #security.lockKernelModules = true;
   security.protectKernelImage = true; # kernel.kexec_load_disabled=1 and nohibernate
   #security.forcePageTableIsolation = true;
-  security.unprivilegedUsernsClone = true;
+  security.unprivilegedUsernsClone = true; # linux_hardened only
   security.virtualisation.flushL1DataCache = "always";
   security.apparmor.enable = true;
   security.apparmor.killUnconfinedConfinables = true;
