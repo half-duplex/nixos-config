@@ -107,7 +107,7 @@ in {
             }
             {
               Name = "Wayback Machine";
-              URLTemplate = "https://web.archive.org/web/*/{searchTerms}";
+              URLTemplate = "https://web.archive.org/{searchTerms}";
               Method = "GET";
               IconURL = "https://web-static.archive.org/_static/images/logo_archive-sm.png";
               Alias = "wb";
