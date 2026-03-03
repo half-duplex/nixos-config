@@ -42,7 +42,7 @@ in {
       protocol = "ssh-ng";
       keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIALi1GW5oe3dH4wmxu85JdIQFkrJeGbVEvAUgHThqAn nix-ssh"];
     };
-    users.users.nix-ssh.extraGroups = lib.mkIf config.nix.sshServe.enable ["ssh-users"];
+    users.users.nix-ssh = lib.mkIf config.nix.sshServe.enable {extraGroups = ["ssh-users"];};
     sops.secrets.nixCacheSSHKey.sopsFile = secrets/all-hosts.yaml;
 
     # cache server
