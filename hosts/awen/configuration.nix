@@ -16,6 +16,7 @@ in {
     cli
 
     authentik
+    coraltpu
     frigate
     immich
     navidrome
@@ -32,6 +33,7 @@ in {
   mal = {
     hardware = "physical";
     nix-cache.serve = true;
+    coraltpu.enable = true;
     services = {
       authentik.enable = true;
       frigate = {
