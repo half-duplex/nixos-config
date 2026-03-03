@@ -65,7 +65,7 @@ in {
     systemd.services.frigate = {
       serviceConfig = {
         EnvironmentFile = config.sops.secrets."frigate.env".path;
-        SupplementaryGroups = ["render" "video"];
+        SupplementaryGroups = ["video"];
       };
     };
     services.go2rtc = {
