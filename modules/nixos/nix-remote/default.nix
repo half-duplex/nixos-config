@@ -9,7 +9,7 @@
     "awdbox" = "FAx+su7wzUxR94JhN31M0PVkV3SlLn6Ofuxg3VHA6tg=";
     "awen" = "0EdqqRpCM7okCedZYN3YX1bv7A3Y6Iuo2mO4Ty30w6M=";
   } [config.networking.hostName];
-  builders = lib.remove [config.networking.hostName] cfg.nix-builders.builders;
+  builders = lib.remove config.networking.hostName cfg.nix-builders.builders;
 in {
   options.mal = {
     nix-cache = {
