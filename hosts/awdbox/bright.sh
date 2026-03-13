@@ -17,7 +17,7 @@ then
 fi
 
 # Ensure root, using pkexec for gui support
-[ "$UID" -eq 0 ] || exec pkexec "$0" "$@"
+#[ "$UID" -eq 0 ] || exec pkexec "$0" "$@"
 
 if [ -z "$displays" ] ; then
     # Get DDC display IDs
@@ -36,5 +36,6 @@ fi
 
 # Set brightness
 for display in $displays ; do
-    ddcutil -d "$display" setvcp "$VCP_BRIGHTNESS" "$brightness"
+    ddcutil -d "$display" setvcp "$VCP_BRIGHTNESS" "$brightness" &
 done
+wait
