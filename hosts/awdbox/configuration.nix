@@ -88,7 +88,9 @@
     simple-scan
     qmk
     qmk_hid
+    love
     picotron
+    azure-functions-core-tools
 
     (writeShellApplication {
       name = "bright";
