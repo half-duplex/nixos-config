@@ -18,7 +18,6 @@
     sqlite
     vbindiff
     whois
-    xclip
 
     alejandra
     black # python-black

@@ -48,6 +48,8 @@
       pavucontrol
       powertop
       redshift
+      wl-clipboard
+      xclip
 
       carla
       rnnoise-plugin
