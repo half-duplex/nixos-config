@@ -39,7 +39,7 @@ in {
       frigate = {
         enable = true;
         hostname = "panopticon.sec.gd";
-        secrets = ["cam_wyze"];
+        secrets = ["cam_task" "cam_workshop" "cam_wyze"];
         useUSBCoral = true;
         settings = {
           mqtt = {
@@ -48,16 +48,36 @@ in {
             password = "{FRIGATE_MQTT_PASSWORD}";
           };
           cameras = {
+            task = {
+              enabled = true;
+              live.stream_name = "task_hd";
+              ffmpeg.inputs = [
+                {
+                  path = "rtsp://[::1]:8554/task_hd?timeout=30";
+                  roles = [];
+                }
+              ];
+            };
+            workshop = {
+              enabled = true;
+              live.stream_name = "workshop_hd";
+              ffmpeg.inputs = [
+                {
+                  path = "rtsp://[::1]:8554/workshop_hd?timeout=30";
+                  roles = [];
+                }
+              ];
+            };
             wyze = {
               enabled = true;
               live = {stream_name = "wyze_hd";};
               ffmpeg.inputs = [
                 {
-                  path = "rtsp://[::1]:8554/wyze";
+                  path = "rtsp://[::1]:8554/wyze?timeout=30";
                   roles = ["detect"];
                 }
                 {
-                  path = "rtsp://[::1]:8554/wyze_hd";
+                  path = "rtsp://[::1]:8554/wyze_hd?timeout=30";
                   roles = ["record"];
                 }
               ];
@@ -67,8 +87,12 @@ in {
             };
           };
           go2rtc.streams = {
-            wyze = "rtsp://\${cam_wyze}/sd";
-            wyze_hd = "rtsp://\${cam_wyze}/hd";
+            #task = "rtsp://\${cam_task}/sd#timeout=30";
+            task_hd = "rtsp://\${cam_task}/hd#timeout=30";
+            #workshop = "rtsp://\${cam_workshop}/sd#timeout=30";
+            workshop_hd = "rtsp://\${cam_workshop}/hd#timeout=30";
+            wyze = "rtsp://\${cam_wyze}/sd#timeout=30";
+            wyze_hd = "rtsp://\${cam_wyze}/hd#timeout=30";
           };
         };
       };
