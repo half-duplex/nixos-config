@@ -70,26 +70,31 @@ in {
           ];
           byPath = {
             "/var/lib" = {
-              dirs = [
-                "nixos"
-                "systemd/backlight"
-                "systemd/pstore"
-                "systemd/rfkill"
-                "systemd/timers"
-                (mkIf (config.security.acme.certs != {}) "acme")
-                # https://stackoverflow.com/questions/65957677/
-                (mkIf config.hardware.bluetooth.enable "bluetooth")
-                (mkIf config.services.flatpak.enable "flatpak")
-                (mkIf config.virtualisation.libvirtd.enable "libvirt")
-                (mkIf config.hardware.rasdaemon.enable "rasdaemon")
-                (mkIf config.virtualisation.libvirtd.qemu.swtpm.enable "swtpm-localca")
-                (mkIf config.services.tailscale.enable "tailscale")
-                {
-                  # bound instead of configured with pkiBundle so that `sbctl` works
-                  path = "sbctl";
-                  mode = "0700";
-                }
-              ];
+              dirs =
+                [
+                  "nixos"
+                  "systemd/backlight"
+                  "systemd/pstore"
+                  "systemd/rfkill"
+                  "systemd/timers"
+                  (mkIf (config.security.acme.certs != {}) "acme")
+                  # https://stackoverflow.com/questions/65957677/
+                  (mkIf config.hardware.bluetooth.enable "bluetooth")
+                  (mkIf config.services.flatpak.enable "flatpak")
+                  (mkIf config.virtualisation.libvirtd.enable "libvirt")
+                  (mkIf config.hardware.rasdaemon.enable "rasdaemon")
+                  (mkIf config.virtualisation.libvirtd.qemu.swtpm.enable "swtpm-localca")
+                  (mkIf config.services.tailscale.enable "tailscale")
+                  {
+                    # bound instead of configured with pkiBundle so that `sbctl` works
+                    path = "sbctl";
+                    mode = "0700";
+                  }
+                ]
+                ++ (
+                  lib.optionals (config.services.frigate.enable)
+                  ["frigate/clips" "frigate/exports" "frigate/recordings"]
+                );
               files = [
                 (mkIf config.networking.networkmanager.enable {
                   path = "NetworkManager/secret_key";
