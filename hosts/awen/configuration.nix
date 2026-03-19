@@ -224,6 +224,10 @@ in {
     jellyfin = {
       enable = true;
     };
+    matterbridge = {
+      enable = true;
+      configPath = "/persist/matterbridge/config.toml";
+    };
     mosquitto = {
       enable = true;
       listeners = [
@@ -380,6 +384,12 @@ in {
             proxyPass = "http://10.0.0.7:8123";
             proxyWebsockets = true;
           };
+        };
+        "ii.sec.gd" = {
+          onlySSL = true;
+          enableACME = true;
+          extraConfig = ''access_log /var/log/nginx/chatrelay.log;'';
+          root = "/persist/matterbridge/media/";
         };
         "media.sec.gd" = {
           onlySSL = true;
@@ -576,6 +586,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    ffmpeg-full
     perSystem.self.immich-stacker
     virtio-win
   ];
