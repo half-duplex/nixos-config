@@ -26,6 +26,16 @@
     };
     systemd.services.NetworkManager-wait-online.enable = lib.mkDefault false;
 
+    # Hide discord's log spam
+    # "The resource https://discord.com/assets/[...].woff2 was preloaded using
+    # "link preload but not used within a few seconds from the window's load
+    # "event. Please make sure it has an appropriate `as` value and it is
+    # "preloaded intentionally." and more
+    systemd.user.services."app-discord@" = {
+      overrideStrategy = "asDropin";
+      serviceConfig.StandardOutput = "null";
+    };
+
     services.avahi.enable = true;
 
     security.rtkit.enable = true;
