@@ -53,7 +53,7 @@ in {
               live.stream_name = "task_hd";
               ffmpeg.inputs = [
                 {
-                  path = "rtsp://[::1]:8554/task_hd?timeout=30";
+                  path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/task_hd?timeout=30";
                   roles = [];
                 }
               ];
@@ -63,7 +63,7 @@ in {
               live.stream_name = "workshop_hd";
               ffmpeg.inputs = [
                 {
-                  path = "rtsp://[::1]:8554/workshop_hd?timeout=30";
+                  path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/workshop_hd?timeout=30";
                   roles = [];
                 }
               ];
@@ -73,11 +73,11 @@ in {
               live = {stream_name = "wyze_hd";};
               ffmpeg.inputs = [
                 {
-                  path = "rtsp://[::1]:8554/wyze?timeout=30";
+                  path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/wyze?timeout=30";
                   roles = ["detect"];
                 }
                 {
-                  path = "rtsp://[::1]:8554/wyze_hd?timeout=30";
+                  path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/wyze_hd?timeout=30";
                   roles = ["record"];
                 }
               ];

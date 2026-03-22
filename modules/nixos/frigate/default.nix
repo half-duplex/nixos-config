@@ -5,6 +5,9 @@
   ...
 }: let
   cfg = config.mal.services.frigate;
+  secrets = cfg.secrets ++ ["go2rtc_rtmp_password"];
+  rtmp_port = 8554;
+  webrtc_port = 8555;
 in {
   options.mal.services.frigate = {
     enable = lib.mkEnableOption "Configure Frigate NVR";
@@ -68,17 +71,26 @@ in {
         SupplementaryGroups = ["video"];
       };
     };
+
     services.go2rtc = {
       # why is this not in the nixpkgs module!!!
       # note: stream aliases are a frigate feature, not go2rtc, and cannot be used here
       enable = builtins.hasAttr "go2rtc" config.services.frigate.settings;
       settings = lib.attrsets.recursiveUpdate cfg.settings.go2rtc {
-        # make sure these match what frigate has hardcoded...
+        # make sure these ports match what frigate has hardcoded...
+        # frigate doesn't support auth for the go2rtc api either -.-
         api.listen = ":1984";
-        rtsp.listen = ":8554";
-        webrtc.listen = ":8555";
+        rtsp = {
+          listen = ":" + toString rtmp_port;
+          username = "stream";
+          password = "\${go2rtc_rtmp_password}";
+        };
+        webrtc.listen = ":" + toString webrtc_port;
       };
     };
+    networking.firewall.allowedTCPPorts = [rtmp_port webrtc_port];
+    networking.firewall.allowedUDPPorts = [webrtc_port];
+
     services.nginx.virtualHosts.${cfg.hostname} = {
       # proxy configured by services.frigate
       onlySSL = true;
@@ -86,10 +98,10 @@ in {
       # impractical to add security headers to all of the locations =\
     };
     systemd.services.go2rtc.serviceConfig.LoadCredential =
-      lib.map (secret: "${secret}:${config.sops.secrets.${secret}.path}") cfg.secrets;
+      lib.map (secret: "${secret}:${config.sops.secrets.${secret}.path}") secrets;
     sops.secrets =
       (
-        lib.genAttrs cfg.secrets (_: {
+        lib.genAttrs secrets (_: {
           restartUnits = ["go2rtc.service"];
           sopsFile = secrets/${config.networking.hostName}.yaml;
         })
