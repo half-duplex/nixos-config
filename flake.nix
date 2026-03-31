@@ -4,7 +4,7 @@
     nixpkgs.url = "nixpkgs/nixos-25.11";
     nixpkgsStaging.url = "nixpkgs/release-25.11";
     #nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
-    blank.url = "github:divnix/blank?ref=5a5d2684073d9f563072ed07c871d577a6c614a8";
+    blank.url = "github:divnix/blank?rev=5a5d2684073d9f563072ed07c871d577a6c614a8";
     blueprint = {
       url = "github:numtide/blueprint";
       inputs.nixpkgs.follows = "nixpkgs";
