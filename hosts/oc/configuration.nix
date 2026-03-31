@@ -1,6 +1,7 @@
 {
   flake,
   hostName,
+  lib,
   modulesPath,
   pkgs,
   ...
@@ -8,19 +9,18 @@
   imports = with flake.modules.nixos; [
     (modulesPath + "/profiles/qemu-guest.nix")
     base
-    cli
+    cli-minimal
   ];
 
   mal = {
     hardware = "qemu";
+    secureBoot = false; # TODO
   };
 
-  # Delay for network device - work around https://github.com/NixOS/nixpkgs/issues/98741
-  #boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 2";
-
   boot = {
-    #initrd.kernelModules = [ "virtio_gpu" "drm" ];
-    kernelParams = ["console=ttyAMA0"];
+    initrd.kernelModules = [ "virtio_gpu" "drm" ];
+    #kernelParams = ["console=ttyAMA0"];
+    kernelParams = ["console=ttyS0" "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"];
   };
 
   networking.hostName = hostName;
@@ -31,6 +31,7 @@
 
   environment.systemPackages = with pkgs; [];
 
-  nixpkgs.hostPlatform = "aarch64-linux";
-  system.stateVersion = "25.05";
+  #nixpkgs.hostPlatform = "aarch64-linux";
+  nixpkgs.hostPlatform = "x86_64-linux";
+  system.stateVersion = "25.11";
 }
