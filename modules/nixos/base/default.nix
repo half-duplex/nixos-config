@@ -383,7 +383,18 @@ in {
       };
       mal = {
         isNormalUser = true;
-        extraGroups = ["wheel" "ssh-users" "audio" "video" "networkmanager" "dialout" "input" "wireshark" "libvirtd"];
+        extraGroups = [
+          "wheel"
+          "ssh-users"
+          "audio"
+          "video"
+          "networkmanager"
+          "dialout"
+          "input"
+          "wireshark"
+          "libvirtd"
+          "plugdev"
+        ];
       };
     };
   };

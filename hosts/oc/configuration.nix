@@ -18,7 +18,7 @@
   };
 
   boot = {
-    initrd.kernelModules = [ "virtio_gpu" "drm" ];
+    initrd.kernelModules = ["virtio_gpu" "drm"];
     #kernelParams = ["console=ttyAMA0"];
     kernelParams = ["console=ttyS0" "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"];
   };

@@ -5,6 +5,7 @@
   inputs,
   lib,
   modulesPath,
+  perSystem,
   pkgs,
   ...
 }: {
@@ -164,6 +165,7 @@
       enable = true;
       client.enable = true;
     };
+    udev.packages = [perSystem.self.probe-rs-udev];
     zrepl.settings.jobs = [
       {
         name = "data_snap_nobackup";
@@ -258,6 +260,7 @@
   systemd.targets.postgresql.wantedBy = lib.mkForce [];
 
   programs.gnupg.agent.enable = true;
+  programs.pulseview.enable = true;
 
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "25.05";
