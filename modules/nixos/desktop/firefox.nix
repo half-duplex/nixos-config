@@ -147,6 +147,7 @@ in {
           "browser.startup.page".Value = 3; # Restore session
           "browser.tabs.closeWindowWithLastTab".Value = false;
           "browser.tabs.tabMinWidth".Value = 70;
+          "browser.tabs.unloadOnLowMemory".Value = true;
           "browser.uidensity".Value = 1;
           "browser.uitour.enabled".Value = false;
           "browser.urlbar.showSearchTerms.enabled".Value = false;
