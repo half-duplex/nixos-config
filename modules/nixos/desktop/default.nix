@@ -73,7 +73,6 @@
 
       discord
       element-desktop
-      evolution
       signal-desktop
       teamspeak3
       #nixpkgsUnstable.teamspeak6-client
