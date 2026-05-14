@@ -33,7 +33,7 @@
     lib.foldl (a: b: a // b)
     {
       "/mnt/awdbox/data" = {
-        device = "awdbox:/data";
+        device = "awdbox:/mnt/data";
         fsType = "nfs";
         options = ["noauto" "nfsvers=4" "sec=krb5p"];
       };

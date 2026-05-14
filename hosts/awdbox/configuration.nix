@@ -102,18 +102,20 @@
     })
   ];
 
+  systemd.tmpfiles.rules = ["L /data - - - - /mnt/data"];
+
   fileSystems =
     lib.foldl (a: b: a // b)
     {
-      "/data" = {
+      "/mnt/data" = {
         device = "pool/data";
         fsType = "zfs";
       };
-      "/data/backups" = {
+      "/mnt/data/backups" = {
         device = "pool/backups";
         fsType = "zfs";
       };
-      "/data/nobackup" = {
+      "/mnt/data/nobackup" = {
         device = "pool/nobackup";
         fsType = "zfs";
       };
@@ -152,12 +154,12 @@
     printing.enable = true;
     samba.settings = {
       public = {
-        path = "/data/public";
+        path = "/mnt/data/public";
         #writeable = "yes";
         public = "yes";
       };
       media = {
-        path = "/data/library";
+        path = "/mnt/data/library";
         writeable = "yes";
       };
     };

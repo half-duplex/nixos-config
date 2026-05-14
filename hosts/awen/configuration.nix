@@ -178,13 +178,14 @@ in {
     ];
   };
 
+  systemd.tmpfiles.rules = [
+    # bind mount breaks things when e.g. /mnt/data/backups is remounted
+    "L /data - - - - /mnt/data"
+  ];
+
   fileSystems =
     lib.foldl (a: b: a // b)
     {
-      "/data" = {
-        device = "/mnt/data";
-        options = ["bind"];
-      };
       "/mnt/data" = {
         device = "pool/data";
         fsType = "zfs";
@@ -452,7 +453,7 @@ in {
       '';
     };
     samba.settings.public = {
-      path = "/data/public";
+      path = "/mnt/data/public";
       #writeable = "yes";
       public = "yes";
     };
@@ -495,19 +496,19 @@ in {
           {
             username = "mal-seedvault";
             password = "{bcrypt}$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C";
-            directory = "/data/backups/phone/";
+            directory = "/mnt/data/backups/phone/";
             permissions = "CRUD";
           }
           {
             username = "nadia-seedvault";
             password = "{bcrypt}$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6";
-            directory = "/data/backups/phone-nadia/";
+            directory = "/mnt/data/backups/phone-nadia/";
             permissions = "CRUD";
           }
           {
             username = "ivy-seedvault";
             password = "{bcrypt}$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q";
-            directory = "/data/backups/phone-ivy/";
+            directory = "/mnt/data/backups/phone-ivy/";
             permissions = "CRUD";
           }
         ];

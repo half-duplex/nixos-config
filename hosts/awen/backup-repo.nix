@@ -24,7 +24,7 @@ in {
     }
     // genAttrs (attrNames backupSystems) (
       host: {
-        path = "/data/backups/${host}";
+        path = "/mnt/data/backups/${host}";
         "valid users" = host;
         writeable = "yes";
       }
