@@ -53,7 +53,7 @@ in {
           enableACME = true;
           extraConfig = nginxHeaders {
             Content-Security-Policy = {
-              img-src = "'self' data:";
+              img-src = "'self' data: blob:";
               font-src = "'self' data:";
               script-src = "'self' 'unsafe-inline'";
               style-src = "'self' 'unsafe-inline'";
