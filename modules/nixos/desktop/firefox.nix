@@ -135,10 +135,11 @@ in {
           "browser.aboutConfig.showWarning" = ffLocked false;
           "browser.contentblocking.category".Value = "strict";
           "browser.discovery.enabled".Value = false;
+          "browser.ml.linkPreview.enabled".Value = false; # disable the non-AI preview too
           "browser.newtabpage.enabled".Value = false;
           "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
           "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
-          "browser.newtabpage.activity-stream.showWeather" = ffLocked false; # not in FirefoxHome; fuck accuweather
+          "browser.newtabpage.activity-stream.widgets.weather.enabled" = ffLocked false; # not in FirefoxHome; fuck accuweather
           "browser.newtabpage.activity-stream.system.showSponsored" = ffLocked false; # ?
           "browser.sessionstore.warnOnQuit".Value = true;
           "browser.startup.page".Value = 3; # Restore session
