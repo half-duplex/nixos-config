@@ -23,6 +23,7 @@ in {
     rtorrent
     samba
     ups
+    abiotic-factor
     vintagestory
     werehouse
 
@@ -35,6 +36,18 @@ in {
     nix-cache.serve = true;
     coraltpu.enable = true;
     services = {
+      abiotic-factor = {
+        enable = true;
+        autostart = false;
+        addGroupManagementPolicy = true;
+        serverName = "Abiotic Nexus";
+        port = 42773;
+        maxPlayers = 6;
+        moderators = [
+          76561197989702120 # mal
+          76561197984116346 # nadia
+        ];
+      };
       authentik.enable = true;
       frigate = {
         enable = true;
@@ -144,10 +157,9 @@ in {
     "command=\"zrepl stdinserver t14s\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBlIAZVeRbfsFpbsoywqneHtIDvXTWv7myK5YOvnSsx7 root@t14s"
   ];
 
-  # vintage story
   users.users.nadia = {
     isNormalUser = true;
-    extraGroups = ["ssh-users" "vintagestory"];
+    extraGroups = ["ssh-users" "abiotic" "vintagestory"];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ59U5sahxc6qtBdtJuk+83Hn0pEb0V6LepQWQo63mlU"
     ];
