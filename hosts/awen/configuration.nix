@@ -36,18 +36,6 @@ in {
     nix-cache.serve = true;
     coraltpu.enable = true;
     services = {
-      abiotic-factor = {
-        enable = true;
-        autostart = false;
-        addGroupManagementPolicy = true;
-        serverName = "Abiotic Nexus";
-        port = 42773;
-        maxPlayers = 6;
-        moderators = [
-          76561197989702120 # mal
-          76561197984116346 # nadia
-        ];
-      };
       authentik.enable = true;
       frigate = {
         enable = true;
@@ -287,6 +275,20 @@ in {
     gid = config.users.groups.mosquitto.gid;
   };
   services = {
+    abiotic-factor = {
+      enable = true;
+      autostart = false;
+      addGroupManagementPolicy = true;
+      dataDir = "/persist/abiotic-factor";
+      maxPlayers = 6;
+      moderators = [
+        76561197989702120 # mal
+        76561197984116346 # nadia
+      ];
+      openFirewall = true;
+      port = 42773;
+      serverName = "Abiotic Nexus";
+    };
     avahi.enable = true;
     jellyfin = {
       enable = true;

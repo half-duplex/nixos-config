@@ -6,18 +6,24 @@
 }: let
   description = "Server for Abiotic Factor, a survival crafting game";
 
-  inherit (lib) mkIf mkOption types;
-  inherit (lib.strings) escapeShellArg escapeShellArgs;
-  cfg = config.mal.services.abiotic-factor;
+  inherit (lib) mkIf mkOption optionalString types;
+  inherit (lib.strings) escapeShellArgs;
+  cfg = config.services.abiotic-factor;
 
   serviceName = "abiotic-factor";
+  worldName = "Cascade";
 in {
-  options.mal.services.abiotic-factor = with types; {
+  options.services.abiotic-factor = with types; let
+    # This is technically not the correct type. Steam IDs are u64, nix can
+    # only do 2^63-1, but the first 8 bits are a "Universe" ID which is
+    # currently a max of 5
+    steamId = ints.unsigned;
+  in {
     enable = lib.mkEnableOption description;
-    directory = mkOption {
+    dataDir = mkOption {
       type = path;
-      default = "/persist/abiotic-factor";
-      description = "Installation directory";
+      default = "/var/run/abiotic-factor";
+      description = "Directory for gameserver installation and wineprefix";
     };
     user = mkOption {
       type = str;
@@ -34,10 +40,11 @@ in {
       restart the service and view its logs
     '';
     autostart = lib.mkEnableOption "Automatically start the gameserver";
+    openFirewall = lib.mkEnableOption "Allow the configured ports through the firewall.";
     port = mkOption {
       type = port;
       default = 7777;
-      description = "Game port";
+      description = "Gameserver port";
     };
     queryPort = mkOption {
       type = nullOr port;
@@ -47,42 +54,45 @@ in {
     serverName = mkOption {
       type = str;
       default = "Abiotic Factor Server";
-      description = "Server name";
+      description = "Server name (shown in server browser)";
     };
     serverPasswordFile = mkOption {
-      type = str;
-      default = "${cfg.directory}/server-password";
+      type = nullOr str;
+      default = "${cfg.dataDir}/server-password";
       description = ''
-        File containing server connect password.
+        File containing server connect password. Set to `null` to allow
+        connecting without a password.
         NOTE: The password will be visible in `ps`
       '';
+    };
+    sessionFile = mkOption {
+      type = nullOr path;
+      default = "${cfg.dataDir}/session";
+      description = "File to write the session shortcode to on server startup";
     };
     maxPlayers = mkOption {
       type = ints.between 1 24;
       default = 6;
       description = ''
         Maximum simultaneous player count. The official documentation
-        and game warn against player counts above 6.
+        and game warn against having more than 6 players.
       '';
     };
     moderators = mkOption {
-      # This is technically not the correct type. Steam IDs are u64, nix can
-      # only do 2^63-1, but the first 8 bits are a "Universe" ID which is
-      # currently a max of 5
-      type = listOf ints.unsigned;
+      type = listOf steamId;
       default = [];
       description = "A list of the 64-bit numeric Steam IDs of server moderators";
       example = [76561197960287930];
     };
     bannedPlayers = mkOption {
-      type = listOf ints.unsigned;
+      type = listOf steamId;
       default = [];
       description = "A list of the 64-bit numeric Steam IDs of banned players";
       example = [76561197960287930];
     };
     sandboxSettings = mkOption {
       description = ''
-        Additional sandbox (world) options.
+        Sandbox (world) options.
         Documentation: https://github.com/DFJacob/AbioticFactorDedicatedServer/wiki/Technical-%E2%80%90-Sandbox-Options
       '';
       default = {};
@@ -100,12 +110,12 @@ in {
           DeathPenalties = mkOption {
             type = ints.between 0 5;
             description = ''
-              What players keep and lose upon death.
+              Upon player death, what items are kept, dropped, or destroyed.
               0 = Keep all
               1 = Keep equipped & hotbar
               2 = Keep hotbar
               3 = Keep equipped
-              4 = Lose all
+              4 = Drop all
               5 = Destroy all
             '';
             default = 1;
@@ -124,9 +134,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedUDPPorts =
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall (
       (lib.optional (! isNull cfg.port) cfg.port)
-      ++ (lib.optional (! isNull cfg.queryPort) cfg.queryPort);
+      ++ (lib.optional (! isNull cfg.queryPort) cfg.queryPort)
+    );
 
     systemd.services.${serviceName} = let
       adminIni = pkgs.writeText "abiotic-factor-Admin.ini" (
@@ -138,8 +149,13 @@ in {
       sandboxIni = pkgs.writeText "abiotic-factor-SandboxSettings.ini" (
         lib.generators.toINI {} {SandboxSettings = cfg.sandboxSettings;}
       );
-      worldName = "Cascade";
-      winePkg = pkgs.wine64;
+      deps = with pkgs; [
+        coreutils
+        steamcmd
+        wine64
+      ];
+      abioticLogPath = "${cfg.dataDir}/game/AbioticFactor/Saved/Logs/AbioticFactor.log";
+      isSet = val: val != null;
     in {
       inherit description;
       after = ["network.target"];
@@ -148,30 +164,36 @@ in {
         enable = true;
         binSh = null;
         mode = "full-apivfs";
-        packages = with pkgs; [
-          coreutils
-          wine64
-          steamcmd
-        ];
+        packages = deps;
       };
+      enableStrictShellChecks = true;
       environment = {
-        WINEPREFIX = "${cfg.directory}/wineprefix";
+        WINEPREFIX = "${cfg.dataDir}/wineprefix";
         WINEDEBUG = "fixme-all";
+        # "explorer.exe,services.exe=d" prevents graceful shutdown...
+        WINEDLLOVERRIDES = "services.exe=d";
       };
-      #path = with pkgs; [
-      #  coreutils
-      #  wine64
-      #];
+      path = deps;
       serviceConfig = {
-        Type = "simple";
-        #Restart = "on-failure";
+        Type = "notify";
+        #Restart = "on-failure"; # TODO: back to on-failure
         Restart = "no";
         RestartSec = 10;
         SyslogIdentifier = serviceName;
         User = cfg.user;
         Group = cfg.group;
+        UMask = "0007";
+        WorkingDirectory = cfg.dataDir;
 
-        BindPaths = [cfg.directory];
+        #ExitType = "cgroup"; # let wineserver etc shut down
+        #KillMode = "process"; # SIGINT of wineserver causes immediate main thread death, so don't
+        #KillSignal = "SIGINT"; # SIGTERM doesn't stop gracefully (no map save)
+        NotifyAccess = "all";
+
+        BindPaths = [
+          cfg.dataDir
+          "/run/systemd/notify" # $NOTIFY_SOCKET for systemd-notify
+        ];
         BindReadOnlyPaths = [
           "/etc/resolv.conf"
           "/etc/ssl/certs/ca-certificates.crt"
@@ -195,60 +217,42 @@ in {
         RestrictSUIDSGID = true;
         SystemCallArchitectures = ["native" "x86"];
         SystemCallFilter = ["@system-service" "~@privileged" "capset" "@mount"];
-
-        UMask = "0007";
-        WorkingDirectory = cfg.directory;
-        ExecStartPre = [
-          # Set null graphics driver
-          # If this isn't done, winedevice.exe runs until systemd times out and kills it
-          (escapeShellArgs [
-            "${winePkg}/bin/wine64"
-            "cmd"
-            "/c"
-            ''reg add HKEY_CURRENT_USER\\Software\\Wine\\Drivers /v Graphics /t REG_SZ /d null /f''
-          ])
-          # Install the game
-          (escapeShellArgs [
-            "${pkgs.steamcmd}/bin/steamcmd"
-            "+@sSteamCmdForcePlatformType"
-            "windows"
-            "+force_install_dir"
-            "${cfg.directory}/game"
-            "+login"
-            "anonymous"
-            "+app_update"
-            "2857200"
-            "+quit"
-          ])
-          # Link the config files
-          # I would prefer to use the command line options, but those don't
-          # understand absolute paths...
-          (escapeShellArgs [
-            "${pkgs.coreutils}/bin/ln"
-            "-sf"
-            adminIni.outPath
-            "${cfg.directory}/game/AbioticFactor/Saved/SaveGames/Server/Admin.ini"
-          ])
-          (escapeShellArgs [
-            "${pkgs.coreutils}/bin/ln"
-            "-sf"
-            sandboxIni.outPath
-            "${cfg.directory}/game/AbioticFactor/Saved/SaveGames/Server/Worlds/${worldName}/SandboxSettings.ini"
-          ])
-        ];
-        ExecStop = (lib.escapeShellArg "${pkgs.coreutils}/bin/kill") + " -s INT \"$MAINPID\"";
-        ExecStopPost = escapeShellArgs ["-${winePkg}/bin/wineserver" "-k" "-w"];
       };
-      script =
-        ''
-          SERVER_PASSWORD="$(cat ${cfg.serverPasswordFile})"
-        ''
-        + (
-          lib.strings.escapeShellArgs (
-            [
-              "exec"
-              "${winePkg}/bin/wine64"
-              "${cfg.directory}/game/AbioticFactor/Binaries/Win64/AbioticFactorServer-Win64-Shipping.exe"
+      preStart = ''
+        # Set null graphics driver to reduce log spam & make sure winedevice.exe exits
+        wine64 cmd /c \
+          'reg add HKEY_CURRENT_USER\Software\Wine\Drivers /v Graphics /t REG_SZ /d null /f'
+        wineserver -k || true
+
+        # Install the game
+        systemd-notify --status="Installing/updating server content"
+        steamcmd \
+          +@sSteamCmdForcePlatformType windows \
+          +force_install_dir "${cfg.dataDir}/game" \
+          +login anonymous \
+          +app_update 2857200 \
+          +quit
+
+        # Link the config files
+        # I would prefer to use the command line options, but those don't
+        # understand absolute paths...
+        ln -sf \
+          "${adminIni.outPath}" \
+          "${cfg.dataDir}/game/AbioticFactor/Saved/SaveGames/Server/Admin.ini"
+        ln -sf \
+          "${sandboxIni.outPath}" \
+          "${cfg.dataDir}/game/AbioticFactor/Saved/SaveGames/Server/Worlds/${worldName}/SandboxSettings.ini"
+
+        rm -f "${abioticLogPath}"
+
+        # Ensure it's gone, to avoid complaints from systemd
+        wineserver -k -w || true
+      '';
+      script = let
+        gameCmd =
+          escapeShellArgs ([
+              "wine64"
+              "${cfg.dataDir}/game/AbioticFactor/Binaries/Win64/AbioticFactorServer-Win64-Shipping.exe"
               "-log"
               "-MaxServerPlayers=${toString cfg.maxPlayers}"
               "-PORT=${toString cfg.port}"
@@ -257,13 +261,50 @@ in {
               "-useperfthreads"
               "-WorldSaveName=${worldName}"
             ]
-            ++ (lib.optional (! isNull cfg.queryPort) "-QUERYPORT=${toString cfg.queryPort}")
-          )
-        )
-        + (lib.optionalString (! isNull cfg.serverPasswordFile) " -ServerPassword=\"$SERVER_PASSWORD\"")
-        + (lib.optionalString (! isNull cfg.extraArgs) (" " + cfg.extraArgs));
+            ++ (lib.optional (isSet cfg.queryPort) "-QUERYPORT=${toString cfg.queryPort}"))
+          + (optionalString (isSet cfg.serverPasswordFile) " -ServerPassword=\"$(cat ${cfg.serverPasswordFile})\"")
+          + (optionalString (isSet cfg.extraArgs) (" " + cfg.extraArgs));
+      in ''
+        report_status() {
+          systemd-notify --status="Waiting for server to start"
+
+          session_file="${toString cfg.sessionFile}"
+          running=0
+          session=""
+          tail -F "${abioticLogPath}" 2>/dev/null \
+            | while IFS= read -r fullline ; do
+              line="$(expr "$fullline" : '\[[0-9:.-]*\]\[ *[0-9]*\]\(.*\)')" || true
+              case "$line" in
+                "LogInit: Display: Engine is initialized."*)
+                  [ "$running" -eq 1 ] && continue
+                  systemd-notify --ready
+                  [ -n "$session" ] && return
+                  running=1
+                  ;;
+                "LogAbiotic: Warning: Session short code: "*)
+                  session="$(expr "$line" : '.*Session short code: \([A-Z0-9]*\)')"
+                  systemd-notify --status "Running - Session shortcode: $session"
+                  [ -n "$session_file" ] && echo "$session" >"$session_file"
+                  [ "$running" -eq 1 ] && return
+                  ;;
+              esac
+            done || true
+        }
+
+        report_status &
+        exec ${gameCmd}
+      '';
+      preStop = ''
+        systemd-notify --status=""
+        if [ -n "$MAINPID" ] ; then
+          kill -s INT "$MAINPID"
+          tail -f --pid="$MAINPID"
+        fi
+        wineserver -k -w || true
+      '';
+      postStop = ''rm -f "${cfg.sessionFile}"'';
     };
-    systemd.tmpfiles.settings.${serviceName}.${cfg.directory}.d = {
+    systemd.tmpfiles.settings.${serviceName}.${cfg.dataDir}.d = {
       user = cfg.user;
       group = cfg.group;
       mode = "0750";
@@ -271,7 +312,7 @@ in {
     users.users = mkIf (cfg.user == "abiotic") {
       abiotic = {
         group = cfg.group;
-        home = cfg.directory;
+        home = cfg.dataDir;
         isSystemUser = true;
       };
     };
