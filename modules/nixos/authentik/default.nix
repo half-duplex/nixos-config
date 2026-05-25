@@ -12,7 +12,7 @@
 
   cfg = config.mal.services.authentik;
 in {
-  imports = [inputs.authentik-nix.nixosModules.default];
+  imports = [inputs.authentik.nixosModules.default];
 
   options.mal.services.authentik = {
     enable = lib.mkEnableOption "Configure the authentik IDP";

@@ -28,7 +28,11 @@
     };
 
     # applications
-    authentik-nix = {
+    abiotic-factor = {
+      url = "github:half-duplex/abiotic-factor-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    authentik = {
       url = "github:nix-community/authentik-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };

@@ -2,6 +2,7 @@
   config,
   flake,
   hostName,
+  inputs,
   lib,
   modulesPath,
   perSystem,
@@ -23,9 +24,10 @@ in {
     rtorrent
     samba
     ups
-    abiotic-factor
     vintagestory
     werehouse
+
+    inputs.abiotic-factor.nixosModules.default
 
     ./backup-repo.nix
     #./frigate.nix

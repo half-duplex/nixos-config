@@ -1,22 +1,26 @@
 {
   "nodes": {
-    "authentik-go": {
-      "flake": false,
+    "abiotic-factor": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1778672763,
-        "narHash": "sha256-K0dzj+GnajGz63Gp+NYyhanjhtDxpzCKpmdIZYMfz/M=",
-        "owner": "goauthentik",
-        "repo": "client-go",
-        "rev": "58f64509446aab6bc2d9b1fe36be19b5f2a3b4a8",
+        "lastModified": 1779682199,
+        "narHash": "sha256-5r98G+Z04/4sxHvNY38v6benANhLcqqquM8HcdJocyY=",
+        "owner": "half-duplex",
+        "repo": "abiotic-factor-nix",
+        "rev": "856986e0a38fa471ad7246687c6b7ef9be6f92d7",
         "type": "github"
       },
       "original": {
-        "owner": "goauthentik",
-        "repo": "client-go",
+        "owner": "half-duplex",
+        "repo": "abiotic-factor-nix",
         "type": "github"
       }
     },
-    "authentik-nix": {
+    "authentik": {
       "inputs": {
         "authentik-go": "authentik-go",
         "authentik-src": "authentik-src",
@@ -43,6 +47,22 @@
       "original": {
         "owner": "nix-community",
         "repo": "authentik-nix",
+        "type": "github"
+      }
+    },
+    "authentik-go": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778672763,
+        "narHash": "sha256-K0dzj+GnajGz63Gp+NYyhanjhtDxpzCKpmdIZYMfz/M=",
+        "owner": "goauthentik",
+        "repo": "client-go",
+        "rev": "58f64509446aab6bc2d9b1fe36be19b5f2a3b4a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "goauthentik",
+        "repo": "client-go",
         "type": "github"
       }
     },
@@ -205,7 +225,7 @@
     "flake-utils": {
       "inputs": {
         "systems": [
-          "authentik-nix",
+          "authentik",
           "systems"
         ]
       },
@@ -294,11 +314,11 @@
     "napalm": {
       "inputs": {
         "flake-utils": [
-          "authentik-nix",
+          "authentik",
           "flake-utils"
         ],
         "nixpkgs": [
-          "authentik-nix",
+          "authentik",
           "nixpkgs"
         ]
       },
@@ -420,11 +440,11 @@
     },
     "nixpkgsStaging": {
       "locked": {
-        "lastModified": 1779645137,
-        "narHash": "sha256-NvFOoEVSTXzcxbLOjgqme8iyz08s5Zkwi57dHjhS0X0=",
+        "lastModified": 1779673555,
+        "narHash": "sha256-IZlTNZIKJNu1v7DAOpAxpBHMMLEaTZmc60tZ2SWz3i4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "00396e3ca72d05a3f8fe80f0af8d12c975f89592",
+        "rev": "e8b7777533400ecaf7236f57ae2e9eee65175cb4",
         "type": "github"
       },
       "original": {
@@ -494,15 +514,15 @@
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
-          "authentik-nix",
+          "authentik",
           "nixpkgs"
         ],
         "pyproject-nix": [
-          "authentik-nix",
+          "authentik",
           "pyproject-nix"
         ],
         "uv2nix": [
-          "authentik-nix",
+          "authentik",
           "uv2nix"
         ]
       },
@@ -523,7 +543,7 @@
     "pyproject-nix": {
       "inputs": {
         "nixpkgs": [
-          "authentik-nix",
+          "authentik",
           "nixpkgs"
         ]
       },
@@ -543,7 +563,8 @@
     },
     "root": {
       "inputs": {
-        "authentik-nix": "authentik-nix",
+        "abiotic-factor": "abiotic-factor",
+        "authentik": "authentik",
         "blank": "blank",
         "blueprint": "blueprint",
         "intransience": "intransience",
@@ -660,11 +681,11 @@
     "uv2nix": {
       "inputs": {
         "nixpkgs": [
-          "authentik-nix",
+          "authentik",
           "nixpkgs"
         ],
         "pyproject-nix": [
-          "authentik-nix",
+          "authentik",
           "pyproject-nix"
         ]
       },
