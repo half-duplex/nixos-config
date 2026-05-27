@@ -13,6 +13,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     base
     desktop
+    amdgpu-vr
     plasma
     samba
     ups
