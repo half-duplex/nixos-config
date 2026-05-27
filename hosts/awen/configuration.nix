@@ -71,17 +71,18 @@ in {
           cameras = {
             task = {
               enabled = true;
+              detect.enabled = false;
               record.enabled = true;
               live.streams = {
                 "High Quality" = "task_hd";
                 "Low Quality" = "task";
               };
-              onvif = {
-                host = "10.0.65.182";
-                port = 80;
-                user = "thingino";
-                password = "{FRIGATE_CAM_TASK_PW}";
-              };
+              #onvif = {
+              #  host = "10.0.65.182";
+              #  port = 80;
+              #  user = "thingino";
+              #  password = "{FRIGATE_CAM_TASK_PW}";
+              #};
               ffmpeg.inputs = [
                 {
                   path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/task?timeout=30";
@@ -95,17 +96,18 @@ in {
             };
             workshop = {
               enabled = true;
+              detect.enabled = false;
               record.enabled = true;
               live.streams = {
                 "High Quality" = "workshop_hd";
                 "Low Quality" = "workshop";
               };
-              onvif = {
-                host = "10.0.65.181";
-                port = 80;
-                user = "thingino";
-                password = "{FRIGATE_CAM_WORKSHOP_PW}";
-              };
+              #onvif = {
+              #  host = "10.0.65.181";
+              #  port = 80;
+              #  user = "thingino";
+              #  password = "{FRIGATE_CAM_WORKSHOP_PW}";
+              #};
               ffmpeg.inputs = [
                 {
                   path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/workshop?timeout=30";
@@ -125,12 +127,12 @@ in {
                 "High Quality" = "wyze_hd";
                 "Low Quality" = "wyze";
               };
-              onvif = {
-                host = "10.0.65.180";
-                port = 80;
-                user = "thingino";
-                password = "{FRIGATE_CAM_WYZE_PW}";
-              };
+              #onvif = {
+              #  host = "10.0.65.180";
+              #  port = 80;
+              #  user = "thingino";
+              #  password = "{FRIGATE_CAM_WYZE_PW}";
+              #};
               ffmpeg.inputs = [
                 {
                   path = "rtsp://stream:{FRIGATE_GO2RTC_PASSWORD}@[::1]:8554/wyze?timeout=30";
