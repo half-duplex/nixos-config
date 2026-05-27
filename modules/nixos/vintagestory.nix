@@ -7,14 +7,24 @@
   description = "Server for Vintage Story, an indie sandbox adventure game";
 
   inherit (lib) mkIf mkOption types;
-  cfg = config.mal.services.vintagestory;
+  cfg = config.services.vintagestory;
 in {
-  options.mal.services.vintagestory = {
+  options.services.vintagestory = {
     enable = lib.mkEnableOption description;
-    dataPath = mkOption {
-      default = "/persist/vintagestory";
+    dataDir = mkOption {
+      default = "/opt/vintagestory";
       description = "Data path (config and state)";
       type = types.path;
+    };
+    autostart = mkOption {
+      default = true;
+      description = "Automatically start the gameserver";
+      type = types.bool;
+    };
+    openFirewall = mkOption {
+      default = true;
+      description = "Allow the configured port through the firewall";
+      type = types.bool;
     };
     package = lib.mkPackageOption pkgs "vintagestory" {};
     port = mkOption {
@@ -22,7 +32,7 @@ in {
       default = 42420;
       description = ''
         Which port to open in the firewall and listen on for socket activation.
-        Must match your config file.
+        Must match your config file!
       '';
     };
     user = mkOption {
@@ -42,36 +52,25 @@ in {
   };
 
   config = mkIf cfg.enable {
-    mal.services.vintagestory.package = pkgs.vintagestory.overrideAttrs (_: rec {
-      version = "1.21.5";
-      src = pkgs.fetchurl {
-        url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-        hash = "sha256-dG1D2Buqht+bRyxx2ie34Z+U1bdKgi5R3w29BG/a5jg=";
-      };
-    });
-
-    networking.firewall = {
+    networking.firewall = mkIf (cfg.port != null && cfg.openFirewall) {
       allowedTCPPorts = [cfg.port];
       allowedUDPPorts = [cfg.port];
     };
-    systemd.services.vintagestory = {
+    systemd.services.vintagestory = let
+      deps = [ cfg.package ];
+    in {
       inherit description;
       after = ["network.target"];
-      wantedBy = ["multi-user.target"];
-      path = [
-        cfg.package
-        pkgs.coreutils
-        pkgs.cacert
-        #pkgs.strace
-      ];
+      wantedBy = lib.mkIf cfg.autostart ["multi-user.target"];
       confinement = {
         enable = true;
         binSh = null;
-        #mode = "chroot-only"; # TODO: why does this break CoreCLR
-        mode = "full-apivfs";
+        mode = "full-apivfs"; # chroot-only breaks CoreCLR
+        packages = deps;
       };
+      path = deps;
       serviceConfig = {
-        ExecStart = ''${cfg.package}/bin/vintagestory-server --dataPath "${cfg.dataPath}"'';
+        ExecStart = ''${cfg.package}/bin/vintagestory-server --dataPath "${cfg.dataDir}"'';
 
         Type = "simple";
         Restart = "on-failure";
@@ -80,7 +79,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
 
-        BindPaths = [cfg.dataPath];
+        BindPaths = [cfg.dataDir];
         BindReadOnlyPaths = [
           "/etc/resolv.conf"
           "/etc/ssl/certs/ca-bundle.crt"
@@ -107,7 +106,7 @@ in {
         UMask = "0007";
       };
     };
-    systemd.tmpfiles.settings.vintagestory."${cfg.dataPath}".d = {
+    systemd.tmpfiles.settings.vintagestory."${cfg.dataDir}".d = {
       user = cfg.user;
       group = cfg.group;
       mode = "0750";

@@ -56,10 +56,6 @@ in {
         discoverable = true;
         interface = "br0";
       };
-      vintagestory = {
-        enable = true;
-        addGroupManagementPolicy = true;
-      };
       werehouse = {
         enable = true;
         hostname = "artchive.sec.gd";
@@ -426,6 +422,12 @@ in {
       dataDir = "/persist/trilium";
       nginx.enable = true;
       nginx.hostName = "notes.sec.gd";
+    };
+    vintagestory = {
+      enable = true;
+      addGroupManagementPolicy = true;
+      autostart = false;
+      dataDir = "/persist/vintagestory";
     };
     webdav = {
       enable = true;
