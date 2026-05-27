@@ -151,16 +151,12 @@ in {
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {
         device = "/dev/mapper/crypt${toString n}";
+        fsType = "auto";
         options = ["noauto" "noatime"];
       };
     }));
 
   networking.firewall.allowedTCPPorts = [80 443 445 1883];
-  # work around etc.overlay permissions bug
-  environment.etc."mosquitto/acl-0.conf" = {
-    uid = config.users.users.mosquitto.uid;
-    gid = config.users.groups.mosquitto.gid;
-  };
   services = {
     abiotic-factor = {
       enable = true;

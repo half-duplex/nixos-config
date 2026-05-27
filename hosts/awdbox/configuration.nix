@@ -124,6 +124,7 @@
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {
         device = "/dev/mapper/crypt${toString n}";
+        fsType = "auto";
         options = ["noauto" "noatime"];
       };
     }));
@@ -137,7 +138,6 @@
     ollama = {
       enable = true;
       package = pkgs.ollama-rocm;
-      acceleration = "rocm";
       rocmOverrideGfx = "10.1.0";
     };
     openvpn.servers.commercial = {

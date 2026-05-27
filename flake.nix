@@ -1,8 +1,8 @@
 {
   inputs = {
     # system
-    nixpkgs.url = "nixpkgs/nixos-25.11";
-    nixpkgsStaging.url = "nixpkgs/release-25.11";
+    nixpkgs.url = "nixpkgs/nixos-26.05";
+    nixpkgsStaging.url = "nixpkgs/release-26.05";
     #nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
     blank.url = "github:divnix/blank?rev=5a5d2684073d9f563072ed07c871d577a6c614a8";
     blueprint = {

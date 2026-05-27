@@ -74,8 +74,8 @@
       discord
       element-desktop
       signal-desktop
-      teamspeak3
-      #nixpkgsUnstable.teamspeak6-client
+      #teamspeak3 # removed from 26.05
+      teamspeak6-client
       telegram-desktop
       thunderbird
 

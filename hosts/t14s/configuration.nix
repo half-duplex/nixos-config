@@ -41,6 +41,7 @@
     (lib.forEach (lib.range 1 5) (n: {
       "/mnt/crypt${toString n}" = {
         device = "/dev/mapper/crypt${toString n}";
+        fsType = "auto";
         options = ["noauto" "noatime"];
       };
     }));

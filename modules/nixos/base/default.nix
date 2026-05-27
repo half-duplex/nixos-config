@@ -60,8 +60,6 @@ in {
     # Others should be auto-loaded once tank is mounted
     zfs.requestEncryptionCredentials = ["tank" "pool"];
 
-    kernelPackages = pkgs.linuxPackages_hardened;
-
     # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/profiles/hardened.nix 2022-03-21
     kernel.sysctl =
       {

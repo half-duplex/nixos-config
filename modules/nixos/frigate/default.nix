@@ -51,7 +51,6 @@ in {
           database.path = "/persist/frigate/frigate.db";
           ui = {
             time_format = "24hour";
-            strftime_fmt = "%F %T"; # %R to omit seconds
           };
           ffmpeg.hwaccel_args = "preset-vaapi";
         }
