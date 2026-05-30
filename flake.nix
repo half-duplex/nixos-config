@@ -32,10 +32,6 @@
       url = "github:half-duplex/abiotic-factor-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    authentik = {
-      url = "github:nix-community/authentik-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     picotron = {
       url = "github:half-duplex/picotron-nix";
       inputs.nixpkgs.follows = "nixpkgs";
