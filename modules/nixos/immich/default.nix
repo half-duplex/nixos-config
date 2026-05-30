@@ -38,8 +38,8 @@
       clientSecret = "${config.sops.placeholder.oauth_client_secret}";
       defaultStorageQuota = 0;
       enabled = true;
-      issuerUrl = "https://auth.sec.gd/.well-known/openid-configuration";
-      scope = "openid profile email immich";
+      issuerUrl = "https://id.sec.gd/oauth2/openid/immich/.well-known/openid-configuration";
+      scope = "openid profile email";
       storageQuotaClaim = "immich_quota_gb";
     };
     trash.days = 90;

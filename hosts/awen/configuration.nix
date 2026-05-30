@@ -16,9 +16,9 @@ in {
     base
     cli
 
-    authentik
     coraltpu
     immich
+    kanidm
     navidrome
     rtorrent
     samba
@@ -37,7 +37,7 @@ in {
     nix-cache.serve = true;
     coraltpu.enable = true;
     services = {
-      authentik.enable = true;
+      kanidm.enable = true;
       immich.enable = true;
       navidrome.enable = true;
       nut = {
