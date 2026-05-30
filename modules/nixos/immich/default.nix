@@ -75,7 +75,7 @@ in {
         machine-learning.environment = {
           HF_XET_CACHE = cachePath + "huggingface-xet-cache";
           MACHINE_LEARNING_CACHE_FOLDER = lib.mkForce (cachePath + "model-cache");
-          MPLCONFIGDIR = cachePath + "matplotlib-cache";
+          MPLCONFIGDIR = lib.mkForce (cachePath + "matplotlib-cache");
         };
         #package = pkgs.nixpkgsUnstable.immich;
         host = "127.0.0.1"; # "localhost" causes v6-only listen
