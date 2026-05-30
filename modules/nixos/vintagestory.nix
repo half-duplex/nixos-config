@@ -57,7 +57,7 @@ in {
       allowedUDPPorts = [cfg.port];
     };
     systemd.services.vintagestory = let
-      deps = [ cfg.package ];
+      deps = [cfg.package];
     in {
       inherit description;
       after = ["network.target"];
