@@ -41,7 +41,6 @@ in {
     exiftool
     git
     mediainfo
-    mosh
     nmap
     rsync
     socat
@@ -127,6 +126,7 @@ in {
     };
   };
 
+  programs.mosh.enable = true;
   programs.mtr.enable = true;
 
   programs.tmux = {
