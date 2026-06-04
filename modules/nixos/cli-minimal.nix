@@ -97,7 +97,7 @@ in {
     };
     variables = {
       HISTCONTROL = "ignoreboth";
-      HISTSIZE = "5000";
+      HISTSIZE = "10000";
       HISTTIMEFORMAT = "%Y.%m.%d %T ";
       PATH = "$HOME/.local/bin:$PATH";
 
