@@ -106,6 +106,13 @@ in {
               Alias = "nixp";
             }
             {
+              Name = "PyPI Packages";
+              URLTemplate = "https://pypi.org/search/?q={searchTerms}";
+              Method = "GET";
+              IconURL = "https://pypi.org/static/images/white-cube.2351a86c.svg";
+              Alias = "pypi";
+            }
+            {
               Name = "Wayback Machine";
               URLTemplate = "https://web.archive.org/{searchTerms}";
               Method = "GET";
