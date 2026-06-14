@@ -280,7 +280,7 @@ in {
               user = "root";
               port = 22;
               identity_file = "/persist/zrepl/ssh_awen";
-              options = ["ControlMaster=no"];
+              options = ["ControlMaster=no"]; # No /run/user/0
             };
             send.encrypted = true;
             replication.protection = {
@@ -288,6 +288,7 @@ in {
               incremental = "guarantee_incremental";
             };
             filesystems = {
+              "tank" = false; # no need to snap the empty root
               "tank<" = true;
               "tank/nix<" = false;
               "tank/home/nobackup<" = false;

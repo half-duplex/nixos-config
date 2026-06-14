@@ -105,20 +105,34 @@
 
   systemd.tmpfiles.rules = ["L /data - - - - /mnt/data"];
 
+  swapDevices = [
+    {
+      device = "/dev/disk/by-partuuid/414f87ca-8ab7-4d5f-9683-d7ff5e04d536";
+      options = ["nofail"];
+      randomEncryption = {
+        enable = true;
+        allowDiscards = true;
+        sectorSize = 4096;
+      };
+    }
+  ];
   fileSystems =
     lib.foldl (a: b: a // b)
     {
       "/mnt/data" = {
         device = "pool/data";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/mnt/data/backups" = {
         device = "pool/backups";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/mnt/data/nobackup" = {
         device = "pool/nobackup";
         fsType = "zfs";
+        options = ["nofail"];
       };
     }
     (lib.forEach (lib.range 1 5) (n: {
@@ -214,6 +228,7 @@
           incremental = "guarantee_incremental";
         };
         filesystems = {
+          "pool" = false; # no need to snap the empty root
           "pool<" = true;
           "pool/nobackup<" = false;
         };

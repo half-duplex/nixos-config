@@ -168,6 +168,7 @@ in {
       "/home/nobackup" = {
         device = "tank/home/nobackup";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/nix" = {
         device = "tank/nix";
@@ -181,6 +182,7 @@ in {
       "/persist/nobackup" = {
         device = "tank/persist/nobackup";
         fsType = "zfs";
+        options = ["nofail"];
       };
     };
   };
