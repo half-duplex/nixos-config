@@ -153,391 +153,389 @@ in {
     }));
 
   networking.firewall.allowedTCPPorts = [80 443 445 1883];
-  services = {
-    abiotic-factor = {
-      enable = true;
-      autostart = false;
-      addGroupManagementPolicy = true;
-      dataDir = "/persist/abiotic-factor";
-      maxPlayers = 6;
-      moderators = [
-        76561197989702120 # mal
-        76561197984116346 # nadia
-      ];
-      openFirewall = true;
-      port = 42773;
-      serverName = "Abiotic Nexus";
-    };
-    avahi.enable = true;
-    jellyfin = {
-      enable = true;
-    };
-    matterbridge = {
-      enable = true;
-      configPath = "/persist/matterbridge/config.toml";
-    };
-    mosquitto = {
-      enable = true;
-      listeners = [
-        {
-          port = 1883;
-          users = {
-            "hass.awen.sec.gd".hashedPassword = "$7$101$ZGKtPJuxva6PLF3R$A1iUE1AAwwPLXTN9D6UwHPa0bGPgsFqFdnSj++4lwZXqnpMCxlXRuYjKHGQyVMWemhC4arNdF86CB1VVc9jHEw==";
-            "frigate".hashedPassword = "$7$101$LYQGV/6R0ooY6CfN$kgh9oUq//bV9jS73Ogu6B4rMhq4eZRtTWEOe+I+KRZxIEJj9LDzCWtrcoGWOub88xz87AHJWmClVYEkfkNXA3g==";
-          };
-        }
-      ];
-    };
-    nginx = {
-      enable = true;
-      # default headers, if none are overridden in a location block
-      appendHttpConfig = ''
-        # content vhost
-        limit_conn_zone $binary_remote_addr zone=content_addr:5m;
-        geo $content_rate_limit {
-          10.0.0.0/16 0;  # lan, unlimited
-          default     10m;  # 80mbps
-        }
-        # less cursed than it looks - actually allowed by spec:
-        # https://www.rfc-editor.org/rfc/rfc4918#section-9.4
-        map $request_method $webdav_location {
-          GET     @direct;
-          HEAD    @direct;
-          default @webdav;
-        }
-      '';
-      recommendedBrotliSettings = true;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
-      #recommendedZstdSettings = true;  # causes response truncation
-      virtualHosts = let
-        webdavDestination = ''
-          # fix COPY/MOVE: https://github.com/hacdias/webdav#nginx-configuration-example
-          set $destination $http_destination;
-          if ($http_destination ~ "^$scheme://$host/(?<path>.*)") {
-            set $destination /$path;
-          }
-          proxy_set_header Destination $destination;
-        '';
-      in {
-        "default" = {
-          default = true;
-          # Can't use globalRedirect because it adds a bonus http://
-          extraConfig = ''
-            return 301 https://$http_host$request_uri;
-          '';
-          listen = [
-            {
-              addr = "0.0.0.0";
-              extraParameters = ["deferred"];
-            }
-            {
-              addr = "0.0.0.0";
-              extraParameters = ["deferred"];
-              port = 443;
-              ssl = true;
-            }
-            {
-              addr = "[::]";
-              extraParameters = ["deferred"];
-            }
-            {
-              addr = "[::]";
-              extraParameters = ["deferred"];
-              port = 443;
-              ssl = true;
-            }
-          ];
-          rejectSSL = true;
-        };
-        "content.awen.sec.gd" = {
-          basicAuthFile = "/persist/nginx/htpasswd-content";
-          enableACME = true;
-          onlySSL = true;
-          root = "/mnt/data/downloads";
-          extraConfig =
-            nginxHeaders {Content-Disposition = "inline";}
-            + ''
-              access_log /var/log/nginx/content.log;
-              aio threads;
-              autoindex on;
-              charset utf8;
-              autoindex_exact_size off;
-              set_real_ip_from 100.64.0.6;
-              limit_rate $content_rate_limit;
-              limit_conn content_addr 2;
-              proxy_buffering off;
-              proxy_request_buffering off;
-              try_files /dev/null $webdav_location;
-            '';
-          locations = let
-            contentDavConfig =
-              ''proxy_set_header Authorization "Basic Y29udGVudDp0bmV0bm9j";''
-              + webdavDestination;
-          in {
-            "@direct" = {};
-            "@webdav" = {
-              extraConfig = contentDavConfig;
-              proxyPass = "http://127.0.0.1:45496";
-            };
-            "/library/".alias = "/mnt/data/library/";
-            "/now/" = {
-              alias = "/mnt/data/downloads/";
-              extraConfig = ''
-                try_files $uri $uri/ =404; # no webdav
-                limit_rate 18m; # 144mbps
-                limit_conn content_addr 2;
-              '';
-            };
-          };
-        };
-        "dav.awen.sec.gd" = {
-          # this vhost must have nginx basic auth, else the content-dav proxy credentials can be abused
-          basicAuthFile = pkgs.writeText "htpasswd-dav" ''
-            mal-seedvault:$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C
-            nadia-seedvault:$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6
-            ivy-seedvault:$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q
-          '';
-          enableACME = true;
-          onlySSL = true;
-          extraConfig =
-            webdavDestination
-            + ''
-              access_log /var/log/nginx/dav.log;
-              proxy_buffering off;
-              proxy_request_buffering off;
-            '';
-          locations."/".proxyPass = "http://127.0.0.1:45496";
-        };
-        "hass.sec.gd" = {
-          onlySSL = true;
-          enableACME = true;
-          extraConfig =
-            nginxHeaders {
-              Content-Security-Policy = {
-                connect-src = "'self' data: https://brands.home-assistant.io"; # icons via SW
-                font-src = "'self' data: https://cdnjs.cloudflare.com";
-                frame-ancestors = "'self'";
-                img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
-                script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-                style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
-              };
-            }
-            + ''
-              access_log /var/log/nginx/homeassistant.log;
-            '';
-          locations."/" = {
-            proxyPass = "http://10.0.0.7:8123";
-            proxyWebsockets = true;
-          };
-        };
-        "ii.sec.gd" = {
-          onlySSL = true;
-          enableACME = true;
-          extraConfig = ''access_log /var/log/nginx/chatrelay.log;'';
-          root = "/persist/matterbridge/media/";
-        };
-        "media.sec.gd" = {
-          onlySSL = true;
-          enableACME = true;
-          extraConfig =
-            nginxHeaders {
-              Content-Security-Policy = {
-                font-src = "'self' data:";
-                img-src = [
-                  "'self'"
-                  "blob:"
-                  "https://repo.jellyfin.org/releases/plugin/images/"
-                  "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
-                ];
-                script-src = "'self' 'unsafe-inline' blob:";
-                style-src = "'self' 'unsafe-inline' blob:";
-                frame-ancestors = "'self'";
-              };
-              Cross-Origin-Opener-Policy = "same-origin";
-              Cross-Origin-Embedder-Policy = "credentialless";
-              Cross-Origin-Resource-Policy = "same-origin";
-            }
-            + ''
-              access_log /var/log/nginx/media.log;
-            '';
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:8096";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_buffering off;
-            '';
-          };
-        };
-        "notes.sec.gd" = {
-          # proxy configured by services.trilium-server
-          onlySSL = true;
-          enableACME = true;
-          extraConfig =
-            nginxHeaders {
-              Content-Security-Policy = {
-                connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
-                img-src = "'self' data:";
-                script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
-                style-src = "'self' 'unsafe-inline'";
-              };
-            }
-            + ''
-              access_log /var/log/nginx/notes.log;
-            '';
-        };
-      };
-    };
-    postgresql = {
-      enable = true;
-      #package = pkgs.postgresql_15;
-      authentication = lib.mkOverride 10 ''
-        local all all peer
-        host all all 127.0.0.1/32 scram-sha-256
-        host all all ::1/128 scram-sha-256
-      '';
-    };
-    samba.settings.public = {
-      path = "/mnt/data/public";
-      #writeable = "yes";
-      public = "yes";
-    };
-    smartd.enable = true;
-    teamspeak3 = {
-      enable = true;
-      dataDir = "/persist/teamspeak3-server";
-      defaultVoicePort = 36609;
-      openFirewall = true;
-    };
-    tor = {
-      enable = true;
-      client.enable = true;
-    };
-    trilium-server = {
-      enable = true;
-      package = pkgs.trilium-next-server;
-      port = 37962;
-      dataDir = "/persist/trilium";
-      nginx.enable = true;
-      nginx.hostName = "notes.sec.gd";
-    };
-    vintagestory = {
-      enable = true;
-      addGroupManagementPolicy = true;
-      autostart = false;
-      dataDir = "/persist/vintagestory";
-    };
-    webdav = {
-      enable = true;
-      settings = {
-        address = "127.0.0.1";
-        port = 45496;
-        debug = true;
-        noSniff = true;
-        behindProxy = true;
-        permissions = "";
-        directory = "/dev/null";
-        users = [
-          {
-            username = "content";
-            password = "tnetnoc";
-            directory = "/mnt/data/downloads/";
-            permissions = "R";
-          }
-          {
-            username = "mal-seedvault";
-            password = "{bcrypt}$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C";
-            directory = "/mnt/data/backups/phone/";
-            permissions = "CRUD";
-          }
-          {
-            username = "nadia-seedvault";
-            password = "{bcrypt}$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6";
-            directory = "/mnt/data/backups/phone-nadia/";
-            permissions = "CRUD";
-          }
-          {
-            username = "ivy-seedvault";
-            password = "{bcrypt}$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q";
-            directory = "/mnt/data/backups/phone-ivy/";
-            permissions = "CRUD";
-          }
-        ];
-      };
-    };
-    zrepl.settings.jobs = [
+  services.abiotic-factor = {
+    enable = true;
+    autostart = false;
+    addGroupManagementPolicy = true;
+    dataDir = "/persist/abiotic-factor";
+    maxPlayers = 6;
+    moderators = [
+      76561197989702120 # mal
+      76561197984116346 # nadia
+    ];
+    openFirewall = true;
+    port = 42773;
+    serverName = "Abiotic Nexus";
+  };
+  services.avahi.enable = true;
+  services.jellyfin = {
+    enable = true;
+  };
+  services.matterbridge = {
+    enable = true;
+    configPath = "/persist/matterbridge/config.toml";
+  };
+  services.mosquitto = {
+    enable = true;
+    listeners = [
       {
-        name = "tank_sink";
-        type = "sink";
-        serve = {
-          type = "stdinserver";
-          client_identities = [
-            "awdbox"
-            "awen" # TODO: use local instead
-            "t14s"
-          ];
-        };
-        root_fs = "pool/backups";
-      }
-      {
-        name = "data_snap_nobackup";
-        type = "snap";
-        filesystems = {
-          "pool/nobackup" = true;
-        };
-        snapshotting = {
-          type = "periodic";
-          interval = "5m";
-          prefix = "zrepl_";
-        };
-        pruning = {
-          keep = [
-            {
-              type = "grid";
-              grid = "1x1h(keep=all) | 32x15m | 24x1h";
-              regex = "^zrepl_.*";
-            }
-            {
-              type = "regex";
-              negate = true;
-              regex = "^zrepl_.*";
-            }
-          ];
-        };
-      }
-      {
-        # TODO: replicate to nvme or awdbox
-        name = "data_snap";
-        type = "snap";
-        filesystems = {
-          "pool<" = true;
-          "pool/backups<" = false;
-          "pool/nobackup<" = false;
-        };
-        snapshotting = {
-          type = "periodic";
-          interval = "5m";
-          prefix = "zrepl_";
-        };
-        pruning = {
-          keep = [
-            {
-              type = "grid";
-              grid = "1x1d(keep=all) | 96x15m | 72x1h | 30x1d | 52x1w";
-              regex = "^zrepl_.*";
-            }
-            {
-              type = "regex";
-              negate = true;
-              regex = "^zrepl_.*";
-            }
-          ];
+        port = 1883;
+        users = {
+          "hass.awen.sec.gd".hashedPassword = "$7$101$ZGKtPJuxva6PLF3R$A1iUE1AAwwPLXTN9D6UwHPa0bGPgsFqFdnSj++4lwZXqnpMCxlXRuYjKHGQyVMWemhC4arNdF86CB1VVc9jHEw==";
+          "frigate".hashedPassword = "$7$101$LYQGV/6R0ooY6CfN$kgh9oUq//bV9jS73Ogu6B4rMhq4eZRtTWEOe+I+KRZxIEJj9LDzCWtrcoGWOub88xz87AHJWmClVYEkfkNXA3g==";
         };
       }
     ];
   };
+  services.nginx = {
+    enable = true;
+    # default headers, if none are overridden in a location block
+    appendHttpConfig = ''
+      # content vhost
+      limit_conn_zone $binary_remote_addr zone=content_addr:5m;
+      geo $content_rate_limit {
+        10.0.0.0/16 0;  # lan, unlimited
+        default     10m;  # 80mbps
+      }
+      # less cursed than it looks - actually allowed by spec:
+      # https://www.rfc-editor.org/rfc/rfc4918#section-9.4
+      map $request_method $webdav_location {
+        GET     @direct;
+        HEAD    @direct;
+        default @webdav;
+      }
+    '';
+    recommendedBrotliSettings = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    #recommendedZstdSettings = true;  # causes response truncation
+    virtualHosts = let
+      webdavDestination = ''
+        # fix COPY/MOVE: https://github.com/hacdias/webdav#nginx-configuration-example
+        set $destination $http_destination;
+        if ($http_destination ~ "^$scheme://$host/(?<path>.*)") {
+          set $destination /$path;
+        }
+        proxy_set_header Destination $destination;
+      '';
+    in {
+      "default" = {
+        default = true;
+        # Can't use globalRedirect because it adds a bonus http://
+        extraConfig = ''
+          return 301 https://$http_host$request_uri;
+        '';
+        listen = [
+          {
+            addr = "0.0.0.0";
+            extraParameters = ["deferred"];
+          }
+          {
+            addr = "0.0.0.0";
+            extraParameters = ["deferred"];
+            port = 443;
+            ssl = true;
+          }
+          {
+            addr = "[::]";
+            extraParameters = ["deferred"];
+          }
+          {
+            addr = "[::]";
+            extraParameters = ["deferred"];
+            port = 443;
+            ssl = true;
+          }
+        ];
+        rejectSSL = true;
+      };
+      "content.awen.sec.gd" = {
+        basicAuthFile = "/persist/nginx/htpasswd-content";
+        enableACME = true;
+        onlySSL = true;
+        root = "/mnt/data/downloads";
+        extraConfig =
+          nginxHeaders {Content-Disposition = "inline";}
+          + ''
+            access_log /var/log/nginx/content.log;
+            aio threads;
+            autoindex on;
+            charset utf8;
+            autoindex_exact_size off;
+            set_real_ip_from 100.64.0.6;
+            limit_rate $content_rate_limit;
+            limit_conn content_addr 2;
+            proxy_buffering off;
+            proxy_request_buffering off;
+            try_files /dev/null $webdav_location;
+          '';
+        locations = let
+          contentDavConfig =
+            ''proxy_set_header Authorization "Basic Y29udGVudDp0bmV0bm9j";''
+            + webdavDestination;
+        in {
+          "@direct" = {};
+          "@webdav" = {
+            extraConfig = contentDavConfig;
+            proxyPass = "http://127.0.0.1:45496";
+          };
+          "/library/".alias = "/mnt/data/library/";
+          "/now/" = {
+            alias = "/mnt/data/downloads/";
+            extraConfig = ''
+              try_files $uri $uri/ =404; # no webdav
+              limit_rate 18m; # 144mbps
+              limit_conn content_addr 2;
+            '';
+          };
+        };
+      };
+      "dav.awen.sec.gd" = {
+        # this vhost must have nginx basic auth, else the content-dav proxy credentials can be abused
+        basicAuthFile = pkgs.writeText "htpasswd-dav" ''
+          mal-seedvault:$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C
+          nadia-seedvault:$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6
+          ivy-seedvault:$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q
+        '';
+        enableACME = true;
+        onlySSL = true;
+        extraConfig =
+          webdavDestination
+          + ''
+            access_log /var/log/nginx/dav.log;
+            proxy_buffering off;
+            proxy_request_buffering off;
+          '';
+        locations."/".proxyPass = "http://127.0.0.1:45496";
+      };
+      "hass.sec.gd" = {
+        onlySSL = true;
+        enableACME = true;
+        extraConfig =
+          nginxHeaders {
+            Content-Security-Policy = {
+              connect-src = "'self' data: https://brands.home-assistant.io"; # icons via SW
+              font-src = "'self' data: https://cdnjs.cloudflare.com";
+              frame-ancestors = "'self'";
+              img-src = "'self' data: https://basemaps.cartocdn.com https://brands.home-assistant.io";
+              script-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+              style-src = "'self' 'unsafe-inline' https://cdnjs.cloudflare.com";
+            };
+          }
+          + ''
+            access_log /var/log/nginx/homeassistant.log;
+          '';
+        locations."/" = {
+          proxyPass = "http://10.0.0.7:8123";
+          proxyWebsockets = true;
+        };
+      };
+      "ii.sec.gd" = {
+        onlySSL = true;
+        enableACME = true;
+        extraConfig = ''access_log /var/log/nginx/chatrelay.log;'';
+        root = "/persist/matterbridge/media/";
+      };
+      "media.sec.gd" = {
+        onlySSL = true;
+        enableACME = true;
+        extraConfig =
+          nginxHeaders {
+            Content-Security-Policy = {
+              font-src = "'self' data:";
+              img-src = [
+                "'self'"
+                "blob:"
+                "https://repo.jellyfin.org/releases/plugin/images/"
+                "https://raw.githubusercontent.com/firecore/InfuseSync/master/"
+              ];
+              script-src = "'self' 'unsafe-inline' blob:";
+              style-src = "'self' 'unsafe-inline' blob:";
+              frame-ancestors = "'self'";
+            };
+            Cross-Origin-Opener-Policy = "same-origin";
+            Cross-Origin-Embedder-Policy = "credentialless";
+            Cross-Origin-Resource-Policy = "same-origin";
+          }
+          + ''
+            access_log /var/log/nginx/media.log;
+          '';
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8096";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_buffering off;
+          '';
+        };
+      };
+      "notes.sec.gd" = {
+        # proxy configured by services.trilium-server
+        onlySSL = true;
+        enableACME = true;
+        extraConfig =
+          nginxHeaders {
+            Content-Security-Policy = {
+              connect-src = "'self' https://api.github.com/repos/TriliumNext/Notes/releases/latest";
+              img-src = "'self' data:";
+              script-src = "'self' 'unsafe-inline' 'unsafe-eval'";
+              style-src = "'self' 'unsafe-inline'";
+            };
+          }
+          + ''
+            access_log /var/log/nginx/notes.log;
+          '';
+      };
+    };
+  };
+  services.postgresql = {
+    enable = true;
+    #package = pkgs.postgresql_15;
+    authentication = lib.mkOverride 10 ''
+      local all all peer
+      host all all 127.0.0.1/32 scram-sha-256
+      host all all ::1/128 scram-sha-256
+    '';
+  };
+  services.samba.settings.public = {
+    path = "/mnt/data/public";
+    #writeable = "yes";
+    public = "yes";
+  };
+  services.smartd.enable = true;
+  services.teamspeak3 = {
+    enable = true;
+    dataDir = "/persist/teamspeak3-server";
+    defaultVoicePort = 36609;
+    openFirewall = true;
+  };
+  services.tor = {
+    enable = true;
+    client.enable = true;
+  };
+  services.trilium-server = {
+    enable = true;
+    package = pkgs.trilium-next-server;
+    port = 37962;
+    dataDir = "/persist/trilium";
+    nginx.enable = true;
+    nginx.hostName = "notes.sec.gd";
+  };
+  services.vintagestory = {
+    enable = true;
+    addGroupManagementPolicy = true;
+    autostart = false;
+    dataDir = "/persist/vintagestory";
+  };
+  services.webdav = {
+    enable = true;
+    settings = {
+      address = "127.0.0.1";
+      port = 45496;
+      debug = true;
+      noSniff = true;
+      behindProxy = true;
+      permissions = "";
+      directory = "/dev/null";
+      users = [
+        {
+          username = "content";
+          password = "tnetnoc";
+          directory = "/mnt/data/downloads/";
+          permissions = "R";
+        }
+        {
+          username = "mal-seedvault";
+          password = "{bcrypt}$2b$12$tDSmS7YpvUybDvIE4D5GrulR7JaMIShDQa./q5TFEl14n0W3DM14C";
+          directory = "/mnt/data/backups/phone/";
+          permissions = "CRUD";
+        }
+        {
+          username = "nadia-seedvault";
+          password = "{bcrypt}$2b$12$okdYjjLDESKwdlHw.oCLQeClLb0YAa9D8qrzWMeQAJUJ22KA.kFx6";
+          directory = "/mnt/data/backups/phone-nadia/";
+          permissions = "CRUD";
+        }
+        {
+          username = "ivy-seedvault";
+          password = "{bcrypt}$2b$12$Sk8UkeVpwD9UNVe4jECJwOTWTeZVtLlENbdanaUEtCJNFLCzKk/9q";
+          directory = "/mnt/data/backups/phone-ivy/";
+          permissions = "CRUD";
+        }
+      ];
+    };
+  };
+  services.zrepl.settings.jobs = [
+    {
+      name = "tank_sink";
+      type = "sink";
+      serve = {
+        type = "stdinserver";
+        client_identities = [
+          "awdbox"
+          "awen" # TODO: use local instead
+          "t14s"
+        ];
+      };
+      root_fs = "pool/backups";
+    }
+    {
+      name = "data_snap_nobackup";
+      type = "snap";
+      filesystems = {
+        "pool/nobackup" = true;
+      };
+      snapshotting = {
+        type = "periodic";
+        interval = "5m";
+        prefix = "zrepl_";
+      };
+      pruning = {
+        keep = [
+          {
+            type = "grid";
+            grid = "1x1h(keep=all) | 32x15m | 24x1h";
+            regex = "^zrepl_.*";
+          }
+          {
+            type = "regex";
+            negate = true;
+            regex = "^zrepl_.*";
+          }
+        ];
+      };
+    }
+    {
+      # TODO: replicate to nvme or awdbox
+      name = "data_snap";
+      type = "snap";
+      filesystems = {
+        "pool<" = true;
+        "pool/backups<" = false;
+        "pool/nobackup<" = false;
+      };
+      snapshotting = {
+        type = "periodic";
+        interval = "5m";
+        prefix = "zrepl_";
+      };
+      pruning = {
+        keep = [
+          {
+            type = "grid";
+            grid = "1x1d(keep=all) | 96x15m | 72x1h | 30x1d | 52x1w";
+            regex = "^zrepl_.*";
+          }
+          {
+            type = "regex";
+            negate = true;
+            regex = "^zrepl_.*";
+          }
+        ];
+      };
+    }
+  ];
 
   environment.systemPackages = with pkgs; [
     ffmpeg-full
