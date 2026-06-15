@@ -120,28 +120,44 @@ in {
     "L /data - - - - /mnt/data"
   ];
 
+  swapDevices = [
+    {
+      device = "/dev/disk/by-partuuid/0438be7c-9e7f-4c6f-ae22-eb7466fcbb32";
+      options = ["nofail"];
+      randomEncryption = {
+        enable = true;
+        allowDiscards = true;
+        sectorSize = 4096;
+      };
+    }
+  ];
   fileSystems =
     lib.foldl (a: b: a // b)
     {
       "/mnt/data" = {
         device = "pool/data";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/mnt/data/backups" = {
         device = "pool/backups";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/mnt/data/downloads" = {
         device = "pool/downloads";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/mnt/data/immich" = {
         device = "pool/immich";
         fsType = "zfs";
+        options = ["nofail"];
       };
       "/mnt/data/nobackup" = {
         device = "pool/nobackup";
         fsType = "zfs";
+        options = ["nofail"];
       };
     }
     (lib.forEach (lib.range 1 5) (n: {
