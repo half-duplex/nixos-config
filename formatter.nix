@@ -1,7 +1,6 @@
 {
   pname,
   pkgs,
-  flake,
 }: let
   formatter = pkgs.writeShellApplication {
     name = pname;

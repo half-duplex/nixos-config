@@ -2,7 +2,6 @@
   config,
   flake,
   lib,
-  pkgs,
   ...
 }: let
   inherit (lib.attrsets) mapAttrsToList;
