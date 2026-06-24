@@ -250,11 +250,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781400199,
-        "narHash": "sha256-QysaFXE7eGqg1Lnuuj8nSPb7Zw/gtPMy8rHOLKHfOaQ=",
+        "lastModified": 1782007105,
+        "narHash": "sha256-oUdsm8POytc0v3OtXadp5WmF3mT+TzYgDjw+N6uzQu0=",
         "owner": "nvmd",
         "repo": "nixos-raspberrypi",
-        "rev": "c2e659551ee9dcd0e28df984151f063fedcb82ac",
+        "rev": "16d0e780d5f9546eb7033d420951fd2e3fad76cd",
         "type": "github"
       },
       "original": {
@@ -266,11 +266,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1781216227,
-        "narHash": "sha256-9mUW6gNwoN2SWc/l0fW4svPNOulXLl8ijqKyeSOGgJE=",
+        "lastModified": 1782116945,
+        "narHash": "sha256-G3tw/IXmaH6IQ2upZvhuN9sG8CkuX+BLuJDpE8hz0Ds=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a0374025a863d007d98e3297f6aa46cc3141c2f0",
+        "rev": "34268251cf5547d39063f2c5ea9a196246f7f3a6",
         "type": "github"
       },
       "original": {
@@ -281,11 +281,11 @@
     },
     "nixpkgsStaging": {
       "locked": {
-        "lastModified": 1781464637,
-        "narHash": "sha256-WVc5EK2KhKIl5wlOKsuBp/gFhuNJyPkJ9nOX8qZO70M=",
+        "lastModified": 1782318956,
+        "narHash": "sha256-TCQbxtgW8yaWOc4onhKu3uqSPoJm3HaT5yDHUqvcauo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "77abf92b3f6380f70669ba083f18342ef9191d08",
+        "rev": "18fe70414f58890931cda1d26545c0d1517699da",
         "type": "github"
       },
       "original": {
@@ -395,11 +395,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780547341,
-        "narHash": "sha256-Gq8KNx5A7hBB3uGJaj6eQfLDIz5YdLu92gqBcvHvoUo=",
+        "lastModified": 1782165805,
+        "narHash": "sha256-478kKQBvK6SYTOdN2h9jhKJv94nbXRbFMfuL1WshErg=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "9ed65852b6257fbeae4355bc24ecfea307ca759a",
+        "rev": "56b24064fdcaedca53553b1a6d607fd23b613a24",
         "type": "github"
       },
       "original": {
@@ -461,11 +461,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781380205,
-        "narHash": "sha256-cyyWPkdy2Cek6F1S7lcNe0mipXSe96tUS9EQf/oHEXY=",
+        "lastModified": 1782162156,
+        "narHash": "sha256-6GZJGeAEe/hwLqYUF5dOk+BY9/TuywNFjM1hoYDau3o=",
         "ref": "refs/heads/main",
-        "rev": "f36f7f6835e3f6c13c0c488436a79d92626ef0d8",
-        "revCount": 554,
+        "rev": "d981be970a37f13bf75ac8c3dacf178de12f621f",
+        "revCount": 555,
         "type": "git",
         "url": "https://codeberg.org/s0ph0s/werehouse.git"
       },
