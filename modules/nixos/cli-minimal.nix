@@ -13,6 +13,7 @@ in {
   ];
 
   environment.systemPackages = with pkgs; [
+    bat
     binutils
     cryptsetup
     dnsutils
@@ -29,6 +30,7 @@ in {
     parted # incl. partprobe
     psmisc # killall, etc
     pv
+    ripgrep
     sbctl
     smartmontools
     tcpdump
