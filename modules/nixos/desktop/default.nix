@@ -120,10 +120,6 @@
       "qtwebengine-5.15.19" # for teamspeak3
     ];
 
-    programs = {
-      #adb.enable = true;
-      ghidra.enable = true;
-    };
     services = {
       flatpak.enable = true;
       pcscd.enable = true; # yubikey ccid/piv
@@ -139,7 +135,13 @@
         enable = true;
         polkitPolicyOwners = ["mal"];
       };
+      #adb.enable = true;
       dconf.enable = true;
+      foot = {
+        enable = true;
+        settings = {};
+      };
+      ghidra.enable = true;
       steam.enable = true;
     };
     nixpkgs.overlays = [
