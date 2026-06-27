@@ -94,6 +94,11 @@
       corefonts
       vista-fonts
       noto-fonts
+      monaspace
+      (iosevka.override {
+        privateBuildPlan = readFile ./iosevka.toml;
+        set = "Iosevka Custom Terminal";
+      })
 
       evince # may be implicit with gnome
       google-chrome
