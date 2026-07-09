@@ -96,8 +96,8 @@
       noto-fonts
       monaspace
       (iosevka.override {
-        privateBuildPlan = readFile ./iosevka.toml;
-        set = "Iosevka Custom Terminal";
+        privateBuildPlan = builtins.readFile ./iosevka.toml;
+        set = "CustomTerminal";
       })
 
       evince # may be implicit with gnome
