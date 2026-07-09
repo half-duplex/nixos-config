@@ -4,6 +4,7 @@
   hostName,
   lib,
   modulesPath,
+  pkgs,
   ...
 }: {
   imports = with flake.modules.nixos; [
@@ -28,6 +29,25 @@
   ];
 
   networking.hostName = hostName;
+  networking.networkmanager.dispatcherScripts = [
+    {
+      source = pkgs.writeText "captive-portal-clicker" ''
+        set -x
+        action="$2"
+        if [ "$action" == "up" ] ; then
+          logger "checking captive portals for $2"
+          ssid=$(${pkgs.networkmanager}/bin/nmcli -g 802-11-wireless.ssid conn show "$CONNECTION_UUID")
+          if [ "$ssid" == "Amtrak_WiFi" ] ; then
+            timeout 1 ${pkgs.curl}/bin/curl http://8.8.8.8/ --head -s \
+              | grep -qi '^Location: https://amtrak.on.icomera.com/cna/' \
+              && ${pkgs.curl}/bin/curl -s 'https://www.ombord.info/hotspot/hotspot.cgi?method=login&url=https://www.amtrak.com/wifi/amtrakwifi.html&onerror=https://amtrak.on.icomera.com/'
+            logger "done captive portal"
+          fi
+        fi
+      '';
+      type = "basic";
+    }
+  ];
 
   fileSystems =
     lib.foldl (a: b: a // b)
