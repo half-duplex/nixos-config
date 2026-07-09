@@ -27,6 +27,7 @@
     lua-language-server
     nil
     nodejs
+    picocom
     pkg-config
     pyright
     rustc
