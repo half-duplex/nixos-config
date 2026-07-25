@@ -21,6 +21,9 @@
 
   boot.initrd.kernelModules = ["nvme"];
   boot.initrd.availableKernelModules = ["amdgpu"];
+  boot.extraModprobeConfig = ''
+      options zfs zfs_arc_sys_free=${toString (2*1024*1024*1024)}
+    '';
   hardware.cpu.amd.updateMicrocode = true;
 
   users.users.mal.openssh.authorizedKeys.keys = [

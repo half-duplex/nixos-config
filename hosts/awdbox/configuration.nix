@@ -49,6 +49,9 @@
       "amdgpu.ppfeaturemask=0xfff7ffff"
     ];
     kernelPackages = lib.mkForce pkgs.linuxPackages;
+    extraModprobeConfig = ''
+      options zfs zfs_arc_sys_free=${toString (2*1024*1024*1024)}
+    '';
   };
   console.earlySetup = true;
 
