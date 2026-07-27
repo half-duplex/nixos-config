@@ -37,5 +37,11 @@
     vim-language-server
   ];
 
+  documentation = {
+    dev.enable = true;
+    man.cache.enable = true;
+    nixos.includeAllModules = true;
+  };
+
   boot.binfmt.emulatedSystems = builtins.filter (sys: sys != pkgs.stdenv.hostPlatform.system) ["aarch64-linux"];
 }
