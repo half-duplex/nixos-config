@@ -52,6 +52,17 @@
     }
   ];
 
+  swapDevices = [
+    {
+      device = "/dev/disk/by-partuuid/14c47044-9e43-4494-942d-9a4dae20a24c";
+      options = ["nofail"];
+      randomEncryption = {
+        enable = true;
+        allowDiscards = true;
+        sectorSize = 4096;
+      };
+    }
+  ];
   fileSystems =
     lib.foldl (a: b: a // b)
     {
