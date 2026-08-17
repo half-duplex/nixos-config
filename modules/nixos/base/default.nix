@@ -221,114 +221,114 @@ in {
     "e /nix/var/log - - - 30d"
   ];
 
-  # Filesystems
+  services.avahi = lib.mkIf config.services.avahi.enable {
+    nssmdns4 = true;
+    nssmdns6 = true;
+    extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
+  };
+  services.journald.extraConfig = "MaxRetentionSec=7d";
+  services.udev.extraRules = ''
+    SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
+  '';
+
   systemd.services.zfs-mount.enable = false;
-  services = {
-    avahi = lib.mkIf config.services.avahi.enable {
-      nssmdns4 = true;
-      nssmdns6 = true;
-      extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
-    };
-    journald.extraConfig = "MaxRetentionSec=7d";
-    udev.extraRules = ''
-      SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
-    '';
-    zfs = {
-      autoScrub.enable = lib.mkDefault true;
-      trim.enable = true;
-      zed.settings.ZED_SYSLOG_SUBCLASS_EXCLUDE = "history_event";
-    };
-    zrepl = {
-      enable = true;
-      settings = {
-        jobs = [
-          {
-            name = "tank_snap_nobackup";
-            type = "snap";
-            filesystems = {
-              "tank/nix<" = true;
-              "tank/home/nobackup<" = true;
-              "tank/persist/nobackup<" = true;
-            };
-            snapshotting = {
-              type = "periodic";
-              interval = "5m";
-              prefix = "zrepl_";
-            };
-            pruning = {
-              keep = [
-                {
-                  type = "grid";
-                  grid = "1x1h(keep=all) | 32x15m | 24x1h";
-                  regex = "^zrepl_.*";
-                }
-                {
-                  type = "regex";
-                  negate = true;
-                  regex = "^zrepl_.*";
-                }
-              ];
-            };
-          }
-          {
-            name = "tank_snap";
-            type = "push";
-            connect = {
-              type = "ssh+stdinserver";
-              host = "awen.sec.gd";
-              #user = "zrepl";
-              user = "root";
-              port = 22;
-              identity_file = "/persist/zrepl/ssh_awen";
-              options = ["ControlMaster=no"]; # No /run/user/0
-            };
-            send.encrypted = true;
-            replication.protection = {
-              initial = "guarantee_resumability";
-              incremental = "guarantee_incremental";
-            };
-            filesystems = {
-              "tank" = false; # no need to snap the empty root
-              "tank<" = true;
-              "tank/nix<" = false;
-              "tank/home/nobackup<" = false;
-              "tank/persist/nobackup<" = false;
-            };
-            snapshotting = {
-              type = "periodic";
-              interval = "5m";
-              prefix = "zrepl_";
-            };
-            pruning = {
-              keep_sender = [
-                {type = "not_replicated";}
-                {
-                  type = "grid";
-                  grid = "1x1h(keep=all) | 32x15m | 24x1h | 7x1d";
-                  regex = "^zrepl_.*";
-                }
-                {
-                  type = "regex";
-                  negate = true;
-                  regex = "^zrepl_.*";
-                }
-              ];
-              keep_receiver = [
-                {
-                  type = "grid";
-                  grid = "1x1d(keep=all) | 96x15m | 72x1h | 30x1d | 52x1w";
-                  regex = "^zrepl_.*";
-                }
-                {
-                  type = "regex";
-                  negate = true;
-                  regex = "^zrepl_.*";
-                }
-              ];
-            };
-          }
-        ];
-      };
+  services.zfs = {
+    autoScrub.enable = lib.mkDefault true;
+    trim.enable = true;
+    zed.settings.ZED_SYSLOG_SUBCLASS_EXCLUDE = "history_event";
+  };
+
+  #systemd.services.zrepl.wantedBy = lib.mkForce [];
+  services.zrepl = {
+    enable = true;
+    settings = {
+      jobs = [
+        {
+          name = "tank_snap_nobackup";
+          type = "snap";
+          filesystems = {
+            "tank/nix<" = true;
+            "tank/home/nobackup<" = true;
+            "tank/persist/nobackup<" = true;
+          };
+          snapshotting = {
+            type = "periodic";
+            interval = "5m";
+            prefix = "zrepl_";
+          };
+          pruning = {
+            keep = [
+              {
+                type = "grid";
+                grid = "1x1h(keep=all) | 32x15m | 24x1h";
+                regex = "^zrepl_.*";
+              }
+              {
+                type = "regex";
+                negate = true;
+                regex = "^zrepl_.*";
+              }
+            ];
+          };
+        }
+        {
+          name = "tank_snap";
+          type = "push";
+          connect = {
+            type = "ssh+stdinserver";
+            host = "awen.sec.gd";
+            #user = "zrepl";
+            user = "root";
+            port = 22;
+            identity_file = "/persist/zrepl/ssh_awen";
+            options = ["ControlMaster=no"]; # No /run/user/0
+          };
+          send.encrypted = true;
+          replication.protection = {
+            initial = "guarantee_resumability";
+            incremental = "guarantee_incremental";
+          };
+          filesystems = {
+            "tank" = false; # no need to snap the empty root
+            "tank<" = true;
+            "tank/nix<" = false;
+            "tank/home/nobackup<" = false;
+            "tank/persist/nobackup<" = false;
+          };
+          snapshotting = {
+            type = "periodic";
+            interval = "5m";
+            prefix = "zrepl_";
+          };
+          pruning = {
+            keep_sender = [
+              {type = "not_replicated";}
+              {
+                type = "grid";
+                grid = "1x1h(keep=all) | 32x15m | 24x1h | 7x1d";
+                regex = "^zrepl_.*";
+              }
+              {
+                type = "regex";
+                negate = true;
+                regex = "^zrepl_.*";
+              }
+            ];
+            keep_receiver = [
+              {
+                type = "grid";
+                grid = "1x1d(keep=all) | 96x15m | 72x1h | 30x1d | 52x1w";
+                regex = "^zrepl_.*";
+              }
+              {
+                type = "regex";
+                negate = true;
+                regex = "^zrepl_.*";
+              }
+            ];
+          };
+        }
+      ];
     };
   };
 
