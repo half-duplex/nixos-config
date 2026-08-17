@@ -15,13 +15,17 @@ in {
               hash = "sha256-uWV5pvQHUrJpWsS+biYtMPvi2B5dxi7F9mCV4JYyz+Q=";
             };
 
-            nativeBuildInputs = (prevAttrs.unwrapped.nativeBuildInputs or []) ++ [
-              pkgs.qt6.qtshadertools
-            ];
-            buildInputs = (prevAttrs.unwrapped.buildInputs or []) ++ [
-              pkgs.minizip
-              pkgs.cmark-gfm
-            ];
+            nativeBuildInputs =
+              (prevAttrs.unwrapped.nativeBuildInputs or [])
+              ++ [
+                pkgs.qt6.qtshadertools
+              ];
+            buildInputs =
+              (prevAttrs.unwrapped.buildInputs or [])
+              ++ [
+                pkgs.minizip
+                pkgs.cmark-gfm
+              ];
 
             patches =
               (prevAttrs.unwrapped.patches or [])
