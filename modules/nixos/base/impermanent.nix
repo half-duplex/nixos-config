@@ -114,6 +114,7 @@ in {
           enable = true;
           path = "/persist/nobackup/cache";
           dirs = [
+            "/var/cache/powertop" # making conditional on package causes infinite recursion??
             (mkIf config.services.fwupd.enable "/var/cache/fwupd")
             (mkIf config.services.displayManager.sddm.enable {
               path = "/var/lib/sddm/.cache";
