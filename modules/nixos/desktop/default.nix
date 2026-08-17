@@ -64,6 +64,7 @@
       carla
       rnnoise-plugin
       ffmpeg-full
+      darktable
       gimp
       pulseaudio # for pactl - no pw equivalent
       yt-dlp
