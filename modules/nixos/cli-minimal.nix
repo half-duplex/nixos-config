@@ -126,6 +126,12 @@ in {
       WGETRC = "$XDG_CONFIG_HOME/wget/wgetrc";
       WINEPREFIX = "$XDG_DATA_HOME/wineprefixes/default";
     };
+    shellAliases = {
+      argv = "python -c '" + ''
+        from sys import argv
+        print("\n".join([f"argv[{i}]={repr(n)}" for i,n in enumerate(argv[1:])]))
+      '' + "'";
+    };
   };
 
   programs.mosh.enable = true;
