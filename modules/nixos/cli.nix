@@ -7,6 +7,7 @@
   environment.systemPackages = with pkgs; [
     jq
     libva-utils # for vainfo
+    litecli
     nfs-utils
     nvme-cli
     pciutils
