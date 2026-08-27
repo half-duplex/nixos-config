@@ -4,7 +4,7 @@
   ...
 }: let
   ffLocked = value: {
-    Status = "Locked";
+    Status = "locked";
     Value = value;
   };
 in {
