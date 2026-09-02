@@ -234,7 +234,6 @@ in {
   systemd.services.zfs-mount.enable = false;
   services.zfs = {
     autoScrub.enable = lib.mkDefault true;
-    trim.enable = true;
     zed.settings.ZED_SYSLOG_SUBCLASS_EXCLUDE = "history_event";
   };
 
