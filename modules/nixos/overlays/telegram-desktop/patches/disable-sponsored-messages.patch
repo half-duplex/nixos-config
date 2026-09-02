@@ -1,40 +1,32 @@
 diff --git a/Telegram/SourceFiles/data/components/sponsored_messages.cpp b/Telegram/SourceFiles/data/components/sponsored_messages.cpp
-index fa5dacf69..a54f87f29 100644
+index 04b421ef67..8e5ea6e259 100644
 --- a/Telegram/SourceFiles/data/components/sponsored_messages.cpp
 +++ b/Telegram/SourceFiles/data/components/sponsored_messages.cpp
-@@ -224,11 +224,6 @@ void SponsoredMessages::inject(
+@@ -302,6 +302,7 @@ HistoryItem *SponsoredMessages::injectItem(
  }
  
  bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
--	if (history->peer->isChannel()) {
--		return true;
--	} else if (const auto user = history->peer->asUser()) {
--		return user->isBot();
--	}
- 	return false;
++	return false;
+ 	if (history->peer->isChannel()) {
+ 		return true;
+ 	} else if (const auto user = history->peer->asUser()) {
+@@ -311,6 +312,7 @@ bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
  }
  
+ bool SponsoredMessages::canHaveFor(not_null<HistoryItem*> item) const {
++	return false;
+ 	return item->history()->peer->isBroadcast()
+ 		&& item->isRegular();
+ }
 diff --git a/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp b/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp
-index 7f30ceb75..129b81a2e 100644
+index cfcdaf9a50..0bf7532e65 100644
 --- a/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp
 +++ b/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp
-@@ -3859,19 +3859,6 @@ void InnerWidget::peerSearchReceived(Api::PeerSearchResult result) {
+@@ -4741,6 +4741,7 @@ void InnerWidget::peerSearchReceived(Api::PeerSearchResult result) {
  		return false;
  	};
  	auto added = base::flat_set<not_null<PeerData*>>();
--	for (const auto &sponsored : result.sponsored) {
--		const auto peer = sponsored.peer;
--		if (inlist(peer) || _sponsoredRemoved.contains(peer)) {
--			continue;
--		}
--		_peerSearchResults.push_back(
--			std::make_unique<PeerSearchResult>(peer));
--		_peerSearchResults.back()->sponsored
--			= std::make_unique<SponsoredSearchResult>(SponsoredSearchResult{
--				.data = sponsored,
--			});
--		added.emplace(peer);
--	}
- 	for (const auto &peer : result.peers) {
- 		if (added.contains(peer) || inlist(peer)) {
- 			continue;
++	if (false)
+ 	for (const auto &sponsored : result.sponsored) {
+ 		const auto peer = sponsored.peer;
+ 		if (inlist(peer) || _sponsoredRemoved.contains(peer)) {

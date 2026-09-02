@@ -6,13 +6,13 @@ in {
       _: prev: {
         telegram-desktop = prev.telegram-desktop.overrideAttrs (finalAttrs: prevAttrs: {
           unwrapped = prevAttrs.unwrapped.overrideAttrs {
-            version = "7.0.5";
+            version = "7.1.4";
             src = fetchFromGitHub {
               owner = "telegramdesktop";
               repo = "tdesktop";
               rev = "v${finalAttrs.version}";
               fetchSubmodules = true;
-              hash = "sha256-uWV5pvQHUrJpWsS+biYtMPvi2B5dxi7F9mCV4JYyz+Q=";
+              hash = "sha256-YiT1XN+u9lJcP7xI5PnhLX8Zd5gyhCwxGcXe4Myl9Xs=";
             };
 
             nativeBuildInputs =
