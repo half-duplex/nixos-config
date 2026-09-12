@@ -8,14 +8,14 @@
 in
   buildGoModule rec {
     inherit pname;
-    version = "1.6.0";
+    version = "1.10.0";
     src = fetchFromGitHub {
       owner = "mattdavis90";
       repo = "immich-stacker";
       rev = "v${version}";
-      hash = "sha256-RDND5nS8VfS3NgFqK/OEhp+Z5R0U0yvdjPeYwTSxEcw=";
+      hash = "sha256-bTNXiTSGmhgXu520NrViD/hijfa+819dOBMRLbAYgPk=";
     };
-    vendorHash = "sha256-Fi7OkzH4o8tUieRHrcak47UI4nu3TC5l2PucpmtY4h4=";
+    vendorHash = "sha256-BsUUsQmEWwMCDX/yjwPDBysPL+RoeQSDz4SIr01zang=";
     meta = {
       description = "A small application to help you stack images in Immich";
       homepage = "https://github.com/mattdavis90/immich-stacker";
