@@ -96,6 +96,7 @@
     love
     picotron
     azure-functions-core-tools
+    davinci-resolve
 
     (writeShellApplication {
       name = "bright";
