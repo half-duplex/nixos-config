@@ -14,7 +14,7 @@
   immichSettings = {
     ffmpeg = {
       accelDecode = true; # May not work without accel="enabled", but I don't want hw encode
-      acceptedAudioCodecs = ["aac" "mp3" "libopus"];
+      acceptedAudioCodecs = ["aac" "mp3" "opus"];
       acceptedContainers = ["mp4" "ogg" "webm"];
       acceptedVideoCodecs = ["h264" "hevc" "vp9" "av1"];
       crf = "30";
