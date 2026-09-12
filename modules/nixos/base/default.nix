@@ -8,6 +8,7 @@
   inherit (lib.strings) concatStringsSep;
 in {
   imports = with flake.modules.nixos; [
+    ./multiverse.nix
     overlays
     nix-remote
     ./efi.nix

@@ -2,8 +2,7 @@
   inputs = {
     # system
     nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
-    nixpkgsStaging.url = "nixpkgs/release-26.05";
-    #nixpkgsUnstable.url = "nixpkgs/nixos-unstable";
+    multiverse.url = "github:fzakaria/nixpkgs-multiverse";
     blank.url = "github:divnix/blank?rev=5a5d2684073d9f563072ed07c871d577a6c614a8";
     blueprint = {
       url = "github:numtide/blueprint";
@@ -18,7 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi/develop";
+      url = "github:nvmd/nixos-raspberrypi";
       inputs.argononed.follows = "blank";
       inputs.nixpkgs.follows = "nixpkgs";
     };

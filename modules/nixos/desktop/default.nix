@@ -1,4 +1,5 @@
 {
+  config,
   flake,
   lib,
   pkgs,
@@ -48,7 +49,9 @@
     };
     services.xserver.xkb.options = "compose:ralt";
 
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = with pkgs; let
+      mvtip = config.multiverse.instance.at "tip";
+    in [
       amdgpu_top
       ddcui
       ddcutil
@@ -104,7 +107,7 @@
       evince # may be implicit with gnome
       google-chrome
       libreoffice-fresh
-      nixpkgsStaging.tor-browser
+      mvtip.tor-browser
       yubikey-manager
       yubioath-flutter
       zoom-us

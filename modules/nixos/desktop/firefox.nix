@@ -1,5 +1,5 @@
 {
-  pkgs,
+  config,
   lib,
   ...
 }: let
@@ -12,7 +12,7 @@ in {
     environment.variables.MOZ_USE_XINPUT2 = "1";
     programs.firefox = {
       enable = true;
-      package = pkgs.nixpkgsStaging.firefox;
+      package = (config.multiverse.instance.at "tip").firefox;
       policies = {
         AutofillAddressEnabled = false;
         AutofillCreditCardEnabled = false;

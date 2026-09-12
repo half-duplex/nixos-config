@@ -67,6 +67,7 @@ in {
     services = {
       immich = {
         enable = true;
+        package = (config.multiverse.instance.at "tip").immich;
         accelerationDevices = ["/dev/dri/renderD128"];
         environment = {
           IMMICH_CONFIG_FILE = config.sops.templates."immich.json".path;
