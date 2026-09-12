@@ -99,7 +99,11 @@ in {
             }
             + concatStringsSep "\n" (
               mapAttrsToList (k: v: "${k} ${v};") {
+                access_log = "/var/log/nginx/immich.log";
+                client_body_timeout = "180s";
+                client_body_buffer_size = "1024k";
                 client_max_body_size = "50000M";
+                proxy_request_buffering = "off";
                 proxy_read_timeout = "600s";
                 proxy_send_timeout = "600s";
                 send_timeout = "600s";
