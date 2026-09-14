@@ -193,6 +193,21 @@
         "type": "github"
       }
     },
+    "multiverse": {
+      "locked": {
+        "lastModified": 1789387926,
+        "narHash": "sha256-oJd9l94KPeUku/f+2DjjWi6EipLNiqyXUadi/gd0WoY=",
+        "owner": "fzakaria",
+        "repo": "nixpkgs-multiverse",
+        "rev": "2643af47bc0839299800c5c1c99e5ade99a5f3fd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fzakaria",
+        "repo": "nixpkgs-multiverse",
+        "type": "github"
+      }
+    },
     "nix-prelude": {
       "inputs": {
         "parsec": "parsec",
@@ -250,46 +265,30 @@
         ]
       },
       "locked": {
-        "lastModified": 1789176430,
-        "narHash": "sha256-YeKTvy1zKI08jzs1uaQzDEGxSWD6shspKTt5X0MXE5M=",
+        "lastModified": 1789303702,
+        "narHash": "sha256-uNP8AWLxN/fYygw+i79QwK1J+KNI7xivq0SHutqkfkg=",
         "owner": "nvmd",
         "repo": "nixos-raspberrypi",
-        "rev": "0b7254d49ed3b660e57a3113c8b6cfc33b2e0c61",
+        "rev": "8e7f1a4a0e80de946f359993087416f581d9c87e",
         "type": "github"
       },
       "original": {
         "owner": "nvmd",
-        "ref": "develop",
         "repo": "nixos-raspberrypi",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789114715,
-        "narHash": "sha256-eeH+/1GxEjw8NCObjaHVIy3YvCQ4Qckrx4LZj5xBaU4=",
-        "rev": "21a67dc470149f337cecafbe965d8d252a390518",
+        "lastModified": 1789344334,
+        "narHash": "sha256-it+7kNGnOOHBCEnl4SfZ7QtfGziH3EryzHqwvJpjAfg=",
+        "rev": "c3eea5b2156db11c7eeeada3dc737711255b253e",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9592.21a67dc47014/nixexprs.tar.zst?lastModified=1789114715&rev=21a67dc470149f337cecafbe965d8d252a390518"
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9729.c3eea5b2156d/nixexprs.tar.zst?lastModified=1789344334&rev=c3eea5b2156db11c7eeeada3dc737711255b253e"
       },
       "original": {
         "type": "tarball",
         "url": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst"
-      }
-    },
-    "nixpkgsStaging": {
-      "locked": {
-        "lastModified": 1789155820,
-        "narHash": "sha256-cTHZTeYRV42p62ss3ZEFnBXrW3WpLgDpYWYyat4V2b8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "8029b6c369415ee1ef02a86f352806348f104db9",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "ref": "release-26.05",
-        "type": "indirect"
       }
     },
     "parsec": {
@@ -357,9 +356,9 @@
         "blueprint": "blueprint",
         "intransience": "intransience",
         "lanzaboote": "lanzaboote",
+        "multiverse": "multiverse",
         "nixos-raspberrypi": "nixos-raspberrypi",
         "nixpkgs": "nixpkgs",
-        "nixpkgsStaging": "nixpkgsStaging",
         "picotron": "picotron",
         "sops-nix": "sops-nix",
         "werehouse": "werehouse"
