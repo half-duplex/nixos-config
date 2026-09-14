@@ -556,7 +556,6 @@ in {
   environment.systemPackages = with pkgs; [
     ffmpeg-full
     perSystem.self.immich-stacker
-    virtio-win
   ];
 
   #virtualisation.vmware.host.enable = true;

@@ -92,7 +92,6 @@
       (proxmark3.override {hardwarePlatform = "PM3GENERIC";})
       remmina
       virt-manager
-      virtio-win
       wireshark
 
       corefonts
