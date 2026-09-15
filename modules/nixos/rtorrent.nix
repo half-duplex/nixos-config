@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib) literalExpression mkIf mkOption types;
 
   inherit (flake.lib) nginxHeaders;
 
@@ -58,6 +58,7 @@ in {
       };
       hostName = mkOption {
         default = "rt.${config.networking.fqdn}";
+        defaultText = literalExpression ''"rt.''${networking.fqdn}"'';
         description = "The hostname rutorrent will be accessible on";
         type = types.str;
       };
@@ -74,6 +75,7 @@ in {
       enable = lib.mkEnableOption "Configure the Flood frontend for rtorrent";
       hostName = mkOption {
         default = "dl.${config.networking.fqdn}";
+        defaultText = literalExpression ''"dl.''${networking.fqdn}"'';
         description = "The hostname rutorrent will be accessible on";
         type = types.str;
       };
@@ -122,9 +124,9 @@ in {
 
         protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
 
-        network.http.max_open.set = 128
-        network.max_open_files.set = 600
-        network.max_open_sockets.set = 3000
+        network.http.max_open.set = 200
+        network.max_open_files.set = 2000
+        network.max_open_sockets.set = 4000
 
         pieces.memory.max.set = 1800M
         network.xmlrpc.size_limit.set = 8M
@@ -235,6 +237,9 @@ in {
           };
         };
       };
+    };
+    systemd.services.rtorrent = mkIf rtCfg.enable {
+      serviceConfig.LimitNOFILE = "4096:524288";
     };
     systemd.services.flood = mkIf floodCfg.enable {
       path = [pkgs.mediainfo];
