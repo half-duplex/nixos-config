@@ -64,6 +64,14 @@ in {
         SearchEngines = {
           Add = [
             {
+              Name = "Startpage";
+              # qadf - safesearch - none, moderate, heavy
+              URLTemplate = "https://www.startpage.com/do/search?cat=web&qadf=none&query={searchTerms}";
+              Method = "GET";
+              IconURL = "https://cdn.startpage.com/sp/cdn/favicons/mobile/android-icon-192x192.png";
+              Alias = "sp";
+            }
+            {
               Name = "Google Images";
               URLTemplate = "https://www.google.com/search?tbm=isch&q={searchTerms}";
               Method = "GET";
