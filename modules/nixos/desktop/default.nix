@@ -79,7 +79,7 @@
       element-desktop
       signal-desktop
       #teamspeak3 # removed from 26.05
-      teamspeak6-client
+      mvtip.teamspeak6-client
       telegram-desktop
       thunderbird
 
