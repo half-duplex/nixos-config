@@ -91,7 +91,7 @@
       imhex
       (proxmark3.override {hardwarePlatform = "PM3GENERIC";})
       remmina
-      virt-manager
+      mvtip.virt-manager
       wireshark
 
       corefonts
