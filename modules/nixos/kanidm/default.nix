@@ -6,7 +6,7 @@
 }: let
   nsCfg = config.mal.services.kanidm;
   cfg = config.services.kanidm.server;
-  package = pkgs.kanidm_1_10;
+  package = pkgs.kanidm_1_11;
   bindPort = 6286;
 in {
   imports = [
