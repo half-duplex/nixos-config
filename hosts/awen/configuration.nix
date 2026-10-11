@@ -99,8 +99,16 @@ in {
 
   networking = {
     inherit hostName;
-    bridges.br0.interfaces = ["eth0"];
+    useDHCP = false;
     defaultGateway = "10.0.0.1";
+    nameservers = [
+      "10.0.0.1"
+      "2001:4860:4860::8888"
+      "2001:4860:4860::8844"
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
+    bridges.br0.interfaces = ["eth0.100"];
     interfaces = {
       br0 = {
         ipv4.addresses = [
@@ -112,14 +120,18 @@ in {
         ipv6.addresses = [];
       };
       eth0.wakeOnLan.enable = true;
+      "eth0.165".useDHCP = false;
     };
-    nameservers = [
-      "10.0.0.1"
-      "2001:4860:4860::8888"
-      "2001:4860:4860::8844"
-      "8.8.8.8"
-      "8.8.4.4"
-    ];
+    vlans = {
+      "eth0.100" = {
+        id = 100;
+        interface = "eth0";
+      };
+      "eth0.165" = {
+        id = 165;
+        interface = "eth0";
+      };
+    };
   };
 
   systemd.tmpfiles.rules = [
