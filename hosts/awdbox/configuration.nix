@@ -17,6 +17,7 @@
     plasma
     samba
     ups
+    vr
     inputs.picotron.nixosModules.default
   ];
 
@@ -46,7 +47,6 @@
     kernelParams = [
       "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:off:10.0.0.1"
       "amd_pstate=active"
-      "amdgpu.ppfeaturemask=0xfff7ffff"
     ];
     kernelPackages = lib.mkForce pkgs.linuxPackages;
     extraModprobeConfig = ''
