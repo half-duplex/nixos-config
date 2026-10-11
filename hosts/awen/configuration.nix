@@ -433,10 +433,16 @@ in {
       host all all ::1/128 scram-sha-256
     '';
   };
-  services.samba.settings.public = {
-    path = "/mnt/data/public";
-    #writeable = "yes";
-    public = "yes";
+  services.samba.settings = {
+    downloads = {
+      path = "/mnt/data/downloads";
+      "valid users" = "mal ivy nadia";
+    };
+    public = {
+      path = "/mnt/data/public";
+      #writeable = "yes";
+      public = "yes";
+    };
   };
   services.smartd.enable = true;
   services.teamspeak3 = {
