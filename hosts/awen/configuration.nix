@@ -82,6 +82,12 @@ in {
     "command=\"zrepl stdinserver t14s\",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBlIAZVeRbfsFpbsoywqneHtIDvXTWv7myK5YOvnSsx7 root@t14s"
   ];
 
+  users.users.ivy = {
+    isNormalUser = true;
+    extraGroups = ["ssh-users" "abiotic" "vintagestory"];
+    openssh.authorizedKeys.keys = [
+    ];
+  };
   users.users.nadia = {
     isNormalUser = true;
     extraGroups = ["ssh-users" "abiotic" "vintagestory"];
@@ -89,6 +95,7 @@ in {
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ59U5sahxc6qtBdtJuk+83Hn0pEb0V6LepQWQo63mlU"
     ];
   };
+  nix.settings.allowed-users = ["ivy"];
 
   networking = {
     inherit hostName;
