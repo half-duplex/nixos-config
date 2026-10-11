@@ -7,6 +7,7 @@
 }: {
   imports = with flake.modules.nixos; [
     cli
+    virt-host
     ./plymouth.nix
 
     ./chromium.nix

@@ -20,7 +20,6 @@ in {
     ./keep-inputs.nix
     ./secureboot.nix
     ./ssh.nix
-    ./virt-host.nix
     ./zswap.nix
   ];
 
