@@ -398,18 +398,9 @@ in {
     };
   };
 
-  virtualisation = {
-    docker = {
-      enable = true;
-      enableOnBoot = false;
-    };
-    libvirtd = {
-      parallelShutdown = 2;
-      qemu = {
-        runAsRoot = false;
-        swtpm.enable = true;
-      };
-    };
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
   };
 
   services = {

@@ -14,7 +14,6 @@ in {
   config = lib.mkMerge [
     (hardwareFor "physical" {
       services.fwupd.enable = true;
-      virtualisation.libvirtd.enable = true;
     })
     (hardwareFor "qemu" {
       services.qemuGuest.enable = true;

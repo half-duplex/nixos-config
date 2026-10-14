@@ -15,6 +15,7 @@ in {
     (modulesPath + "/installer/scan/not-detected.nix")
     base
     cli
+    virt-host
 
     coraltpu
     immich
