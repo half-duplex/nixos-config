@@ -153,11 +153,6 @@
     interfaces.eth0.wakeOnLan.enable = true;
   };
   services = {
-    ollama = {
-      enable = true;
-      package = pkgs.ollama-rocm;
-      rocmOverrideGfx = "10.1.0";
-    };
     openvpn.servers.commercial = {
       config = "config ${config.sops.secrets."openvpn_awdbox_commercial".path}";
     };
