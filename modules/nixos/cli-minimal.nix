@@ -141,7 +141,16 @@ in {
 
   programs.tmux = {
     enable = true;
-    terminal = "screen-256color";
+    escapeTime = 5; # more responsive vim
+    extraConfig = ''
+      set -g set-titles on
+      set -as terminal-features '*:osc7'
+
+      # Set new panes to open in current directory
+      bind c new-window -c "#{pane_current_path}"
+      bind '"' split-window -c "#{pane_current_path}"
+      bind % split-window -h -c "#{pane_current_path}"
+    '';
   };
 
   programs.bash.interactiveShellInit = ''
