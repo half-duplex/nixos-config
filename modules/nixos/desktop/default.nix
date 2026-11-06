@@ -117,13 +117,14 @@
 
       (mpv.override {scripts = [mpvScripts.mpris];})
 
-      (vscode-with-extensions.override {
-        vscodeExtensions = with pkgs.vscode-extensions; [
-          ms-python.python
-          ms-vscode.cpptools
-          vscodevim.vim
-        ];
-      })
+      # broken build 2026-11-06
+      #(vscode-with-extensions.override {
+      #  vscodeExtensions = with pkgs.vscode-extensions; [
+      #    ms-python.python
+      #    ms-vscode.cpptools
+      #    vscodevim.vim
+      #  ];
+      #})
     ];
     nixpkgs.config.permittedInsecurePackages = [
       "qtwebengine-5.15.19" # for teamspeak3
