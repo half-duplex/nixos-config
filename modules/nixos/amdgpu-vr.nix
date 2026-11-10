@@ -1,13 +1,4 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
-  amdgpu-vr = pkgs.callPackage ./package.nix {
-    kernel = config.boot.kernelPackages.kernel;
-  };
-in {
-  #boot.extraModulePackages = [ amdgpu-vr ];
+{pkgs, ...}: {
   boot.kernelPatches = [
     {
       name = "amdgpu-ignore-ctx-privileges";
