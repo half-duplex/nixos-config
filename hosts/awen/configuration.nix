@@ -18,6 +18,7 @@ in {
     virt-host
 
     coraltpu
+    fantastick
     immich
     kanidm
     navidrome
@@ -203,10 +204,20 @@ in {
     port = 42773;
     serverName = "Abiotic Nexus";
   };
-  services.avahi.enable = true;
-  services.jellyfin = {
+  services.fantastick = {
     enable = true;
+    createDatabase = true;
+    dataDir = "/persist/fantastick";
+    envFile = config.sops.secrets."fantastick.env".path;
+    package = flake.packages.x86_64-linux.fantastick;
   };
+  sops.secrets."fantastick.env" = {
+    restartUnits = ["fantastick.service"];
+    sopsFile = secrets/fantastick.yaml;
+  };
+
+  services.avahi.enable = true;
+  services.jellyfin.enable = true;
   services.matterbridge = {
     enable = true;
     configPath = "/persist/matterbridge/config.toml";
