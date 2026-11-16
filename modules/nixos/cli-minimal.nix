@@ -133,6 +133,7 @@ in {
         for idx, arg in enumerate(argv[1:]):
             print(f"argv[{idx}]={repr(arg)}")
       '';
+      nixos-rebuild = "nixos-rebuild --log-format multiline-with-logs";
     };
   };
 
