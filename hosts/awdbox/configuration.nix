@@ -42,7 +42,7 @@
   };
 
   boot = {
-    initrd.kernelModules = ["nvme" "e1000e"];
+    initrd.kernelModules = ["nvme" "r8169" "e1000e"];
     initrd.availableKernelModules = ["amdgpu"];
     kernelParams = [
       "ip=10.0.0.22::10.0.0.1:255.255.255.0::eth0:off:10.0.0.1"
