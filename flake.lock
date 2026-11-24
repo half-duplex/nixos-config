@@ -154,11 +154,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794963576,
-        "narHash": "sha256-+CPrP74GDJ63f7bgEFC9Av4hbxc7K9WUNv1ZVRifRe8=",
+        "lastModified": 1795366757,
+        "narHash": "sha256-Tp4Kh4R7ID1f2mMCDlb2PiFQ/DZZsnXB2u2juWN+TT4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "2b13c9cb3aa20653e6f8ee0b7f8331a53ea9b0a9",
+        "rev": "3b8140d21fa0a70b1b38c2ed29853dfe686234a6",
         "type": "github"
       },
       "original": {
@@ -215,11 +215,11 @@
     },
     "multiverse": {
       "locked": {
-        "lastModified": 1795186772,
-        "narHash": "sha256-VF2vjcwDwn95SCKFV3WgUS1GLbVJxvpUoiNHL4AaY+I=",
+        "lastModified": 1795476465,
+        "narHash": "sha256-I8I39X/EKxV3lvVF6X3Z5icH7nqiC0EtHwcbY20DbLg=",
         "owner": "fzakaria",
         "repo": "nixpkgs-multiverse",
-        "rev": "32c8cf7714f8c358b94cbd015d4ce10a0fcd44bd",
+        "rev": "08279a869108a671dd9004a6eeef4569f629870e",
         "type": "github"
       },
       "original": {
@@ -285,11 +285,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795222243,
-        "narHash": "sha256-CAtdwDah5Rb1+IfDT7Nj5gmkgiWrPQoeeW/hNdg4xDs=",
+        "lastModified": 1795462239,
+        "narHash": "sha256-7cnkV4zpe+UjsFF1D/RQ6tz+6FSzeyCKShQaMbJymiE=",
         "owner": "nvmd",
         "repo": "nixos-raspberrypi",
-        "rev": "5890531655150303aa137aa57ce61baaced9e5db",
+        "rev": "3168358dfabaa7059d6cccd1f460f30f03af41f5",
         "type": "github"
       },
       "original": {
@@ -300,11 +300,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1795137884,
-        "narHash": "sha256-xVwloUjz7paCDnvN5dkrasmAGV+O6uyRUPFHxv2w3VA=",
-        "rev": "ab5c18fdedfc8f9bbc9d773f10a540790e2787a7",
+        "lastModified": 1795370043,
+        "narHash": "sha256-RThZ6/XvhVczW74iClJaGo9+fXjvfm5mvvzTy6hrcYU=",
+        "rev": "0dc498bfe49baeb18b0f9891e800b53bb2603193",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.14894.ab5c18fdedfc/nixexprs.tar.zst?lastModified=1795137884&rev=ab5c18fdedfc8f9bbc9d773f10a540790e2787a7"
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.15079.0dc498bfe49b/nixexprs.tar.zst?lastModified=1795370043&rev=0dc498bfe49baeb18b0f9891e800b53bb2603193"
       },
       "original": {
         "type": "tarball",
@@ -413,11 +413,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794866654,
-        "narHash": "sha256-Y28AMB8lyKjASdJ0BVsR2AqR1cUsVuo8RVVpzHoECho=",
+        "lastModified": 1795471345,
+        "narHash": "sha256-2p8/wnENYHU2Z79Ir/rpq+V1sMI9mSD6xGAlvlbVBUY=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "7c637afdccdf9bcf35c4a2d67b58a77c1fd843a4",
+        "rev": "d5abe5e53200ad48254e8e6bd95e6cef94e66577",
         "type": "github"
       },
       "original": {
@@ -479,11 +479,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792217068,
-        "narHash": "sha256-CxhdKC8oQBPW/Q/miacEBvsVIGg/rWQHyDcMBRP4ujw=",
+        "lastModified": 1795231654,
+        "narHash": "sha256-4k5PN8gHCZ8ajAOE/UkXdJKEgcXtFHxVK/hdn9EUxnw=",
         "ref": "refs/heads/main",
-        "rev": "2cd525448a0b0678be5082b17ce802e1ae369b5b",
-        "revCount": 573,
+        "rev": "ddfd7509ac0c54491b31941f6e0b78e6e4402ab6",
+        "revCount": 575,
         "type": "git",
         "url": "https://codeberg.org/s0ph0s/werehouse.git"
       },
