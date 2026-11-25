@@ -1,32 +1,9 @@
-{pkgs, ...}: let
-  inherit (pkgs) fetchFromGitHub;
-in {
+{...}: {
   nixpkgs.overlays = [
     (
       _: prev: {
         telegram-desktop = prev.telegram-desktop.overrideAttrs (finalAttrs: prevAttrs: {
           unwrapped = prevAttrs.unwrapped.overrideAttrs {
-            version = "7.1.5";
-            src = fetchFromGitHub {
-              owner = "telegramdesktop";
-              repo = "tdesktop";
-              rev = "v${finalAttrs.version}";
-              fetchSubmodules = true;
-              hash = "sha256-FbenDWiv4fxb6GHHsP0P7VLoMk6h+BYcfpomvS22b/c=";
-            };
-
-            nativeBuildInputs =
-              (prevAttrs.unwrapped.nativeBuildInputs or [])
-              ++ [
-                pkgs.qt6.qtshadertools
-              ];
-            buildInputs =
-              (prevAttrs.unwrapped.buildInputs or [])
-              ++ [
-                pkgs.minizip
-                pkgs.cmark-gfm
-              ];
-
             patches =
               (prevAttrs.unwrapped.patches or [])
               ++ [
